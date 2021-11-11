@@ -1,24 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Paper } from "@mui/material";
+import React, { useState } from "react";
+import "./App.css";
+import SpeechConfigForm from "./components/SpeechConfigForm";
+import Home from "./components/Home";
+import MySpeechConfig from "./models/MySpeechConfig";
+import { loadSpeechConfig, saveSpeechConfig } from "./repositories/SpeechConfigRepository";
+
 
 function App() {
+  const speechConfig = loadSpeechConfig();
+  const handleChangeSpeechConfig = (
+    connectionStrings: MySpeechConfig
+  ) => {
+    saveSpeechConfig(connectionStrings)
+    setDisplaySettings(false)
+  };
+
+  const [displaySettings, setDisplaySettings] = useState(false);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Paper
+        style={{
+          height: "80vh",
+          maxWidth: "400px",
+          padding: "40px",
+          margin: "auto",
+          marginTop: "20px",
+        }}
+      >
+        {displaySettings ? (
+          <SpeechConfigForm
+            hideConfigureScreen={()=> setDisplaySettings(false)}
+            config={speechConfig}
+            setConfig={handleChangeSpeechConfig}
+          />
+        ) : (
+          <Home onDisplaySettings={() => setDisplaySettings(true)} mySpeechConfig={speechConfig}/>
+        )}
+      </Paper>
     </div>
   );
 }
