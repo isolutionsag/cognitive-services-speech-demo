@@ -1,4 +1,4 @@
-import MySpeechConfig from "../models/MySpeechConfig";
+import MySpeechConfig, { isValidSpeechConfig } from "../models/MySpeechConfig";
 import {
   AudioConfig,
   ResultReason,
@@ -13,17 +13,18 @@ const infoTextTypeToStartRecording =
 export default function useSpeechToText(mySpeechConfig: MySpeechConfig) {
   const [infoText, setInfoText] = useState(infoTextTypeToStartRecording);
   const [resultText, setResultText] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(true);
   const [error, setError] = useState("");
   const [isRecordingAndConverting, setIsRecordingAndConverting] =
     useState(false);
 
   useEffect(() => {
-    if (mySpeechConfig.resourceKey === "" || mySpeechConfig.region === "")
+    if (!isValidSpeechConfig(mySpeechConfig)){
       setError(
         "To use the speech to speech service, please configure your keys of the azure speech service first"
       );
-    setIsSuccess(false);
+      setIsSuccess(false);
+    }
   }, [mySpeechConfig]);
 
   function sttFromMic() {
@@ -42,7 +43,7 @@ export default function useSpeechToText(mySpeechConfig: MySpeechConfig) {
 
     setInfoText("speak into your microphone...");
     setIsRecordingAndConverting(true);
-    setError("")
+    setError("");
 
     recognizer.recognizeOnceAsync((result) => {
       if (result.reason === ResultReason.RecognizedSpeech) {

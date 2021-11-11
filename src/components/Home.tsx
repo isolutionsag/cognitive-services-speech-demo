@@ -8,7 +8,7 @@ import { IconButton, TextField, Grid, Button, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import useInput from "../hooks/useInput";
 import GravityItemsArea from "./common/GravityItemsArea";
-import MySpeechConfig from "../models/MySpeechConfig";
+import MySpeechConfig, { isValidSpeechConfig } from "../models/MySpeechConfig";
 import useSpeechToText from "../hooks/useSpeechToText";
 
 interface HomeProps {
@@ -52,7 +52,7 @@ const Home: React.FC<HomeProps> = ({ onDisplaySettings, mySpeechConfig }) => {
           {useSpeechSdk_.error}
         </Typography>
         <IconButton
-        enabled={useSpeechSdk_.success}
+          disabled={!isValidSpeechConfig(mySpeechConfig)}
           color={
             useSpeechSdk_.isRecordingAndConverting ? "secondary" : "primary"
           }
@@ -61,6 +61,7 @@ const Home: React.FC<HomeProps> = ({ onDisplaySettings, mySpeechConfig }) => {
           <SettingsVoice />
         </IconButton>
         <TextField
+          style={{ marginTop: "20px" }}
           multiline
           fullWidth
           name="Input"
