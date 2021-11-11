@@ -2,7 +2,8 @@ export const DefaultSpeechConfig = {
   resourceKey: "",
   region: "",
   speechRecognitionLanguage: "de-CH",
-  voiceName: "leni",
+  speechSynthesisLanguage: "de-CH",
+  voiceName: "de-CH-LeniNeural", //supported: https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/language-support#neural-voices
 };
 
 type MySpeechConfig = typeof DefaultSpeechConfig;
