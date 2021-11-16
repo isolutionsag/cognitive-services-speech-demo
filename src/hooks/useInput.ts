@@ -4,8 +4,6 @@ export function noModifier(input: string) {
     return input
 }
 
-export const numberModifier = (numAsString: string) => {
-    const mod: string = numAsString.replace(/[^0-9]/g, '');
     return mod
 }
 
