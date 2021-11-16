@@ -38,10 +38,9 @@ const Home: React.FC<HomeProps> = ({ onDisplaySettings, mySpeechConfig }) => {
   }, [speechToText.resultText]);
 
   useEffect(() => {
-    if(_useBotResponse.isFetching) return
     useInputOutput.setValue(_useBotResponse.answer)
     textToSpeech.synthesizeSpeech(_useBotResponse.answer)
-  }, [_useBotResponse.answer, _useBotResponse.isFetching])
+  }, [_useBotResponse.answer])
 
   return (
     <>
