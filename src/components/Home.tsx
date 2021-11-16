@@ -9,17 +9,18 @@ import React, { useEffect, useState } from "react";
 import useInput from "../hooks/useInput";
 import GravityItemsArea from "./common/GravityItemsArea";
 import MySpeechConfig, { isValidSpeechConfig } from "../models/MySpeechConfig";
+import QnaConfig from "../models/QnAConfig";
 import useSpeechToText from "../hooks/useSpeechToText";
 import useTextToSpeech from "../hooks/useTextToSpeech";
 import useBotResponse from "../hooks/useBotResponse";
-import {makeBotRequest} from "../api/BotApi"
 
 interface HomeProps {
   onDisplaySettings: () => void;
   mySpeechConfig: MySpeechConfig;
+  qnaConfig: QnaConfig
 }
 
-const Home: React.FC<HomeProps> = ({ onDisplaySettings, mySpeechConfig }) => {
+const Home: React.FC<HomeProps> = ({ onDisplaySettings, mySpeechConfig, qnaConfig }) => {
   const useInputInput = useInput(
     "Hello, how are you?",
     () => "",
@@ -28,7 +29,7 @@ const Home: React.FC<HomeProps> = ({ onDisplaySettings, mySpeechConfig }) => {
   );
 
   const speechToText = useSpeechToText(mySpeechConfig);
-  const _useBotResponse = useBotResponse(speechToText.resultText)
+  const _useBotResponse = useBotResponse(speechToText.resultText, qnaConfig)
   
   const useInputOutput = useInput("", () => "", undefined, false);
   const textToSpeech = useTextToSpeech(useInputOutput.value, mySpeechConfig);

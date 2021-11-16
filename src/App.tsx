@@ -1,23 +1,29 @@
 import { Paper } from "@mui/material";
 import React, { useState } from "react";
 import "./App.css";
-import SpeechConfigForm from "./components/SpeechConfigForm";
+import KeysConfigForm from "./components/SpeechConfigForm";
 import Home from "./components/Home";
 import MySpeechConfig from "./models/MySpeechConfig";
+import QnAConfig from "./models/QnAConfig";
 import { loadSpeechConfig, saveSpeechConfig } from "./repositories/SpeechConfigRepository";
+import { loadQnAConfig, saveQnAConfig } from "./repositories/QnAConfigRepository";
 
 
 function App() {
   const speechConfig = loadSpeechConfig();
-  const handleChangeSpeechConfig = (
-    connectionStrings: MySpeechConfig
+  const qnaConfig = loadQnAConfig();
+
+  const handleChangeKeys = (
+    mySpeechConfig: MySpeechConfig,
+    qnaConfig: QnAConfig
   ) => {
-    saveSpeechConfig(connectionStrings)
+    saveSpeechConfig(mySpeechConfig)
+    saveQnAConfig(qnaConfig)
     setDisplaySettings(false)
   };
 
   const [displaySettings, setDisplaySettings] = useState(false);
-
+  
   return (
     <div className="App">
       <Paper
@@ -31,13 +37,14 @@ function App() {
         }}
       >
         {displaySettings ? (
-          <SpeechConfigForm
+          <KeysConfigForm
             hideConfigureScreen={()=> setDisplaySettings(false)}
-            config={speechConfig}
-            setConfig={handleChangeSpeechConfig}
+            mySpeechConfig={speechConfig}
+            qnaConfig={qnaConfig}
+            setConfigKeys={handleChangeKeys}
           />
         ) : (
-          <Home onDisplaySettings={() => setDisplaySettings(true)} mySpeechConfig={speechConfig}/>
+          <Home onDisplaySettings={() => setDisplaySettings(true)} mySpeechConfig={speechConfig} qnaConfig={qnaConfig}/>
         )}
       </Paper>
     </div>

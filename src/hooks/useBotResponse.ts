@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { makeBotRequest } from "../api/BotApi";
+import QnAConfig from "../models/QnAConfig";
 
-export default function useBotResponse(question: string) {
+export default function useBotResponse(question: string, config: QnAConfig) {
   const [isFetching, setIsFetching] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [answer, setAnswer] = useState("");
@@ -10,7 +11,7 @@ export default function useBotResponse(question: string) {
     const getBotAnswer = async () => {
       setIsFetching(true)
       setIsSuccess(false)
-      const botResponse = await makeBotRequest(question);
+      const botResponse = await makeBotRequest(question, config);
       setIsFetching(false);
       try {
         const answer = (botResponse as any).answers[0].answer as string;

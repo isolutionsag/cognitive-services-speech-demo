@@ -1,13 +1,9 @@
 import { createPostRequest } from "./ApiUtil";
-
-const KB_id = "748a9cd7-6acb-43aa-abdb-15c0a9118679";
-const AuthEndpointKey = " 47778641-988a-4ca7-939c-05fbdbfd07a4";
-const BotName = "chitchatdemobot";
+import QnAConfig from "../models/QnAConfig";
 
 export async function makeBotRequest(
   question: string,
-  kbId: string = KB_id,
-  authEndpointKey: string = AuthEndpointKey
+  config: QnAConfig
 ): Promise<BotResponse> {
   console.log("makeBotRequest");
   let requestOptions = createPostRequest(
@@ -15,14 +11,20 @@ export async function makeBotRequest(
       question: question,
     },
     "application/json",
-    `EndpointKey ${authEndpointKey}`
+    `EndpointKey ${config.authEndpointKey}`
   );
 
-  const result = await fetch(getRequestUrl(BotName, kbId), requestOptions);
-  const resData = result.json();
-  if (resData === null || resData === undefined)
-    return { error: "Failed to get answer from api bot" };
-  return resData;
+  let response: BotResponse;
+  try {
+    const result = await fetch(
+      getRequestUrl(config.botName, config.knowledgeBaseId),
+      requestOptions
+    );
+    response = await result.json();
+  } catch (err) {
+    response = { error: "Failed to get answer from Bot Api" };
+  }
+  return response;
 }
 
 function getRequestUrl(botName: string, kbId: string) {
