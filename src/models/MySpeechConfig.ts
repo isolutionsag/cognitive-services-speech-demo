@@ -1,8 +1,8 @@
 import { SpeechConfig } from "microsoft-cognitiveservices-speech-sdk";
 
 export const DefaultSpeechConfig = {
-  resourceKey: "",
-  region: "",
+  resourceKey: "ff60597589d142978d5dadd4ec2655a2",
+  region: "switzerlandnorth",
   speechRecognitionLanguage: "de-CH",
   speechSynthesisLanguage: "de-CH",
   voiceName: "de-CH-LeniNeural", //supported: https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/language-support#neural-voices
