@@ -22,11 +22,12 @@ function App() {
     <div className="App">
       <Paper
         style={{
-          height: "80vh",
+          minHeight: "50vh",
           maxWidth: "400px",
           padding: "40px",
           margin: "auto",
           marginTop: "20px",
+          marginBottom: "20px"
         }}
       >
         {displaySettings ? (
