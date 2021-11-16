@@ -10,6 +10,9 @@ import useInput from "../hooks/useInput";
 import GravityItemsArea from "./common/GravityItemsArea";
 import MySpeechConfig, { isValidSpeechConfig } from "../models/MySpeechConfig";
 import useSpeechToText from "../hooks/useSpeechToText";
+import useTextToSpeech from "../hooks/useTextToSpeech";
+import useBotResponse from "../hooks/useBotResponse";
+import {makeBotRequest} from "../api/BotApi"
 
 interface HomeProps {
   onDisplaySettings: () => void;
@@ -24,12 +27,21 @@ const Home: React.FC<HomeProps> = ({ onDisplaySettings, mySpeechConfig }) => {
     false
   );
 
-  const useInputOutput = useInput("Hi, I'm fine!", () => "", undefined, false);
-  const useSpeechSdk_ = useSpeechToText(mySpeechConfig);
+  const speechToText = useSpeechToText(mySpeechConfig);
+  const _useBotResponse = useBotResponse(speechToText.resultText)
+  
+  const useInputOutput = useInput("", () => "", undefined, false);
+  const textToSpeech = useTextToSpeech(useInputOutput.value, mySpeechConfig);
 
   useEffect(() => {
-    useInputInput.setValue(useSpeechSdk_.resultText);
-  }, [useSpeechSdk_.resultText]);
+    useInputInput.setValue(speechToText.resultText);
+  }, [speechToText.resultText]);
+
+  useEffect(() => {
+    if(_useBotResponse.isFetching) return
+    useInputOutput.setValue(_useBotResponse.answer)
+    textToSpeech.synthesizeSpeech(_useBotResponse.answer)
+  }, [_useBotResponse.answer, _useBotResponse.isFetching])
 
   return (
     <>
@@ -45,20 +57,21 @@ const Home: React.FC<HomeProps> = ({ onDisplaySettings, mySpeechConfig }) => {
       <Grid container direction="column" alignItems="center">
         <h1>Hi!</h1>
         <Typography variant="body1" gutterBottom>
-          {useSpeechSdk_.infoText}
+          {speechToText.infoText}
         </Typography>
 
         <Typography variant="body2" color="orange" gutterBottom>
-          {useSpeechSdk_.error}
+          {speechToText.error}
         </Typography>
         <IconButton
+          size="large"
           disabled={!isValidSpeechConfig(mySpeechConfig)}
           color={
-            useSpeechSdk_.isRecordingAndConverting ? "secondary" : "primary"
+            speechToText.isRecordingAndConverting ? "secondary" : "primary"
           }
-          onClick={() => useSpeechSdk_.sttFromMic()}
+          onClick={() => speechToText.sttFromMic()}
         >
-          <SettingsVoice />
+          <SettingsVoice fontSize="large"/>
         </IconButton>
         <TextField
           style={{ marginTop: "20px" }}
@@ -89,11 +102,14 @@ const Home: React.FC<HomeProps> = ({ onDisplaySettings, mySpeechConfig }) => {
         />
 
         <IconButton
-          color="primary"
+          size="large"
+          disabled={!isValidSpeechConfig(mySpeechConfig)}
+          color={textToSpeech.isSpeaking ? "secondary" : "primary"}
+          onClick={() => textToSpeech.synthesizeSpeech()}
           aria-label="Speak output"
           style={{ marginTop: "20px" }}
         >
-          <VolumeUp />
+          <VolumeUp fontSize="large"/>
         </IconButton>
       </Grid>
     </>
