@@ -4,6 +4,7 @@ import MySpeechConfig, {
 } from "../models/MySpeechConfig";
 import {
   AudioConfig,
+  AutoDetectSourceLanguageConfig,
   ResultReason,
   SpeechRecognizer,
 } from "microsoft-cognitiveservices-speech-sdk";
@@ -15,6 +16,7 @@ const infoTextTapToStartRecording =
 export default function useSpeechToText(mySpeechConfig: MySpeechConfig) {
   const [infoText, setInfoText] = useState(infoTextTapToStartRecording);
   const [resultText, setResultText] = useState("");
+  const [detectedLanguage, setDetectedLanguage] = useState("");
   const [isSuccess, setIsSuccess] = useState(true);
   const [error, setError] = useState("");
   const [isRecordingAndConverting, setIsRecordingAndConverting] =
@@ -32,8 +34,18 @@ export default function useSpeechToText(mySpeechConfig: MySpeechConfig) {
   function sttFromMic() {
     if (!isValidSpeechConfig(mySpeechConfig)) return;
     const speechConfig = getSpeechConfigFromMySpeechConfig(mySpeechConfig);
+    const autoDetectConfig = AutoDetectSourceLanguageConfig.fromLanguages([
+      "en-US",
+      "de-DE",
+      "fr-FR",
+      "it-IT" 
+    ]); //max 4 languages for autodetection: https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/how-to-automatic-language-detection?pivots=programming-language-javascript
     const audioConfig = AudioConfig.fromDefaultMicrophoneInput();
-    const recognizer = new SpeechRecognizer(speechConfig, audioConfig);
+    const recognizer = SpeechRecognizer.FromConfig(
+      speechConfig,
+      autoDetectConfig,
+      audioConfig
+    );
 
     setInfoText("speak into your microphone...");
     setIsRecordingAndConverting(true);
@@ -41,6 +53,7 @@ export default function useSpeechToText(mySpeechConfig: MySpeechConfig) {
 
     recognizer.recognizeOnceAsync((result) => {
       if (result.reason === ResultReason.RecognizedSpeech) {
+        setDetectedLanguage(result.language);
         setResultText(result.text);
         setIsSuccess(true);
       } else {
@@ -57,6 +70,7 @@ export default function useSpeechToText(mySpeechConfig: MySpeechConfig) {
   return {
     infoText,
     resultText,
+    detectedLanguage,
     isSuccess,
     error,
     sttFromMic,

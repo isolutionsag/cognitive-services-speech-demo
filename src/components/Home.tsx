@@ -83,7 +83,7 @@ const Home: React.FC<HomeProps> = ({ onDisplaySettings, mySpeechConfig, qnaConfi
           value={useInputInput.value}
           onChange={useInputInput.handleChange}
           error={useInputInput.error !== ""}
-          helperText={useInputInput.error}
+          helperText={useInputInput.error !== ""? useInputInput.error: `Detected language: ${speechToText.detectedLanguage}`}
         />
         <div style={{ padding: "20px" }}>
           <ForumOutlined style={{ height: "50px", width: "50px" }} />
