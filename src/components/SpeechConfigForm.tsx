@@ -5,18 +5,21 @@ import useInput from "../hooks/useInput";
 import { ArrowBack, Save } from "@mui/icons-material";
 import GravityItemsArea from "./common/GravityItemsArea";
 import QnAConfig from "../models/QnAConfig";
+import TranslatorConfig from "../models/TranslatorConfig";
 
 interface SpeechConfigFormProps {
   hideConfigureScreen: () => void;
   mySpeechConfig: MySpeechConfig;
   qnaConfig: QnAConfig;
-  setConfigKeys: (mySpeechConfig: MySpeechConfig, qnaConfig: QnAConfig) => void;
+  translatorConfig: TranslatorConfig;
+  setConfigKeys: (mySpeechConfig: MySpeechConfig, qnaConfig: QnAConfig, translatorConfig: TranslatorConfig) => void;
 }
 
 const SpeechConfigForm: React.FC<SpeechConfigFormProps> = ({
   hideConfigureScreen,
   mySpeechConfig,
   qnaConfig,
+  translatorConfig,
   setConfigKeys,
 }) => {
   const useInputResourceKey = useInput(mySpeechConfig.resourceKey);
@@ -26,6 +29,8 @@ const SpeechConfigForm: React.FC<SpeechConfigFormProps> = ({
   const useInputAuthEndpointKey = useInput(qnaConfig.authEndpointKey);
   const useInputBotName = useInput(qnaConfig.botName);
 
+  const useInputTranslatorSubscriptionKey = useInput(translatorConfig.subscriptionKey)
+
   const handleSaveKeys = () => {
     mySpeechConfig.resourceKey = useInputResourceKey.value;
     mySpeechConfig.region = useInputRegion.value;
@@ -33,7 +38,9 @@ const SpeechConfigForm: React.FC<SpeechConfigFormProps> = ({
     qnaConfig.knowledgeBaseId = useInputKbId.value;
     qnaConfig.authEndpointKey = useInputAuthEndpointKey.value;
     qnaConfig.botName = useInputBotName.value;
-    setConfigKeys(mySpeechConfig, qnaConfig);
+
+    translatorConfig.subscriptionKey = useInputTranslatorSubscriptionKey.value
+    setConfigKeys(mySpeechConfig, qnaConfig, translatorConfig);
   };
 
   const sectionBoxStyles = { border: 1, p: 3, borderRadius: "4px" };
@@ -85,6 +92,15 @@ const SpeechConfigForm: React.FC<SpeechConfigFormProps> = ({
               label="Bot Name"
               value={useInputBotName.value}
               onChange={useInputBotName.handleChange}
+            />
+          </Box>
+          <h3>Translator</h3>
+          <Box sx={sectionBoxStyles}>
+            <TextField
+              fullWidth
+              label="Subscription (Resource) Key"
+              value={useInputTranslatorSubscriptionKey.value}
+              onChange={useInputTranslatorSubscriptionKey.handleChange}
             />
           </Box>
         </Box>

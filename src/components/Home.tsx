@@ -15,14 +15,16 @@ import useTextToSpeech from "../hooks/useTextToSpeech";
 import useBotResponse from "../hooks/useBotResponse";
 import { makeTranslationRequest } from "../api/TranslationApi";
 import { botLanguage } from "../api/BotApi";
+import TranslatorConfig from "../models/TranslatorConfig";
 
 interface HomeProps {
   onDisplaySettings: () => void;
   mySpeechConfig: MySpeechConfig;
-  qnaConfig: QnaConfig
+  qnaConfig: QnaConfig;
+  translatorConfig: TranslatorConfig;
 }
 
-const Home: React.FC<HomeProps> = ({ onDisplaySettings, mySpeechConfig, qnaConfig }) => {
+const Home: React.FC<HomeProps> = ({ onDisplaySettings, mySpeechConfig, qnaConfig, translatorConfig }) => {
   const useInputInput = useInput(
     "Hello, how are you?",
     () => "",
@@ -42,7 +44,7 @@ const Home: React.FC<HomeProps> = ({ onDisplaySettings, mySpeechConfig, qnaConfi
     useInputInput.setValue(speechToText.resultText);
 
     const getTranslationForBot = async () => {
-      const translationResponse = await makeTranslationRequest(speechToText.resultText, speechToText.detectedLanguage, [botLanguage])
+      const translationResponse = await makeTranslationRequest(speechToText.resultText, speechToText.detectedLanguage, [botLanguage], translatorConfig)
       if(translationResponse.error) console.log("Failed to get translation") //TODO: show in UI? send original (unstranslated) question to bot?
       else {
         const translation = translationResponse.translations?.filter((t) => t.to === botLanguage)

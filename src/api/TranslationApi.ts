@@ -1,7 +1,7 @@
 import { createPostRequest } from "./ApiUtil";
 import { v4 as uuidv4 } from "uuid";
+import TranslatorConfig from "../models/TranslatorConfig"
 
-const subscriptionKey = "a4c13ea841b84a6fb5d767016d672520";
 const endpoint = "https://api.cognitive.microsofttranslator.com";
 
 // Add your location, also known as region. The default is global
@@ -17,7 +17,8 @@ interface TranslationResponse {
 export async function makeTranslationRequest(
   textToTranslate: string,
   fromLanguage: string,
-  toLanguages: string[]
+  toLanguages: string[],
+  config: TranslatorConfig
 ): Promise<TranslationResponse> {
   function getRequestOptions() {
     let requestOptions = createPostRequest(
@@ -27,7 +28,7 @@ export async function makeTranslationRequest(
 
     const headers = {
       "Content-Type": "application/json",
-      "Ocp-Apim-Subscription-Key": subscriptionKey,
+      "Ocp-Apim-Subscription-Key": config.subscriptionKey,
       "Ocp-Apim-Subscription-Region": region,
       "X-ClientTraceId": uuidv4().toString(),
     };
