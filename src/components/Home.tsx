@@ -13,6 +13,8 @@ import QnaConfig from "../models/QnAConfig";
 import useSpeechToText from "../hooks/useSpeechToText";
 import useTextToSpeech from "../hooks/useTextToSpeech";
 import useBotResponse from "../hooks/useBotResponse";
+import { makeTranslationRequest } from "../api/TranslationApi";
+import { botLanguage } from "../api/BotApi";
 
 interface HomeProps {
   onDisplaySettings: () => void;
@@ -28,17 +30,35 @@ const Home: React.FC<HomeProps> = ({ onDisplaySettings, mySpeechConfig, qnaConfi
     false
   );
 
+  const [inputTranslation, setInputTranslation] = useState({text: ""})
+
   const speechToText = useSpeechToText(mySpeechConfig);
-  const _useBotResponse = useBotResponse(speechToText.resultText, qnaConfig)
+  const _useBotResponse = useBotResponse(inputTranslation, qnaConfig)
   
   const useInputOutput = useInput("", () => "", undefined, false);
   const textToSpeech = useTextToSpeech(useInputOutput.value, mySpeechConfig);
 
   useEffect(() => {
     useInputInput.setValue(speechToText.resultText);
+
+    const getTranslationForBot = async () => {
+      const translationResponse = await makeTranslationRequest(speechToText.resultText, speechToText.detectedLanguage, [botLanguage])
+      if(translationResponse.error) console.log("Failed to get translation") //TODO: show in UI? send original (unstranslated) question to bot?
+      else {
+        const translation = translationResponse.translations?.filter((t) => t.to === botLanguage)
+        if(!translation || translation.length === 0){
+          console.log("No matching translation for bot language") //TODO: show in UI? send original (unstranslated) question to bot?
+          return
+        }
+        setInputTranslation({text: translation[0]?.text})
+      }
+    }
+
+    getTranslationForBot()
   }, [speechToText.resultText]);
 
   useEffect(() => {
+    console.log("Useeffect of usebot response answer")
     useInputOutput.setValue(_useBotResponse.answer)
     textToSpeech.synthesizeSpeech(_useBotResponse.answer)
   }, [_useBotResponse.answer])
