@@ -1,6 +1,8 @@
 import { createPostRequest } from "./ApiUtil";
 import QnAConfig from "../models/QnAConfig";
 
+export const botLanguage = "de"
+
 export async function makeBotRequest(
   question: string,
   config: QnAConfig
