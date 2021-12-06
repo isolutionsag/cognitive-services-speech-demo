@@ -4,7 +4,18 @@ import {
   VolumeUp,
   VpnKey,
 } from "@mui/icons-material";
-import { IconButton, TextField, Grid, Button, Typography } from "@mui/material";
+import {
+  IconButton,
+  TextField,
+  Grid,
+  Button,
+  Typography,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import useInput from "../hooks/useInput";
 import GravityItemsArea from "./common/GravityItemsArea";
@@ -16,6 +27,10 @@ import useBotResponse from "../hooks/useBotResponse";
 import { makeTranslationRequest } from "../api/TranslationApi";
 import { botLanguage } from "../api/BotApi";
 import TranslatorConfig from "../models/TranslatorConfig";
+import Language, {
+  getVoiceForLanguage,
+  languageModels,
+} from "../util/Language";
 
 interface HomeProps {
   onDisplaySettings: () => void;
@@ -24,7 +39,12 @@ interface HomeProps {
   translatorConfig: TranslatorConfig;
 }
 
-const Home: React.FC<HomeProps> = ({ onDisplaySettings, mySpeechConfig, qnaConfig, translatorConfig }) => {
+const Home: React.FC<HomeProps> = ({
+  onDisplaySettings,
+  mySpeechConfig,
+  qnaConfig,
+  translatorConfig,
+}) => {
   const useInputInput = useInput(
     "Hello, how are you?",
     () => "",
@@ -32,38 +52,99 @@ const Home: React.FC<HomeProps> = ({ onDisplaySettings, mySpeechConfig, qnaConfi
     false
   );
 
-  const [inputTranslation, setInputTranslation] = useState({text: ""})
+  const [outputLanguage, setOutputLanguage] = useState(Language.AUTO);
+  const [outputVoice, setOutputVoice] = useState(getVoiceForLanguage(outputLanguage))
+
+  const [inputTranslation, setInputTranslation] = useState({ text: "" });
 
   const speechToText = useSpeechToText(mySpeechConfig);
-  const _useBotResponse = useBotResponse(inputTranslation, qnaConfig)
-  
+  const _useBotResponse = useBotResponse(inputTranslation, qnaConfig);
+
   const useInputOutput = useInput("", () => "", undefined, false);
-  const textToSpeech = useTextToSpeech(useInputOutput.value, mySpeechConfig);
+  const textToSpeech = useTextToSpeech(useInputOutput.value, outputVoice ,mySpeechConfig);
 
   useEffect(() => {
     useInputInput.setValue(speechToText.resultText);
 
     const getTranslationForBot = async () => {
-      const translationResponse = await makeTranslationRequest(speechToText.resultText, speechToText.detectedLanguage, [botLanguage], translatorConfig)
-      if(translationResponse.error) console.log("Failed to get translation") //TODO: show in UI? send original (unstranslated) question to bot?
-      else {
-        const translation = translationResponse.translations?.filter((t) => t.to === botLanguage)
-        if(!translation || translation.length === 0){
-          console.log("No matching translation for bot language") //TODO: show in UI? send original (unstranslated) question to bot?
-          return
-        }
-        setInputTranslation({text: translation[0]?.text})
-      }
-    }
 
-    getTranslationForBot()
+      const translationResponse = await makeTranslationRequest(
+        speechToText.resultText,
+        speechToText.detectedLanguageLocale,
+        [botLanguage],
+        translatorConfig
+      );
+      console.log("Input translation result: ", translationResponse)
+      if (translationResponse.error) console.log("Failed to get translation for input");
+      //TODO: show in UI? send original (unstranslated) question to bot?
+      else {
+        const translation = translationResponse.translations?.filter(
+          (t) => t.to === botLanguage.split("-")[0].toLowerCase()
+        );
+        if (!translation || translation.length === 0) {
+          console.log("No matching translation for bot language"); //TODO: show in UI? send original (unstranslated) question to bot?
+          return;
+        }
+        const text = translation[0]?.text 
+        console.log("Successfully translated text: ", text)
+        setInputTranslation({ text});
+      }
+    };
+
+    getTranslationForBot();
   }, [speechToText.resultText]);
 
   useEffect(() => {
-    console.log("Useeffect of usebot response answer")
-    useInputOutput.setValue(_useBotResponse.answer)
-    textToSpeech.synthesizeSpeech(_useBotResponse.answer)
-  }, [_useBotResponse.answer])
+
+    console.log("Bot answer or outputLanguage changed: ", _useBotResponse.answer, outputLanguage)
+    const getOutputTranslation = async () => {
+
+      function getToLanguage(): string {
+        if(outputLanguage !== Language.AUTO) return outputLanguage.toLocaleLowerCase();
+        const detectedLanguageSplit = speechToText.detectedLanguageLocale.split("-");
+        return detectedLanguageSplit[0]
+      }
+      
+      const toLanguage = getToLanguage(); //lowercase language key (2 letters)
+      console.log("To language: " + toLanguage)
+      
+      setOutputVoice(getVoiceForLanguage(toLanguage.toUpperCase() as Language));
+
+      const translationResponse = await makeTranslationRequest(
+        _useBotResponse.answer,
+        botLanguage,
+        [toLanguage],
+        translatorConfig
+      );
+      if (translationResponse.error) {
+        console.log("Failed to get translation for bot response", translationResponse.error);
+        displayBotAnswer(_useBotResponse.answer, botLanguage);
+      } else {
+        console.log("Bot response translations: ", translationResponse)
+        const translation = translationResponse.translations?.filter(
+          (t) => t.to === toLanguage
+        );
+        if (!translation || translation.length === 0) {
+          console.log("No matching translation for output language");
+          displayBotAnswer(_useBotResponse.answer, botLanguage);
+          return;
+        }
+        displayBotAnswer(translation[0]?.text, toLanguage.toUpperCase() as Language);
+      }
+    };
+
+    getOutputTranslation()
+  }, [_useBotResponse.answer, outputLanguage]);
+
+  function displayBotAnswer(text: string, language: Language) {
+    useInputOutput.setValue(text);
+    console.log("Displaying bot answer in ", language)
+    textToSpeech.synthesizeSpeech(text, getVoiceForLanguage(language));
+  }
+
+  const handleOutputLanguageChange = (event: SelectChangeEvent) => {
+    setOutputLanguage(event.target.value as Language);
+  };
 
   return (
     <>
@@ -105,14 +186,37 @@ const Home: React.FC<HomeProps> = ({ onDisplaySettings, mySpeechConfig, qnaConfi
           value={useInputInput.value}
           onChange={useInputInput.handleChange}
           error={useInputInput.error !== ""}
-          helperText={useInputInput.error !== ""? useInputInput.error: `Detected language: ${speechToText.detectedLanguage}`}
+          helperText={
+            useInputInput.error !== ""
+              ? useInputInput.error
+              : `Detected language: ${speechToText.detectedLanguageLocale}`
+          }
         />
         <div style={{ padding: "20px" }}>
           <ForumOutlined style={{ height: "50px", width: "50px" }} />
         </div>
-
+        <FormControl>
+          <InputLabel id="language-input-label">Output language</InputLabel>
+          <Select
+            style={{ minWidth: "200px" }}
+            autoWidth
+            labelId="language-select-label"
+            id="language-select"
+            value={outputLanguage}
+            label="Output language"
+            onChange={handleOutputLanguageChange}
+          >
+            {languageModels.map((languageModel) => (
+              <MenuItem value={languageModel.key}>
+                {languageModel.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <TextField
+          style={{ marginTop: "10px" }}
           multiline
+          minRows={3}
           fullWidth
           name="Bot response"
           id="Bot response"
@@ -131,7 +235,7 @@ const Home: React.FC<HomeProps> = ({ onDisplaySettings, mySpeechConfig, qnaConfi
           aria-label="Speak output"
           style={{ marginTop: "20px" }}
         >
-          <VolumeUp fontSize="large"/>
+          <VolumeUp fontSize="large" />
         </IconButton>
       </Grid>
     </>

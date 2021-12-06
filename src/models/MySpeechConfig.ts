@@ -24,7 +24,6 @@ export function getSpeechConfigFromMySpeechConfig(
   config: MySpeechConfig
 ): SpeechConfig {
   const res = SpeechConfig.fromSubscription(config.resourceKey, config.region);
-  res.speechRecognitionLanguage = config.speechRecognitionLanguage;
   res.speechSynthesisLanguage = config.speechSynthesisLanguage;
   res.speechSynthesisVoiceName = config.voiceName;
   return res;

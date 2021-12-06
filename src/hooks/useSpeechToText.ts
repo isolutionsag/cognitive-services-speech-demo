@@ -9,14 +9,15 @@ import {
   SpeechRecognizer,
 } from "microsoft-cognitiveservices-speech-sdk";
 import { useEffect, useState } from "react";
+import Language, { InputLanguageLocale } from "../util/Language";
 
 const infoTextTapToStartRecording =
-  "Tap the record button and say something...";
+  "Tap the record button and say something in EN, DE, FR or IT...";
 
 export default function useSpeechToText(mySpeechConfig: MySpeechConfig) {
   const [infoText, setInfoText] = useState(infoTextTapToStartRecording);
   const [resultText, setResultText] = useState("");
-  const [detectedLanguage, setDetectedLanguage] = useState("");
+  const [detectedLanguageLocale, setDetectedLanguage] = useState("");
   const [isSuccess, setIsSuccess] = useState(true);
   const [error, setError] = useState("");
   const [isRecordingAndConverting, setIsRecordingAndConverting] =
@@ -35,10 +36,10 @@ export default function useSpeechToText(mySpeechConfig: MySpeechConfig) {
     if (!isValidSpeechConfig(mySpeechConfig)) return;
     const speechConfig = getSpeechConfigFromMySpeechConfig(mySpeechConfig);
     const autoDetectConfig = AutoDetectSourceLanguageConfig.fromLanguages([
-      "en-US",
-      "de-DE",
-      "fr-FR",
-      "it-IT" 
+      InputLanguageLocale[Language.EN],
+      InputLanguageLocale[Language.DE],
+      InputLanguageLocale[Language.FR],
+      InputLanguageLocale[Language.ES],
     ]); //max 4 languages for autodetection: https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/how-to-automatic-language-detection?pivots=programming-language-javascript
     const audioConfig = AudioConfig.fromDefaultMicrophoneInput();
     const recognizer = SpeechRecognizer.FromConfig(
@@ -70,7 +71,7 @@ export default function useSpeechToText(mySpeechConfig: MySpeechConfig) {
   return {
     infoText,
     resultText,
-    detectedLanguage,
+    detectedLanguageLocale,
     isSuccess,
     error,
     sttFromMic,
