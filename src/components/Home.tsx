@@ -174,7 +174,7 @@ const Home: React.FC<HomeProps> = ({
           }
           onClick={() => speechToText.sttFromMic()}
         >
-          <SettingsVoice fontSize="large"/>
+          <SettingsVoice fontSize="large" />
         </IconButton>
         <TextField
           style={{ marginTop: "20px" }}
