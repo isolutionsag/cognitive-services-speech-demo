@@ -163,7 +163,7 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
   };
 
   return (
-    <Grid container direction="column" alignItems="center">
+    <Grid container direction="column" alignItems="center" maxWidth="400px">
       <h1>Hi!</h1>
       <Typography variant="body1" gutterBottom>
         {speechToText.infoText}
