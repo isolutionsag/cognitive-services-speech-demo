@@ -33,7 +33,7 @@ export default function useSpeechToTextContinuous(
     "...speak to your microphone..."
   );
   const [recognizingText, setRecognizingText] = useState("... i do listen ...");
-  const [recognizer, setRecognizer] = useState<SpeechRecognizer>();
+  const recognizer = useRef<SpeechRecognizer>();
 
   const [translatedText, setTranslatedText] = useState<string>("...");
   const [translatingText, setTranslatingText] = useState<string>("...");
@@ -47,7 +47,22 @@ export default function useSpeechToTextContinuous(
   const speechConfig = getSpeechConfigFromMySpeechConfig(mySpeechConfig);
 
   useEffect(() => {
-    if (!isValidSpeechConfig(mySpeechConfig)) {
+    if (isValidSpeechConfig(mySpeechConfig)) {
+      if (recognizer.current === undefined) {
+        speechConfig.speechRecognitionLanguage = speechRecognitionLanguage;
+        const audioConfig = AudioConfig.fromDefaultMicrophoneInput();
+        recognizer.current = new SpeechRecognizer(speechConfig, audioConfig);
+      }
+
+      if (translator.current === undefined)
+        translator.current = CreateTranslator(
+          mySpeechConfig,
+          speechRecognitionLanguage,
+          translationTargetLanguage
+        );
+
+      console.log("Created translator: ", translator.current);
+    } else {
       setError(
         "To use the speech to speech service, please configure your keys of the azure speech service first"
       );
@@ -56,52 +71,30 @@ export default function useSpeechToTextContinuous(
   }, [mySpeechConfig]);
 
   useDidUpdate(() => {
-    if (translator !== undefined) {
+    if (translator.current !== undefined) {
       sttFromMicStop();
       translator.current = CreateTranslator(
         mySpeechConfig,
         speechRecognitionLanguage,
         translationTargetLanguage
       );
-
       sttFromMic();
     }
   }, [translationTargetLanguage]);
 
   function sttFromMic() {
-    if (!isValidSpeechConfig(mySpeechConfig)) {
-      setError("Invalid speech config");
-      return;
-    }
-    setError("");
-
-    speechConfig.speechRecognitionLanguage = speechRecognitionLanguage;
-
-    const audioConfig = AudioConfig.fromDefaultMicrophoneInput();
-
-    if (recognizer === undefined)
-      setRecognizer(new SpeechRecognizer(speechConfig, audioConfig));
-
-    if (translator.current === undefined)
-      translator.current = CreateTranslator(
-        mySpeechConfig,
-        speechRecognitionLanguage,
-        translationTargetLanguage
-      );
-
     setIsRecognizing(true);
-
-    if (recognizer === undefined || translator === undefined) return;
+    if (!recognizer.current || !translator.current) return;
 
     // returns words understood, no punctuation
-    recognizer.recognizing = (s, e) => {
+    recognizer.current.recognizing = (s, e) => {
       if (e.result.reason === ResultReason.RecognizingSpeech) {
         setRecognizingText(e.result.text);
       }
     };
 
     // return whole sentences with punctuation.
-    recognizer.recognized = (s, e) => {
+    recognizer.current.recognized = (s, e) => {
       if (e.result.reason === ResultReason.RecognizedSpeech) {
         setRecognizedText(e.result.text);
       }
@@ -123,12 +116,14 @@ export default function useSpeechToTextContinuous(
       }
     };
 
-    recognizer.startContinuousRecognitionAsync();
+    console.log("Starting recognition");
+    recognizer.current.startContinuousRecognitionAsync();
     translator.current.startContinuousRecognitionAsync();
   }
 
   async function sttFromMicStop() {
-    recognizer?.stopContinuousRecognitionAsync();
+    console.log("Ending recognition");
+    recognizer.current?.stopContinuousRecognitionAsync();
     translator.current?.stopContinuousRecognitionAsync();
 
     setRecognizingText("...");
