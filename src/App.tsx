@@ -24,6 +24,7 @@ import GravityItemsArea from "./components/common/GravityItemsArea";
 import ChatWithBot from "./components/usecases/ChatWithBot";
 import RealtimeTranscription from "./components/usecases/RealtimeTranscription";
 import { ArrowBack, VpnKey } from "@mui/icons-material";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 enum Page {
   Home,
@@ -64,8 +65,28 @@ function App() {
     setSelectedUseCase(useCase);
   };
 
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#003854',
+      },
+      secondary: {
+        main: '#E83181'
+      },
+      background: {
+        default: '#d4dce1'
+      }
+    }
+  }); 
+
   return (
+    <ThemeProvider theme={theme}>
     <div className="App">
+      <div className="App-header">
+        <img src="images/isolutions.svg" className="logo" alt="iSolutions" />
+        <h1>Demo App using Azure Speech Services - <img src="images/switzerland.svg" height="28px" alt="switzerland" /> Language Model</h1>
+      </div>
+
       <PaperArea maxWidth={currentPage===Page.Home? 800: 400}>
         {currentPage !== Page.Home && (
           <GravityItemsArea>
@@ -104,7 +125,11 @@ function App() {
         )}
         {currentPage === Page.UseCase &&  displayUseCase(selectedUseCase)}
       </PaperArea>
+      <div className="App-footer">
+        <span>created by <a href="https://www.isolutions.ch">isolutions AG</a> under MIT License.</span>
+      </div>
     </div>
+    </ThemeProvider>
   );
 }
 
@@ -124,7 +149,7 @@ function displayUseCase(useCase: UseCase) {
         />
       );
     case UseCase.RealtimeTranscription:
-      return <RealtimeTranscription />;
+      return <RealtimeTranscription speechConfig={speechConfig} />;
       break;
   }
 }

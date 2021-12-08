@@ -1,3 +1,17 @@
+:root {
+  --passion-color1: #554596;
+  --passion-color2: #E83181;
+  --passion-color3: #F6A424;
+
+  --simplicity-color1: #003854;
+  --simplicity-color2: #A7BBC5;
+  --simplicity-color3: #D4DCE1;
+  --simplicity-color4: #EAEEF1;
+
+  --secondary-OC08: #343A40;
+  --secondary-OC04: #CED4DA;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,4 +19,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--simplicity-color3);
+  color: var(--secondary-OC08);
 }
