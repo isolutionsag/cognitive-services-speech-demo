@@ -41,6 +41,16 @@ const Home: React.FC<HomeProps> = ({ useCaseSelected }) => {
             onSelected={useCaseSelected}
           />
         </Grid>
+        <Grid item xs={12} md={6}>
+          <UseCaseCard
+            image="todo"
+            imageAlt="News Icon with 3 lines symbolyzing summary"
+            title="Bing News Reader and Summarizer"
+            details="Get the latest Bing news read out loud in your language and quickly view the summary of the events"
+            useCase={UseCase.BingApi}
+            onSelected={useCaseSelected}
+          />
+        </Grid>
       </Grid>
     </div>
   );
