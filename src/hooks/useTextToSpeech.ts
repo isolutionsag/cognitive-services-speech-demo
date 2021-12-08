@@ -4,20 +4,20 @@ import MySpeechConfig, { isValidSpeechConfig, getSpeechConfigFromMySpeechConfig 
 import { Voice } from "../util/TextToSpechVoices"
 
 export default function useTextToSpeech(initialText: string, initialVoice: Voice, mySpeechConfig: MySpeechConfig){
-    const [isSpeaking, setIsSpeaking] = useState(false);
+    const [isSynthesizing, setIsSynthesizing] = useState(false);
 
     function synthesizeSpeech(text: string = initialText, voice: Voice = initialVoice) {
         if (!isValidSpeechConfig(mySpeechConfig)) return;
         const speechConfig = getSpeechConfigFromMySpeechConfig(mySpeechConfig);
         speechConfig.speechSynthesisVoiceName = voice;
         console.log("Synthesizing speech in " + voice + "...");
-        setIsSpeaking(true);
+        setIsSynthesizing(true);
         const audioConfig = AudioConfig.fromDefaultSpeakerOutput();
         const synthesizer = new SpeechSynthesizer(speechConfig, audioConfig);
         synthesizer.speakTextAsync(
             text,
           (result) => {
-            setTimeout(() => setIsSpeaking(false), text.length * 70); //estimated millis per character to pronounse
+            setTimeout(() => setIsSynthesizing(false), text.length * 70); //estimated millis per character to pronounse
             console.log(result);
             if (result) {
               synthesizer.close();
@@ -25,7 +25,7 @@ export default function useTextToSpeech(initialText: string, initialVoice: Voice
             }
           },
           (error) => {
-            setIsSpeaking(false);
+            setIsSynthesizing(false);
             console.log(error);
             synthesizer.close();
           }
@@ -34,6 +34,6 @@ export default function useTextToSpeech(initialText: string, initialVoice: Voice
 
     return {
         synthesizeSpeech,
-        isSpeaking
+        isSynthesizing
     }
 }

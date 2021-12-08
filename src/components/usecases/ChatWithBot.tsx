@@ -229,7 +229,7 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
       <IconButton
         size="large"
         disabled={!isValidSpeechConfig(mySpeechConfig)}
-        color={textToSpeech.isSpeaking ? "secondary" : "primary"}
+        color={textToSpeech.isSynthesizing ? "secondary" : "primary"}
         onClick={() => textToSpeech.synthesizeSpeech()}
         aria-label="Speak output"
         style={{ marginTop: "20px" }}
