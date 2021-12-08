@@ -1,3 +1,4 @@
+import { VolumeUp } from "@mui/icons-material";
 import {
   Button,
   FormControl,
@@ -7,12 +8,15 @@ import {
   SelectChangeEvent,
   Typography,
 } from "@mui/material";
+import { useEffect } from "react";
 import useSpeechToTextContinuous from "../../hooks/useSpeechToTextContinuous";
+import useTextToSpeech from "../../hooks/useTextToSpeech";
 import MySpeechConfig from "../../models/MySpeechConfig";
 import {
   SpeechTranslationLanguage,
   SpeechTranslationLanguagesNames,
 } from "../../util/SupportedLanguages";
+import { Voice } from "../../util/TextToSpechVoices";
 
 interface RealtimeTranscriptionProps {
   speechConfig: MySpeechConfig;
@@ -22,6 +26,7 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
   speechConfig,
 }) => {
   const speechToTextContinuous = useSpeechToTextContinuous(speechConfig);
+  const {synthesizeSpeech, isSynthesizing} = useTextToSpeech("", Voice.de_CH_LeniNeural, speechConfig)
 
   const handleTranslationLanguageChange = (event: SelectChangeEvent) => {
     speechToTextContinuous.setTranslationTargetLanguage(
@@ -47,19 +52,29 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
       </Typography>
       <br />
       <br />
-      <Typography variant="body1">
+      <Typography variant="h6">
         {speechToTextContinuous.recognizingText}
       </Typography>
-      <Typography variant="subtitle2" color="primary">
+      <Typography variant="h6" color="primary">
         {speechToTextContinuous.translatingText}
       </Typography>
       <br />
-      <Typography variant="h6">
+      <Typography variant="h5">
         {speechToTextContinuous.recognizedText}
       </Typography>
-      <Typography variant="h6" color="primary">
+      <Typography variant="h5" color="primary">
         {speechToTextContinuous.translatedText}
       </Typography>
+      <Button
+        onClick={() => synthesizeSpeech(speechToTextContinuous.recognizedText)}
+        disabled={speechToTextContinuous.recognizedText.length < 1}
+        color={isSynthesizing? "secondary" : "primary"}
+        variant="outlined"
+        startIcon={<VolumeUp />}
+      >
+        Auf Schweizerdeutsch wiedergeben
+      </Button>
+      <br />
       <br />
       <Button
         onClick={speechToTextContinuous.sttFromMic}
