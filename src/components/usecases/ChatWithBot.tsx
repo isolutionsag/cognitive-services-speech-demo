@@ -2,13 +2,11 @@ import {
   ForumOutlined,
   SettingsVoice,
   VolumeUp,
-  VpnKey,
 } from "@mui/icons-material";
 import {
   IconButton,
   TextField,
   Grid,
-  Button,
   Typography,
   FormControl,
   InputLabel,
@@ -18,7 +16,6 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import useInput from "../../hooks/useInput";
-import GravityItemsArea from "../common/GravityItemsArea";
 import MySpeechConfig, {
   isValidSpeechConfig,
 } from "../../models/MySpeechConfig";
