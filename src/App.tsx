@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import "./App.css";
 import KeysConfigForm from "./components/SpeechConfigForm";
 import Home from "./components/Home";
-import PaperArea from "./components/common/PaperArea";
 import MySpeechConfig from "./models/MySpeechConfig";
 import QnAConfig from "./models/QnAConfig";
 import {
@@ -23,6 +22,7 @@ import UseCase from "./util/UseCase";
 import GravityItemsArea from "./components/common/GravityItemsArea";
 import ChatWithBot from "./components/usecases/ChatWithBot";
 import RealtimeTranscription from "./components/usecases/RealtimeTranscription";
+import BingApi from "./components/usecases/BingApi";
 import { ArrowBack, VpnKey } from "@mui/icons-material";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
@@ -87,7 +87,13 @@ function App() {
         <h1>Demo App using Azure Speech Services - <img src="images/switzerland.svg" height="28px" alt="switzerland" /> Language Model</h1>
       </div>
 
-      <PaperArea maxWidth={currentPage===Page.Home? 800: 400}>
+      <Paper
+        style={{
+          minHeight: "60vh",
+          padding: "40px",
+          margin: "20px"
+        }}
+      >
         {currentPage !== Page.Home && (
           <GravityItemsArea>
             <Button
@@ -123,8 +129,8 @@ function App() {
             setConfigKeys={handleChangeKeys}
           />
         )}
-        {currentPage === Page.UseCase &&  displayUseCase(selectedUseCase)}
-      </PaperArea>
+        {currentPage === Page.UseCase && displayUseCase(selectedUseCase)}
+      </Paper>
       <div className="App-footer">
         <span>created by <a href="https://www.isolutions.ch">isolutions AG</a> under MIT License.</span>
       </div>
@@ -150,7 +156,8 @@ function displayUseCase(useCase: UseCase) {
       );
     case UseCase.RealtimeTranscription:
       return <RealtimeTranscription speechConfig={speechConfig} />;
-      break;
+    case UseCase.BingApi:
+      return <BingApi speechConfig={speechConfig} />;
   }
 }
 
