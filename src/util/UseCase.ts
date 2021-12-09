@@ -1,7 +1,7 @@
 enum UseCase {
     BotChat = "botChat",
     RealtimeTranscription = "realtimeTranscription",
-    BingApi = "bingApi",
+    NewsReader = "newsReader",
 }
 
 export default UseCase

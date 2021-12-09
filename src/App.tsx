@@ -22,7 +22,7 @@ import UseCase from "./util/UseCase";
 import GravityItemsArea from "./components/common/GravityItemsArea";
 import ChatWithBot from "./components/usecases/ChatWithBot";
 import RealtimeTranscription from "./components/usecases/RealtimeTranscription";
-import BingApi from "./components/usecases/BingApi";
+import NewsReader from "./components/usecases/NewsReader";
 import { ArrowBack, VpnKey } from "@mui/icons-material";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
@@ -169,8 +169,8 @@ function displayUseCase(useCase: UseCase) {
       );
     case UseCase.RealtimeTranscription:
       return <RealtimeTranscription speechConfig={speechConfig} />;
-    case UseCase.BingApi:
-      return <BingApi speechConfig={speechConfig} />;
+    case UseCase.NewsReader:
+      return <NewsReader speechConfig={speechConfig} />;
   }
 }
 

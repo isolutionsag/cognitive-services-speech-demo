@@ -1,19 +1,19 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "CH Speech Demo App",
+  "name": "Demo App Azure Speech Service CH-Edition by isolutions",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "images/favicon-isolutions-bold-50x50.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "images/favicon-isolutions-bold-200x200.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "images/favicon-isolutions-bold-200x200.png",
       "type": "image/png",
       "sizes": "512x512"
     }

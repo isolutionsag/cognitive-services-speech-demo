@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@azure/cognitiveservices-newssearch": "^3.0.1",
+    "@azure/ms-rest-azure-js": "^2.1.0",
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
     "@material-ui/icons": "^4.11.2",
