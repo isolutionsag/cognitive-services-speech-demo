@@ -26,7 +26,7 @@ const Usecase: React.FC<UsecaseProps> = ({image, imageAlt, title, details, useCa
           image={image}
           alt={imageAlt}
         />
-        <CardContent >
+        <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             {title}
           </Typography>

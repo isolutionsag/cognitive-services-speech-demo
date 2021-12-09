@@ -25,6 +25,11 @@ import RealtimeTranscription from "./components/usecases/RealtimeTranscription";
 import BingApi from "./components/usecases/BingApi";
 import { ArrowBack, VpnKey } from "@mui/icons-material";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import AppBar from '@mui/material/AppBar';
+import Container from '@mui/material/Container';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 enum Page {
   Home,
@@ -81,60 +86,68 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-    <div className="App">
-      <div className="App-header">
-        <img src="images/isolutions.svg" className="logo" alt="iSolutions" />
-        <h1>Demo App using Azure Speech Services - <img src="images/switzerland.svg" height="28px" alt="switzerland" /> Language Model</h1>
-      </div>
+      <div className="App">
+        <AppBar position="static">
+          <Container maxWidth="xl">
+            <Toolbar disableGutters>
+              <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' } }}>
+                <img src="images/isolutions.svg" className="logo" alt="iSolutions" />
+                <Typography variant="h6" noWrap component="div" alignSelf="center">
+                  Demo App using Azure Speech Services with &nbsp;<img src="images/switzerland.svg" height="28px" alt="switzerland" />&nbsp;Language Model
+                </Typography>
+              </Box>
+              <Box>
+                <Button
+                  variant="contained"
+                  startIcon={<VpnKey />}
+                  onClick={() => setCurrentPage(Page.Settings)}
+                >
+                  Configure Keys
+                </Button>
+              </Box>
+            </Toolbar>
+          </Container>
+        </AppBar>
 
-      <Paper
-        style={{
-          minHeight: "60vh",
-          padding: "40px",
-          margin: "20px"
-        }}
-      >
-        {currentPage !== Page.Home && (
-          <GravityItemsArea>
-            <Button
-              onClick={handleBackClick}
-              variant="outlined"
-              color="secondary"
-              startIcon={<ArrowBack />}
-            >
-              Home
-            </Button>
-          </GravityItemsArea>
-        )}
-        {currentPage === Page.Home && (
-          <>
-            <GravityItemsArea right>
+        <Paper
+          style={{
+            minHeight: "60vh",
+            padding: "40px",
+            margin: "20px"
+          }}
+        >
+          {currentPage !== Page.Home && (
+            <GravityItemsArea>
               <Button
+                onClick={handleBackClick}
                 variant="outlined"
-                startIcon={<VpnKey />}
-                onClick={() => setCurrentPage(Page.Settings)}
+                color="secondary"
+                startIcon={<ArrowBack />}
               >
-                Configure Keys
+                Home
               </Button>
             </GravityItemsArea>
-            <Home useCaseSelected={handleSelectedUseCase} />
-          </>
-        )}
-        {currentPage === Page.Settings && (
-          <KeysConfigForm
-            hideConfigureScreen={handleBackClick}
-            mySpeechConfig={speechConfig}
-            qnaConfig={qnaConfig}
-            translatorConfig={translatorConfig}
-            setConfigKeys={handleChangeKeys}
-          />
-        )}
-        {currentPage === Page.UseCase && displayUseCase(selectedUseCase)}
-      </Paper>
-      <div className="App-footer">
-        <span>created by <a href="https://www.isolutions.ch">isolutions AG</a> under MIT License.</span>
+          )}
+          {currentPage === Page.Home && (
+            <>
+              <Home useCaseSelected={handleSelectedUseCase} />
+            </>
+          )}
+          {currentPage === Page.Settings && (
+            <KeysConfigForm
+              hideConfigureScreen={handleBackClick}
+              mySpeechConfig={speechConfig}
+              qnaConfig={qnaConfig}
+              translatorConfig={translatorConfig}
+              setConfigKeys={handleChangeKeys}
+            />
+          )}
+          {currentPage === Page.UseCase && displayUseCase(selectedUseCase)}
+        </Paper>
+        <div className="App-footer">
+          <span>created by <a href="https://www.isolutions.ch">isolutions AG</a> under MIT License.</span>
+        </div>
       </div>
-    </div>
     </ThemeProvider>
   );
 }

@@ -1,0 +1,32 @@
+{
+    "configurations": [
+    {
+        "name": "Launch via NPM",
+        "request": "launch",
+        "runtimeArgs": [
+            "run",
+            "start",
+            "debug"
+        ],
+        "runtimeExecutable": "npm",
+        "skipFiles": [
+            "<node_internals>/**"
+        ],
+        "type": "pwa-node"
+     }
+    ,{
+        "name": "Launch via YARN",
+        "request": "launch",
+        "runtimeArgs": [
+            "run",
+            "start",
+            "debug"
+        ],
+        "runtimeExecutable": "yarn",
+        "skipFiles": [
+            "<node_internals>/**"
+        ],
+        "type": "pwa-node"
+    }    
+    ]
+}

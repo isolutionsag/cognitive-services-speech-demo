@@ -14,7 +14,7 @@ interface HomeProps {
 const Home: React.FC<HomeProps> = ({ useCaseSelected }) => {
   return (
     <div>
-      <h1>Hi there!</h1>
+      <Typography variant="h2">Hi there!</Typography>
       <Typography variant="body1" gutterBottom mb={4}>
         {
           "Try out our speech, QnA Maker and translation services / Hey, ich bin die Leni! Hier kannst Du mit mir schwätzen, Videos in Realtime transkribieren und mehr"
@@ -23,7 +23,7 @@ const Home: React.FC<HomeProps> = ({ useCaseSelected }) => {
       <Grid container spacing={4}>
         <Grid item xs={12} md={6}>
           <UseCaseCard
-            image="todo"
+            image="images/isolution_zrh_innenarchitektur-102.jpg"
             imageAlt="Bot icon with several language symbols"
             title="Multilingual Bot Chat"
             details="Chat with a bot in the language of your choice"
@@ -33,7 +33,7 @@ const Home: React.FC<HomeProps> = ({ useCaseSelected }) => {
         </Grid>
         <Grid item xs={12} md={6}>
           <UseCaseCard
-            image="todo"
+            image="images/isolution_zrh_innenarchitektur-31.jpg"
             imageAlt="Recycling icon with several language symbols"
             title="Realtime Transkription"
             details="Realtime Transkription Schweizerdeutsch mit Übersetzung in mehrere Sprachen"
@@ -43,7 +43,7 @@ const Home: React.FC<HomeProps> = ({ useCaseSelected }) => {
         </Grid>
         <Grid item xs={12} md={6}>
           <UseCaseCard
-            image="todo"
+            image="images/isolution_zrh_innenarchitektur-100.jpg"
             imageAlt="News Icon with 3 lines symbolyzing summary"
             title="Bing News Reader and Summarizer"
             details="Get the latest Bing news read out loud in your language and quickly view the summary of the events"
