@@ -72,15 +72,6 @@ const FourLangToSwissTranslation: React.FC<FourLangToSwissTranslationProps> = ({
 
   return (
     <Grid container direction="column" alignItems="center">
-      <Typography variant="h3" noWrap>
-        Übersetzung ins Schweizerdeutsch
-      </Typography>
-      <Typography variant="body2">
-        Spreche in EN, FR, IT, ES und erhalte nach einem Satz die
-        Schweizerdeutsche Übersetung gesprochen zurück
-      </Typography>
-      <br />
-      <br />
       <IconButton
         size="large"
         disabled={!isValidSpeechConfig(mySpeechConfig)}

@@ -23,19 +23,20 @@ import {
 } from "./repositories/BingSearchConfigRepository";
 import TranslatorConfig from "./models/TranslatorConfig";
 import BingSearchConfig from "./models/BingSearchConfig";
-import UseCase from "./util/UseCase";
+import UseCase, { UseCaseModels } from "./util/UseCase";
 import GravityItemsArea from "./components/common/GravityItemsArea";
+import UseCaseTemplate from "./components/usecases/UseCaseTemplate";
 import FourLangToSwissTranslation from "./components/usecases/FourLangToSwissTranslation";
 import ChatWithBot from "./components/usecases/ChatWithBot";
 import RealtimeTranscription from "./components/usecases/RealtimeTranscription";
 import NewsReader from "./components/usecases/NewsReader";
 import { ArrowBack, VpnKey } from "@mui/icons-material";
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Container from '@mui/material/Container';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import AppBar from "@mui/material/AppBar";
+import Container from "@mui/material/Container";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
 enum Page {
   Home,
@@ -53,7 +54,7 @@ function App() {
     mySpeechConfig: MySpeechConfig,
     qnaConfig: QnAConfig,
     translatorConfig: TranslatorConfig,
-    bingSearchConfig: BingSearchConfig,
+    bingSearchConfig: BingSearchConfig
   ) => {
     saveSpeechConfig(mySpeechConfig);
     saveQnAConfig(qnaConfig);
@@ -61,8 +62,6 @@ function App() {
     saveBingSearchConfig(bingSearchConfig);
     handleBackClick();
   };
-
-  const [backButtonClicked, setBackButtonClicked] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(Page.Home);
   const [prevPage, setPrevPage] = useState(Page.Home);
@@ -72,15 +71,11 @@ function App() {
   };
 
   const handleBackClick = () => {
-    console.log("Setting backButtonClicked to true...")
-    setBackButtonClicked(true)
-    console.log("backButtonClicked set to: ", backButtonClicked)
     setCurrentPage(prevPage);
   };
 
   const [selectedUseCase, setSelectedUseCase] = useState(UseCase.BotChat);
   const handleSelectedUseCase = (useCase: UseCase) => {
-    setBackButtonClicked(false)
     updatePage(Page.UseCase);
     setSelectedUseCase(useCase);
   };
@@ -88,28 +83,42 @@ function App() {
   const theme = createTheme({
     palette: {
       primary: {
-        main: '#003854',
+        main: "#003854",
       },
       secondary: {
-        main: '#E83181'
+        main: "#E83181",
       },
       background: {
-        default: '#d4dce1'
-      }
-    }
-  }); 
+        default: "#d4dce1",
+      },
+    },
+  });
 
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-
-      <AppBar position="static">
+        <AppBar position="static">
           <Container maxWidth="xl">
             <Toolbar disableGutters>
-              <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' } }}>
-                <img src="images/isolutions.svg" className="logo" alt="iSolutions" />
-                <Typography variant="h6" noWrap component="div" alignSelf="center">
-                  Demo App using Azure Speech Services with &nbsp;<img src="images/switzerland.svg" height="28px" alt="switzerland" />&nbsp;Language Model
+              <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "flex" } }}>
+                <img
+                  src="images/isolutions.svg"
+                  className="logo"
+                  alt="iSolutions"
+                />
+                <Typography
+                  variant="h6"
+                  noWrap
+                  component="div"
+                  alignSelf="center"
+                >
+                  Demo App using Azure Speech Services with &nbsp;
+                  <img
+                    src="images/switzerland.svg"
+                    height="28px"
+                    alt="switzerland"
+                  />
+                  &nbsp;Language Model
                 </Typography>
               </Box>
               <Box>
@@ -129,7 +138,7 @@ function App() {
           style={{
             minHeight: "60vh",
             padding: "40px",
-            margin: "20px"
+            margin: "20px",
           }}
         >
           {currentPage !== Page.Home && (
@@ -159,27 +168,43 @@ function App() {
               setConfigKeys={handleChangeKeys}
             />
           )}
-          {currentPage === Page.UseCase && displayUseCase(selectedUseCase, backButtonClicked)}
+          {currentPage === Page.UseCase  && displayUseCase(selectedUseCase)}
         </Paper>
 
         <div className="App-footer">
-          <span>created by <a href="https://www.isolutions.ch">isolutions AG</a> under MIT License.</span>
+          <span>
+            created by <a href="https://www.isolutions.ch">isolutions AG</a>{" "}
+            under MIT License.
+          </span>
         </div>
-        
       </div>
     </ThemeProvider>
   );
 }
 
-function displayUseCase(useCase: UseCase, backButtonClicked: boolean) {
+function displayUseCase(useCase: UseCase) {
+  console.log("Usecase selected: ", useCase);
+
   const speechConfig = loadSpeechConfig();
+  return (
+    <UseCaseTemplate model={UseCaseModels[useCase]} speechConfig={speechConfig}>
+      {getUseCaseContent(useCase, speechConfig)}
+    </UseCaseTemplate>
+  );
+}
+
+function getUseCaseContent(useCase: UseCase, speechConfig: MySpeechConfig) {
   const qnaConfig = loadQnAConfig();
   const translatorConfig = loadTranslatorConfig();
 
-  console.log("Usecase selected: ", useCase);
   switch (useCase) {
     case UseCase.FourLangToSwissTranslation:
-      return <FourLangToSwissTranslation mySpeechConfig={speechConfig} translatorConfig={translatorConfig}/>
+      return (
+        <FourLangToSwissTranslation
+          mySpeechConfig={speechConfig}
+          translatorConfig={translatorConfig}
+        />
+      );
     case UseCase.BotChat:
       return (
         <ChatWithBot
@@ -189,7 +214,7 @@ function displayUseCase(useCase: UseCase, backButtonClicked: boolean) {
         />
       );
     case UseCase.RealtimeTranscription:
-return <RealtimeTranscription speechConfig={speechConfig} backButtonClicked={backButtonClicked} />;
+      return <RealtimeTranscription speechConfig={speechConfig} />;
     case UseCase.NewsReader:
       return <NewsReader speechConfig={speechConfig} />;
   }

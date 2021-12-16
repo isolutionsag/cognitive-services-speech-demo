@@ -69,8 +69,6 @@ const NewsReader: React.FC<NewsReaderProps> = ({ speechConfig }) => {
   return (
     <Grid container justifyContent="center">
       <div style={{ maxWidth: "800px" }}>
-        <Typography variant="h4">Latest News by Leni</Typography>
-
         <TextField
           id="standard-basic"
           label="News Topic"

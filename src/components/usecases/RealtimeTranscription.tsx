@@ -21,12 +21,10 @@ import { Voice } from "../../util/TextToSpechVoices";
 
 interface RealtimeTranscriptionProps {
   speechConfig: MySpeechConfig;
-  backButtonClicked: boolean;
 }
 
 const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
   speechConfig,
-  backButtonClicked,
 }) => {
   const speechToTextContinuous = useSpeechToTextContinuous(speechConfig);
   const { synthesizeSpeech, isSynthesizing } = useTextToSpeech(
@@ -41,26 +39,17 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
     );
   };
 
+  useEffect(() => {
+    return () => {
+      console.log("Cleanup transcription component");
+      speechToTextContinuous.sttFromMicStop();
+    };
+  }, []);
+
   return (
     <div style={{ minHeight: "65vh" }}>
-      <Typography variant="h3" noWrap>
-        RealtimeTranscription
-      </Typography>
-      <Typography variant="body2">
-        Fang einfach an zu reden, auf Schweizer- oder Hochdeutsch, wie du
-        willst...
-      </Typography>
-      <Typography variant="body2" color="primary">
-        Übersetzungungen sind blau.
-      </Typography>
-      <Typography variant="body2">
-        Oben siehst du den aktuell gesprochenen Text und unten den vollständigen
-        Text, nachdem du eine Pause gemacht hast.
-      </Typography>
-      <br />
-      <br />
       <Typography variant="subtitle1">Erkannte Wörter</Typography>
-      <Box border="1px solid black" borderRadius="5px"  padding="10px">
+      <Box border="1px solid black" borderRadius="5px" padding="10px">
         <Typography variant="h6">
           {speechToTextContinuous.recognizingText}
         </Typography>
