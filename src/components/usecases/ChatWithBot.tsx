@@ -163,82 +163,88 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
   };
 
   return (
-    <Grid container direction="column" alignItems="center" maxWidth="400px">
-      <h1>Hi!</h1>
-      <Typography variant="body1" gutterBottom>
-        {speechToText.infoText}
-      </Typography>
+    <Grid container justifyContent="center">
+      <Grid container item direction="column" alignItems="center" maxWidth="600px">
+        <h1>Hi!</h1>
+        <Typography variant="body1" gutterBottom>
+          {speechToText.infoText}
+        </Typography>
 
-      <Typography variant="body2" color="orange" gutterBottom>
-        {speechToText.error}
-      </Typography>
-      <IconButton
-        size="large"
-        disabled={!isValidSpeechConfig(mySpeechConfig)}
-        color={speechToText.isRecordingAndConverting ? "secondary" : "primary"}
-        onClick={() => speechToText.sttFromMic()}
-      >
-        <SettingsVoice fontSize="large" />
-      </IconButton>
-      <TextField
-        style={{ marginTop: "20px" }}
-        multiline
-        fullWidth
-        name="Input"
-        id="Input"
-        label="Input"
-        value={useInputInput.value}
-        onChange={useInputInput.handleChange}
-        error={useInputInput.error !== ""}
-        helperText={
-          useInputInput.error !== ""
-            ? useInputInput.error
-            : `Detected language: ${speechToText.detectedLanguageLocale}`
-        }
-      />
-      <div style={{ padding: "20px" }}>
-        <ForumOutlined style={{ height: "50px", width: "50px" }} />
-      </div>
-      <FormControl>
-        <InputLabel id="language-input-label">Output language</InputLabel>
-        <Select
-          style={{ minWidth: "200px" }}
-          autoWidth
-          labelId="language-select-label"
-          id="language-select"
-          value={outputLanguage}
-          label="Output language"
-          onChange={handleOutputLanguageChange}
+        <Typography variant="body2" color="orange" gutterBottom>
+          {speechToText.error}
+        </Typography>
+        <IconButton
+          size="large"
+          disabled={!isValidSpeechConfig(mySpeechConfig)}
+          color={
+            speechToText.isRecordingAndConverting ? "secondary" : "primary"
+          }
+          onClick={() => speechToText.sttFromMic()}
         >
-          {languageModels.map((languageModel) => (
-            <MenuItem value={languageModel.key}>{languageModel.label}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <TextField
-        style={{ marginTop: "10px" }}
-        multiline
-        minRows={3}
-        fullWidth
-        name="Bot response"
-        id="Bot response"
-        label="Bot response"
-        value={useInputOutput.value}
-        onChange={useInputOutput.handleChange}
-        error={useInputOutput.error !== ""}
-        helperText={useInputOutput.error}
-      />
+          <SettingsVoice fontSize="large" />
+        </IconButton>
+        <TextField
+          style={{ marginTop: "20px" }}
+          multiline
+          fullWidth
+          name="Input"
+          id="Input"
+          label="Input"
+          value={useInputInput.value}
+          onChange={useInputInput.handleChange}
+          error={useInputInput.error !== ""}
+          helperText={
+            useInputInput.error !== ""
+              ? useInputInput.error
+              : `Detected language: ${speechToText.detectedLanguageLocale}`
+          }
+        />
+        <div style={{ padding: "20px" }}>
+          <ForumOutlined style={{ height: "50px", width: "50px" }} />
+        </div>
+        <FormControl>
+          <InputLabel id="language-input-label">Output language</InputLabel>
+          <Select
+            style={{ minWidth: "200px" }}
+            autoWidth
+            labelId="language-select-label"
+            id="language-select"
+            value={outputLanguage}
+            label="Output language"
+            onChange={handleOutputLanguageChange}
+          >
+            {languageModels.map((languageModel) => (
+              <MenuItem value={languageModel.key}>
+                {languageModel.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <TextField
+          style={{ marginTop: "10px" }}
+          multiline
+          minRows={3}
+          fullWidth
+          name="Bot response"
+          id="Bot response"
+          label="Bot response"
+          value={useInputOutput.value}
+          onChange={useInputOutput.handleChange}
+          error={useInputOutput.error !== ""}
+          helperText={useInputOutput.error}
+        />
 
-      <IconButton
-        size="large"
-        disabled={!isValidSpeechConfig(mySpeechConfig)}
-        color={textToSpeech.isSynthesizing ? "secondary" : "primary"}
-        onClick={() => textToSpeech.synthesizeSpeech()}
-        aria-label="Speak output"
-        style={{ marginTop: "20px" }}
-      >
-        <VolumeUp fontSize="large" />
-      </IconButton>
+        <IconButton
+          size="large"
+          disabled={!isValidSpeechConfig(mySpeechConfig)}
+          color={textToSpeech.isSynthesizing ? "secondary" : "primary"}
+          onClick={() => textToSpeech.synthesizeSpeech()}
+          aria-label="Speak output"
+          style={{ marginTop: "20px" }}
+        >
+          <VolumeUp fontSize="large" />
+        </IconButton>
+      </Grid>
     </Grid>
   );
 };
