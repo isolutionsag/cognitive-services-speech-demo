@@ -1,5 +1,6 @@
 import { VolumeUp } from "@mui/icons-material";
 import {
+  Box,
   Button,
   FormControl,
   InputLabel,
@@ -20,13 +21,19 @@ import { Voice } from "../../util/TextToSpechVoices";
 
 interface RealtimeTranscriptionProps {
   speechConfig: MySpeechConfig;
+  backButtonClicked: boolean;
 }
 
 const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
   speechConfig,
+  backButtonClicked,
 }) => {
   const speechToTextContinuous = useSpeechToTextContinuous(speechConfig);
-  const {synthesizeSpeech, isSynthesizing} = useTextToSpeech("", Voice.de_CH_LeniNeural, speechConfig)
+  const { synthesizeSpeech, isSynthesizing } = useTextToSpeech(
+    "",
+    Voice.de_CH_LeniNeural,
+    speechConfig
+  );
 
   const handleTranslationLanguageChange = (event: SelectChangeEvent) => {
     speechToTextContinuous.setTranslationTargetLanguage(
@@ -52,28 +59,37 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
       </Typography>
       <br />
       <br />
-      <Typography variant="h6">
-        {speechToTextContinuous.recognizingText}
-      </Typography>
-      <Typography variant="h6" color="primary">
-        {speechToTextContinuous.translatingText}
-      </Typography>
+      <Typography variant="subtitle1">Erkannte Wörter</Typography>
+      <Box border="1px solid black" borderRadius="5px"  padding="10px">
+        <Typography variant="h6">
+          {speechToTextContinuous.recognizingText}
+        </Typography>
+        <Typography variant="h6" color="primary">
+          {speechToTextContinuous.translatingText}
+        </Typography>
+      </Box>
       <br />
-      <Typography variant="h5">
-        {speechToTextContinuous.recognizedText}
-      </Typography>
-      <Typography variant="h5" color="primary">
-        {speechToTextContinuous.translatedText}
-      </Typography>
-      <Button
-        onClick={() => synthesizeSpeech(speechToTextContinuous.recognizedText)}
-        disabled={speechToTextContinuous.recognizedText.length < 1}
-        color={isSynthesizing? "secondary" : "primary"}
-        variant="outlined"
-        startIcon={<VolumeUp />}
-      >
-        Auf Schweizerdeutsch wiedergeben
-      </Button>
+      <Typography variant="subtitle1">Erkannte Sätze (nach Pause)</Typography>
+      <Box border="1px solid black" borderRadius="5px" padding="10px">
+        <Typography variant="h5">
+          {speechToTextContinuous.recognizedText}
+        </Typography>
+        <Typography variant="h5" color="primary">
+          {speechToTextContinuous.translatedText}
+        </Typography>
+        <br />
+        <Button
+          onClick={() =>
+            synthesizeSpeech(speechToTextContinuous.recognizedText)
+          }
+          disabled={speechToTextContinuous.recognizedText.length < 1}
+          color={isSynthesizing ? "secondary" : "primary"}
+          variant="outlined"
+          startIcon={<VolumeUp />}
+        >
+          Auf Schweizerdeutsch wiedergeben
+        </Button>
+      </Box>
       <br />
       <br />
       <Button
