@@ -14,7 +14,9 @@ import Language, { InputLanguageLocale } from "../util/Language";
 const infoTextTapToStartRecording =
   "Tap the record button and say something in EN, DE, FR or IT...";
 
-export default function useSpeechToText(mySpeechConfig: MySpeechConfig) {
+export default function useSpeechToText(mySpeechConfig: MySpeechConfig, recognitionLanguages: Language[]) {
+  if(recognitionLanguages.length > 4) throw new Error("Recogniion languages can't be more than 4")
+
   const [infoText, setInfoText] = useState(infoTextTapToStartRecording);
   const [resultText, setResultText] = useState("");
   const [detectedLanguageLocale, setDetectedLanguage] = useState("");
@@ -35,12 +37,9 @@ export default function useSpeechToText(mySpeechConfig: MySpeechConfig) {
   function sttFromMic() {
     if (!isValidSpeechConfig(mySpeechConfig)) return;
     const speechConfig = getSpeechConfigFromMySpeechConfig(mySpeechConfig);
-    const autoDetectConfig = AutoDetectSourceLanguageConfig.fromLanguages([
-      InputLanguageLocale[Language.EN],
-      InputLanguageLocale[Language.DE],
-      InputLanguageLocale[Language.FR],
-      InputLanguageLocale[Language.ES],
-    ]); //max 4 languages for autodetection: https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/how-to-automatic-language-detection?pivots=programming-language-javascript
+    const autoDetectConfig = AutoDetectSourceLanguageConfig.fromLanguages(recognitionLanguages.map(l => InputLanguageLocale[l]));
+    //max 4 languages for autodetection: https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/how-to-automatic-language-detection?pivots=programming-language-javascript
+    
     const audioConfig = AudioConfig.fromDefaultMicrophoneInput();
     const recognizer = SpeechRecognizer.FromConfig(
       speechConfig,

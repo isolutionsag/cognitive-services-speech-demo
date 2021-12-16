@@ -5,6 +5,7 @@ enum Language {
   DE = "DE",
   EN = "EN",
   FR = "FR",
+  IT = "IT",
   ES = "ES",
 }
 
@@ -15,6 +16,7 @@ export const InputLanguageLocale: { [id in Language]: string } = {
   [Language.DE]: "de-DE",
   [Language.EN]: "en-US",
   [Language.FR]: "fr-FR",
+  [Language.IT]: "it-IT",
   [Language.ES]: "es-ES",
 };
 
@@ -23,6 +25,7 @@ export const OutputLanguageLocale: { [id in Language]: string } = {
   [Language.DE]: "de-CH",
   [Language.EN]: "en-US",
   [Language.FR]: "fr-FR",
+  [Language.IT]: "it-IT",
   [Language.ES]: "es-ES",
 };
 
@@ -31,6 +34,7 @@ export const LanguageLabels: { [id in Language]: string } = {
   [Language.DE]: "Deutsch",
   [Language.EN]: "Englisch",
   [Language.FR]: "Französisch",
+  [Language.IT]: "Italienisch",
   [Language.ES]: "Spanish",
 };
 

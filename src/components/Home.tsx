@@ -21,6 +21,16 @@ const Home: React.FC<HomeProps> = ({ useCaseSelected }) => {
         }
       </Typography>
       <Grid container spacing={4}>
+      <Grid item xs={12} md={6}>
+          <UseCaseCard
+            image="todo"
+            imageAlt="todo"
+            title="Übersetzung ins Schweizerdeutsch"
+            details="Spreche in EN, FR, IT, ES und erhalte nach einem Satz die Schweizerdeutsche Übersetung gesprochen zurück"
+            useCase={UseCase.FourLangToSwissTranslation}
+            onSelected={useCaseSelected}
+          />
+        </Grid>
         <Grid item xs={12} md={6}>
           <UseCaseCard
             image="images/isolution_zrh_innenarchitektur-102.jpg"

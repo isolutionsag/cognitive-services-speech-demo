@@ -1,8 +1,4 @@
-import {
-  ForumOutlined,
-  SettingsVoice,
-  VolumeUp,
-} from "@mui/icons-material";
+import { ForumOutlined, SettingsVoice, VolumeUp } from "@mui/icons-material";
 import {
   IconButton,
   TextField,
@@ -31,6 +27,13 @@ import Language, {
   languageModels,
 } from "../../util/Language";
 
+const recognitionLanguages = [
+  Language.EN,
+  Language.DE,
+  Language.FR,
+  Language.ES,
+];
+
 interface ChatWithBotProps {
   mySpeechConfig: MySpeechConfig;
   qnaConfig: QnaConfig;
@@ -56,7 +59,7 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
 
   const [inputTranslation, setInputTranslation] = useState({ text: "" });
 
-  const speechToText = useSpeechToText(mySpeechConfig);
+  const speechToText = useSpeechToText(mySpeechConfig, recognitionLanguages);
   const _useBotResponse = useBotResponse(inputTranslation, qnaConfig);
 
   const useInputOutput = useInput("", () => "", undefined, false);

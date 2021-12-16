@@ -20,6 +20,7 @@ import {
 import TranslatorConfig from "./models/TranslatorConfig";
 import UseCase from "./util/UseCase";
 import GravityItemsArea from "./components/common/GravityItemsArea";
+import FourLangToSwissTranslation from "./components/usecases/FourLangToSwissTranslation";
 import ChatWithBot from "./components/usecases/ChatWithBot";
 import RealtimeTranscription from "./components/usecases/RealtimeTranscription";
 import NewsReader from "./components/usecases/NewsReader";
@@ -53,6 +54,8 @@ function App() {
     handleBackClick();
   };
 
+  const [backButtonClicked, setBackButtonClicked] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(Page.Home);
   const [prevPage, setPrevPage] = useState(Page.Home);
   const updatePage = (page: Page) => {
@@ -61,11 +64,15 @@ function App() {
   };
 
   const handleBackClick = () => {
+    console.log("Setting backButtonClicked to true...")
+    setBackButtonClicked(true)
+    console.log("backButtonClicked set to: ", backButtonClicked)
     setCurrentPage(prevPage);
   };
 
   const [selectedUseCase, setSelectedUseCase] = useState(UseCase.BotChat);
   const handleSelectedUseCase = (useCase: UseCase) => {
+    setBackButtonClicked(false)
     updatePage(Page.UseCase);
     setSelectedUseCase(useCase);
   };
@@ -87,7 +94,8 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-        <AppBar position="static">
+
+      <AppBar position="static">
           <Container maxWidth="xl">
             <Toolbar disableGutters>
               <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' } }}>
@@ -142,23 +150,27 @@ function App() {
               setConfigKeys={handleChangeKeys}
             />
           )}
-          {currentPage === Page.UseCase && displayUseCase(selectedUseCase)}
+          {currentPage === Page.UseCase && displayUseCase(selectedUseCase, backButtonClicked)}
         </Paper>
+
         <div className="App-footer">
           <span>created by <a href="https://www.isolutions.ch">isolutions AG</a> under MIT License.</span>
         </div>
+        
       </div>
     </ThemeProvider>
   );
 }
 
-function displayUseCase(useCase: UseCase) {
+function displayUseCase(useCase: UseCase, backButtonClicked: boolean) {
   const speechConfig = loadSpeechConfig();
   const qnaConfig = loadQnAConfig();
   const translatorConfig = loadTranslatorConfig();
 
   console.log("Usecase selected: ", useCase);
   switch (useCase) {
+    case UseCase.FourLangToSwissTranslation:
+      return <FourLangToSwissTranslation mySpeechConfig={speechConfig} translatorConfig={translatorConfig}/>
     case UseCase.BotChat:
       return (
         <ChatWithBot
@@ -168,7 +180,7 @@ function displayUseCase(useCase: UseCase) {
         />
       );
     case UseCase.RealtimeTranscription:
-      return <RealtimeTranscription speechConfig={speechConfig} />;
+return <RealtimeTranscription speechConfig={speechConfig} backButtonClicked={backButtonClicked} />;
     case UseCase.NewsReader:
       return <NewsReader speechConfig={speechConfig} />;
   }
