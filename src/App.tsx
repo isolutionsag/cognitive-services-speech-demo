@@ -1,7 +1,7 @@
 import { Button, Paper } from "@mui/material";
 import React, { useState } from "react";
 import "./App.css";
-import KeysConfigForm from "./components/SpeechConfigForm";
+import KeysConfigForm from "./components/ConfigForm";
 import Home from "./components/Home";
 import MySpeechConfig from "./models/MySpeechConfig";
 import QnAConfig from "./models/QnAConfig";
@@ -17,7 +17,12 @@ import {
   loadTranslatorConfig,
   saveTranslatorConfig,
 } from "./repositories/TranslationConfigRepository";
+import {
+  loadBingSearchConfig,
+  saveBingSearchConfig,
+} from "./repositories/BingSearchConfigRepository";
 import TranslatorConfig from "./models/TranslatorConfig";
+import BingSearchConfig from "./models/BingSearchConfig";
 import UseCase from "./util/UseCase";
 import GravityItemsArea from "./components/common/GravityItemsArea";
 import FourLangToSwissTranslation from "./components/usecases/FourLangToSwissTranslation";
@@ -42,15 +47,18 @@ function App() {
   const speechConfig = loadSpeechConfig();
   const qnaConfig = loadQnAConfig();
   const translatorConfig = loadTranslatorConfig();
+  const bingSearchConfig = loadBingSearchConfig();
 
   const handleChangeKeys = (
     mySpeechConfig: MySpeechConfig,
     qnaConfig: QnAConfig,
-    translatorConfig: TranslatorConfig
+    translatorConfig: TranslatorConfig,
+    bingSearchConfig: BingSearchConfig,
   ) => {
     saveSpeechConfig(mySpeechConfig);
     saveQnAConfig(qnaConfig);
     saveTranslatorConfig(translatorConfig);
+    saveBingSearchConfig(bingSearchConfig);
     handleBackClick();
   };
 
@@ -147,6 +155,7 @@ function App() {
               mySpeechConfig={speechConfig}
               qnaConfig={qnaConfig}
               translatorConfig={translatorConfig}
+              bingSearchConfig={bingSearchConfig}
               setConfigKeys={handleChangeKeys}
             />
           )}

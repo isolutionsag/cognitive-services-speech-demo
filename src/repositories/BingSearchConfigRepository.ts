@@ -1,20 +1,20 @@
-import TranslatorConfig, { DefaultTranslatorConfig } from "../models/TranslatorConfig";
+import BingSearchConfig, { DefaultBingSearchConfig } from "../models/BingSearchConfig";
 
-const predicate = "translator"
+const predicate = "bingSearch"
 const resourceKeyStorageKey = "subscriptionKey";
 
-export function loadTranslatorConfig(): TranslatorConfig {
+export function loadBingSearchConfig(): BingSearchConfig {
   var subscriptionKey = localStorage.getItem(getStorageKey(resourceKeyStorageKey));
 
-  let result = DefaultTranslatorConfig;
+  let result = DefaultBingSearchConfig;
   if (subscriptionKey) result.subscriptionKey = subscriptionKey;
   return result;
 }
 
-export function saveTranslatorConfig(config: TranslatorConfig) {  
+export function saveBingSearchConfig(config: BingSearchConfig) {  
   localStorage.setItem(getStorageKey(resourceKeyStorageKey), config.subscriptionKey);
 }
 
 function getStorageKey(key: string){
-  return predicate + "_" + key;
+    return predicate + "_" + key;
 }
