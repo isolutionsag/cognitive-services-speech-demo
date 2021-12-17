@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   FormControl,
+  Grid,
   InputLabel,
   MenuItem,
   Select,
@@ -13,6 +14,7 @@ import { useEffect } from "react";
 import useSpeechToTextContinuous from "../../hooks/useSpeechToTextContinuous";
 import useTextToSpeech from "../../hooks/useTextToSpeech";
 import MySpeechConfig from "../../models/MySpeechConfig";
+import { getVoiceForLanguage } from "../../util/Language";
 import {
   SpeechTranslationLanguage,
   SpeechTranslationLanguagesNames,
@@ -49,7 +51,12 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
   return (
     <div style={{ minHeight: "65vh" }}>
       <Typography variant="subtitle1">Erkannte Wörter</Typography>
-      <Box border="1px solid black" borderRadius="5px" padding="10px" minWidth="800px">
+      <Box
+        border="1px solid black"
+        borderRadius="5px"
+        padding="10px"
+        minWidth="800px"
+      >
         <Typography variant="h6">
           {speechToTextContinuous.recognizingText}
         </Typography>
@@ -59,7 +66,12 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
       </Box>
       <br />
       <Typography variant="subtitle1">Erkannte Sätze (nach Pause)</Typography>
-      <Box border="1px solid black" borderRadius="5px" padding="10px" minWidth="800px">
+      <Box
+        border="1px solid black"
+        borderRadius="5px"
+        padding="10px"
+        minWidth="800px"
+      >
         <Typography variant="h5">
           {speechToTextContinuous.recognizedText}
         </Typography>
@@ -67,17 +79,46 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
           {speechToTextContinuous.translatedText}
         </Typography>
         <br />
-        <Button
-          onClick={() =>
-            synthesizeSpeech(speechToTextContinuous.recognizedText)
-          }
-          disabled={speechToTextContinuous.recognizedText.length < 1}
-          color={isSynthesizing ? "secondary" : "primary"}
-          variant="outlined"
-          startIcon={<VolumeUp />}
-        >
-          Auf Schweizerdeutsch wiedergeben
-        </Button>
+        <Grid container spacing={2} justifyContent="space-between">
+          <Grid item>
+            <Button
+              onClick={() =>
+                synthesizeSpeech(
+                  speechToTextContinuous.recognizedText,
+                  Voice.de_CH_LeniNeural
+                )
+              }
+              disabled={speechToTextContinuous.recognizedText.length < 1}
+              color={isSynthesizing ? "secondary" : "primary"}
+              variant="outlined"
+              startIcon={<VolumeUp />}
+            >
+              Auf Schweizerdeutsch wiedergeben
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              onClick={() => {
+                const voice = getVoiceForLanguage(
+                  speechToTextContinuous.translationTargetLanguage
+                );
+                console.log("clicked speak in target language: ", speechToTextContinuous.translationTargetLanguage)
+                console.log("Voice: ", voice)
+                synthesizeSpeech(speechToTextContinuous.translatedText, voice);
+              }}
+              disabled={speechToTextContinuous.translatedText?.length < 1}
+              color={isSynthesizing ? "secondary" : "primary"}
+              variant="outlined"
+              startIcon={<VolumeUp />}
+            >
+              {`Auf ${
+                SpeechTranslationLanguagesNames[
+                  speechToTextContinuous.translationTargetLanguage
+                ]
+              } wiedergeben`}
+            </Button>
+          </Grid>
+        </Grid>
       </Box>
       <br />
       <br />
