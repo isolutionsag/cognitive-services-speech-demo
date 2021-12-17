@@ -1,10 +1,13 @@
 import MySpeechConfig from "../../models/MySpeechConfig";
 import {
+  Avatar,
   Button,
   Divider,
   Grid,
   List,
   ListItem,
+  ListItemAvatar,
+  ListItemIcon,
   ListItemText,
   TextField,
   Typography,
@@ -24,6 +27,8 @@ interface NewsItem {
   title: string;
   description: string;
   url: string;
+  thumbnail: string;
+  datePublished: Date;
 }
 
 const NewsReader: React.FC<NewsReaderProps> = ({ speechConfig }) => {
@@ -61,6 +66,8 @@ const NewsReader: React.FC<NewsReaderProps> = ({ speechConfig }) => {
           title: result.name,
           description: result.description,
           url: result.url,
+          thumbnail: result.image?.thumbnail?.contentUrl,
+          datePublished: new Date(result.datePublished),
         };
       })
     );
@@ -121,38 +128,61 @@ const NewsItemRow: React.FC<{
   const [isItemBeingSynthesized, setIsItemBeingSynthesized] = useState(false);
 
   useEffect(() => {
-    if (!isSynthesizing && index === 0) handleReadNews()
-  }, [item])
+    if (!isSynthesizing && index === 0) handleReadNews();
+  }, [item]);
 
   useEffect(() => {
-    if(!isSynthesizing) setIsItemBeingSynthesized(false)
-  }, [isSynthesizing])
+    if (!isSynthesizing) setIsItemBeingSynthesized(false);
+  }, [isSynthesizing]);
 
-  function handleReadNews(){
-    synthesizeNewsItem(item)
-    setIsItemBeingSynthesized(true)
+  function handleReadNews() {
+    synthesizeNewsItem(item);
+    setIsItemBeingSynthesized(true);
   }
 
   return (
     <React.Fragment>
       <Divider component="li" />
-      <ListItem alignItems="flex-start" >
-        <ListItemText primary={item.title} secondary={item.description} />
-        <div
-          style={{ display: "inline", minWidth: "130px", marginLeft: "10px" }}
-        >
-          <Button href={item.url} target="_blank" fullWidth>
-            Seite öffnen
-          </Button>
-          <Button
-            disabled={isSynthesizing}
-            variant="contained"
-            fullWidth
-            onClick={handleReadNews}
-          >
-            {isItemBeingSynthesized ? "Wird Vorgelesen..." : "Vorlesen"}
-          </Button>
-        </div>
+      <ListItem alignItems="flex-start">
+        <ListItemAvatar>
+          <Avatar
+            sx={{ width: 100, height: 100 }}
+            alt="News thumbnail"
+            src={item.thumbnail}
+          />
+        </ListItemAvatar>
+        <ListItemText
+          style={{ marginLeft: "20px" }}
+          primary={item.title}
+          secondary={
+            <React.Fragment>
+              <Typography
+                sx={{ display: "block" }}
+                component="span"
+                variant="body2"
+                color="text.secondary"
+              >
+                {item.description}
+              </Typography>
+              {`— ${item.datePublished.toDateString()}`}
+            </React.Fragment>
+          }
+        />
+        <ListItemIcon>
+          <div style={{ maxWidth: "150px" }}>
+            <Button href={item.url} target="_blank" fullWidth>
+              Seite öffnen
+            </Button>
+            <Button
+              disabled={isSynthesizing}
+              variant="contained"
+              fullWidth
+              onClick={handleReadNews}
+            >
+              {isItemBeingSynthesized ? "Wird Vorgelesen..." : "Vorlesen"}
+            </Button>
+          </div>
+        </ListItemIcon>
       </ListItem>
     </React.Fragment>
   );
