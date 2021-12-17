@@ -15,6 +15,7 @@ import {
 import useTextToSpeech from "../../hooks/useTextToSpeech";
 import { Voice } from "../../util/TextToSpechVoices";
 import React, { useState, useEffect } from "react";
+import { loadBingSearchConfig } from "../../repositories/BingSearchConfigRepository";
 
 const { CognitiveServicesCredentials } = require("@azure/ms-rest-azure-js");
 const { NewsSearchClient } = require("@azure/cognitiveservices-newssearch");
@@ -32,8 +33,9 @@ interface NewsItem {
 }
 
 const NewsReader: React.FC<NewsReaderProps> = ({ speechConfig }) => {
+  const bingConfig = loadBingSearchConfig();
   const credentials = new CognitiveServicesCredentials(
-    "80ccba9bfd824237a366492e732d6107"
+    bingConfig.subscriptionKey
   );
   const newsSearchClient = new NewsSearchClient(credentials);
   const { synthesizeSpeech, isSynthesizing } = useTextToSpeech(
@@ -56,7 +58,7 @@ const NewsReader: React.FC<NewsReaderProps> = ({ speechConfig }) => {
   const searchNews = async () => {
     let newsResults = await newsSearchClient.news.search(searchTopic, {
       market: "de-ch",
-      acceptLanguage: "de-de",
+      acceptLanguage: "de-DE",
       count: 5,
     });
     console.log(newsResults);
