@@ -1,5 +1,5 @@
 import { SettingsVoice } from "@mui/icons-material";
-import { Button, Grid, IconButton, Typography } from "@mui/material";
+import { Button, Grid, IconButton, Skeleton, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useDidUpdate } from "rooks";
 import { makeTranslationRequest } from "../../api/TranslationApi";
@@ -80,12 +80,18 @@ const FourLangToSwissTranslation: React.FC<FourLangToSwissTranslationProps> = ({
       >
         <SettingsVoice fontSize="large" />
       </IconButton>
-      <Typography variant="h5">{speechToText.resultText}</Typography>
-      <Typography variant="body2">
-        {speechToText.detectedLanguageLocale !== ""
-          ? `Detected language: ${speechToText.detectedLanguageLocale}`
-          : ""}
-      </Typography>
+      {speechToText.isRecordingAndConverting ? (
+        <Skeleton variant="text" style={{ width: "100%", maxWidth: "500px"  }} />
+      ) : (
+        <>
+          <Typography variant="h5">{speechToText.resultText}</Typography>
+          <Typography variant="body2">
+            {speechToText.detectedLanguageLocale !== ""
+              ? `Detected language: ${speechToText.detectedLanguageLocale}`
+              : ""}
+          </Typography>
+        </>
+      )}
       <br />
       <br />
       <Typography variant="h4" color="primary">
