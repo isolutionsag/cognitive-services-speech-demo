@@ -9,6 +9,8 @@ import {
   Select,
   MenuItem,
   SelectChangeEvent,
+  Chip,
+  Stack,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import useInput from "../../hooks/useInput";
@@ -24,14 +26,27 @@ import { botLanguage } from "../../api/BotApi";
 import TranslatorConfig from "../../models/TranslatorConfig";
 import Language, {
   getVoiceForLanguage,
+  InputLanguageLocale,
   languageModels,
 } from "../../util/Language";
+
+interface ChipSuggestion {
+  text: string;
+  languageLocale: string;
+}
+
+const chipSuggestions: ChipSuggestion[] = [
+  { text: "Hallo, wie geht es dir?", languageLocale: "de-DE" },
+  { text: "Kannst du Schweizerdeutsch sprechen?", languageLocale: "de-DE" },
+  { text: "Quel âge as-tu?", languageLocale: "fr-FR" },
+  { text: "What is the best company?", languageLocale: "en-EN" },
+];
 
 const recognitionLanguages = [
   Language.EN,
   Language.DE,
   Language.FR,
-  Language.ES,
+  Language.IT,
 ];
 
 interface ChatWithBotProps {
@@ -52,6 +67,8 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
     false
   );
 
+  const [detectedLanguage, setDetectedLanguage] = useState(InputLanguageLocale[Language.DE])
+
   const [outputLanguage, setOutputLanguage] = useState(Language.AUTO);
   const [outputVoice, setOutputVoice] = useState(
     getVoiceForLanguage(outputLanguage)
@@ -69,13 +86,14 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
     mySpeechConfig
   );
 
-  useEffect(() => {
-    useInputInput.setValue(speechToText.resultText);
+  const handleInputTextChange = (text: string, languageLocale: string) => {
+    useInputInput.setValue(text);
+    setDetectedLanguage(languageLocale);
 
     const getTranslationForBot = async () => {
       const translationResponse = await makeTranslationRequest(
-        speechToText.resultText,
-        speechToText.detectedLanguageLocale,
+        text,
+        languageLocale,
         [botLanguage],
         translatorConfig
       );
@@ -98,6 +116,13 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
     };
 
     getTranslationForBot();
+  };
+
+  useEffect(() => {
+    handleInputTextChange(
+      speechToText.resultText,
+      speechToText.detectedLanguageLocale
+    );
   }, [speechToText.resultText]);
 
   useEffect(() => {
@@ -110,8 +135,7 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
       function getToLanguage(): string {
         if (outputLanguage !== Language.AUTO)
           return outputLanguage.toLocaleLowerCase();
-        const detectedLanguageSplit =
-          speechToText.detectedLanguageLocale.split("-");
+        const detectedLanguageSplit = detectedLanguage.split("-");
         return detectedLanguageSplit[0];
       }
 
@@ -164,12 +188,13 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
 
   return (
     <Grid container justifyContent="center">
-      <Grid container item direction="column" alignItems="center" maxWidth="600px">
-        <h1>Hi!</h1>
-        <Typography variant="body1" gutterBottom>
-          {speechToText.infoText}
-        </Typography>
-
+      <Grid
+        container
+        item
+        direction="column"
+        alignItems="center"
+        maxWidth="600px"
+      >
         <Typography variant="body2" color="orange" gutterBottom>
           {speechToText.error}
         </Typography>
@@ -183,6 +208,21 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
         >
           <SettingsVoice fontSize="large" />
         </IconButton>
+        <Stack direction="row" spacing={1}>
+          {chipSuggestions.map((suggestion) => (
+            <Chip
+              onClick={() =>
+                handleInputTextChange(
+                  suggestion.text,
+                  suggestion.languageLocale
+                )
+              }
+              label={suggestion.text}
+              color="primary"
+              variant="outlined"
+            />
+          ))}
+        </Stack>
         <TextField
           style={{ marginTop: "20px" }}
           multiline
@@ -196,7 +236,7 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
           helperText={
             useInputInput.error !== ""
               ? useInputInput.error
-              : `Detected language: ${speechToText.detectedLanguageLocale}`
+              : `Detected language: ${detectedLanguage}`
           }
         />
         <div style={{ padding: "20px" }}>
