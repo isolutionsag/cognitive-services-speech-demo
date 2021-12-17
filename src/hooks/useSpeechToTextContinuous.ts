@@ -3,23 +3,18 @@ import MySpeechConfig, {
   isValidSpeechConfig,
 } from "../models/MySpeechConfig";
 import {
-  AudioConfig,
   ResultReason,
   SpeechRecognizer,
-  SpeechTranslationConfig,
   TranslationRecognizer,
 } from "microsoft-cognitiveservices-speech-sdk";
 import { useEffect, useRef, useState } from "react";
-import Language, {
-  InputLanguageLocale,
-  OutputLanguageLocale,
-} from "../util/Language";
 import { CreateTranslator } from "../util/TranslationRecognizerCreator";
 import {
   SpeechServiceLocale,
   SpeechTranslationLanguage,
 } from "../util/SupportedLanguages";
 import { useDidUpdate } from "rooks";
+import { CreateSpeechRecognizerSingleLanguage } from "../util/SpeechRecognizerCreator";
 
 const speechRecognitionLanguage = SpeechServiceLocale.German_Switzerland;
 
@@ -44,23 +39,30 @@ export default function useSpeechToTextContinuous(
 
   const [isRecognizing, setIsRecognizing] = useState(false);
 
-  const speechConfig = getSpeechConfigFromMySpeechConfig(mySpeechConfig);
-
   useEffect(() => {
     if (isValidSpeechConfig(mySpeechConfig)) {
       if (recognizer.current === undefined) {
-        speechConfig.speechRecognitionLanguage = speechRecognitionLanguage;
-        const audioConfig = AudioConfig.fromDefaultMicrophoneInput();
-        recognizer.current = new SpeechRecognizer(speechConfig, audioConfig);
+        try {
+          recognizer.current = CreateSpeechRecognizerSingleLanguage(
+            mySpeechConfig,
+            speechRecognitionLanguage
+          );
+        } catch (e) {
+          setError("Error creating speech recognizer: " + e);
+        }
       }
 
-      if (translator.current === undefined)
-        translator.current = CreateTranslator(
-          mySpeechConfig,
-          speechRecognitionLanguage,
-          translationTargetLanguage
-        );
-
+      if (translator.current === undefined) {
+        try {
+          translator.current = CreateTranslator(
+            mySpeechConfig,
+            speechRecognitionLanguage,
+            translationTargetLanguage
+          );
+        } catch (e) {
+          setError("Error creating speech translator: " + e);
+        }
+      }
       console.log("Created translator: ", translator.current);
     } else {
       setError(

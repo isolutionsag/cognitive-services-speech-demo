@@ -39,3 +39,19 @@ export function CreateSpeechRecognizer(
     audioConfig
   );
 }
+
+export function CreateSpeechRecognizerSingleLanguage(
+  mySpeechConfig: MySpeechConfig,
+  recognitionLanguage: SpeechServiceLocale
+): SpeechRecognizer {
+  if (
+    !isValidSpeechConfig(mySpeechConfig) ||
+    recognitionLanguage === undefined
+  )
+    throw new Error("parameter missing in method CreateSpeechRecognizer");
+
+    const speechConfig = getSpeechConfigFromMySpeechConfig(mySpeechConfig);
+    speechConfig.speechRecognitionLanguage = recognitionLanguage;
+    const audioConfig = AudioConfig.fromDefaultMicrophoneInput();
+    return new SpeechRecognizer(speechConfig, audioConfig);
+}
