@@ -14,16 +14,16 @@ interface HomeProps {
 const Home: React.FC<HomeProps> = ({ useCaseSelected }) => {
   return (
     <div>
-      <Typography variant="h2">Hi there!</Typography>
+      <Typography variant="h2">Grüezi!</Typography>
       <Typography variant="body1" gutterBottom mb={4}>
         {
-          "Try out our speech, QnA Maker and translation services / Hey, ich bin die Leni! Hier kannst Du mit mir schwätzen, Videos in Realtime transkribieren und mehr"
+          "Hey, ich bin die Leni! Hier kannst Du mit mir schwätzen, Videos in Realtime transkribieren und mehr"
         }
       </Typography>
       <Grid container spacing={4}>
       <Grid item xs={12} md={6}>
           <UseCaseCard
-            image="todo"
+            image="images/isolution_zrh_innenarchitektur-86.jpg"
             imageAlt="todo"
             title="Übersetzung ins Schweizerdeutsch"
             details="Spreche in EN, FR, IT, ES und erhalte nach einem Satz die Schweizerdeutsche Übersetung gesprochen zurück"
