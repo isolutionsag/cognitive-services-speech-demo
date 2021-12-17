@@ -49,7 +49,7 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
   return (
     <div style={{ minHeight: "65vh" }}>
       <Typography variant="subtitle1">Erkannte Wörter</Typography>
-      <Box border="1px solid black" borderRadius="5px" padding="10px">
+      <Box border="1px solid black" borderRadius="5px" padding="10px" minWidth="800px">
         <Typography variant="h6">
           {speechToTextContinuous.recognizingText}
         </Typography>
@@ -59,7 +59,7 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
       </Box>
       <br />
       <Typography variant="subtitle1">Erkannte Sätze (nach Pause)</Typography>
-      <Box border="1px solid black" borderRadius="5px" padding="10px">
+      <Box border="1px solid black" borderRadius="5px" padding="10px" minWidth="800px">
         <Typography variant="h5">
           {speechToTextContinuous.recognizedText}
         </Typography>
