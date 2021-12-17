@@ -16,6 +16,7 @@ export default function useTextToSpeech(
     text: string = initialText,
     voice: Voice = initialVoice
   ) {
+    if(isSynthesizing) return; //do not start synthesizing new text while still synthesizing, improvement: create a queue of texts?
     let synthesizer: SpeechSynthesizer;
     try {
       synthesizer = CreateSpeechSynthesizer(
