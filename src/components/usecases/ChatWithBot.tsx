@@ -11,6 +11,7 @@ import {
   SelectChangeEvent,
   Chip,
   Stack,
+  Skeleton,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import useInput from "../../hooks/useInput";
@@ -67,7 +68,9 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
     false
   );
 
-  const [detectedLanguage, setDetectedLanguage] = useState(InputLanguageLocale[Language.DE])
+  const [detectedLanguage, setDetectedLanguage] = useState(
+    InputLanguageLocale[Language.DE]
+  );
 
   const [outputLanguage, setOutputLanguage] = useState(Language.AUTO);
   const [outputVoice, setOutputVoice] = useState(
@@ -223,22 +226,26 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
             />
           ))}
         </Stack>
-        <TextField
-          style={{ marginTop: "20px" }}
-          multiline
-          fullWidth
-          name="Input"
-          id="Input"
-          label="Input"
-          value={useInputInput.value}
-          onChange={useInputInput.handleChange}
-          error={useInputInput.error !== ""}
-          helperText={
-            useInputInput.error !== ""
-              ? useInputInput.error
-              : `Detected language: ${detectedLanguage}`
-          }
-        />
+        <br />
+        {speechToText.isRecordingAndConverting ? (
+          <Skeleton variant="text" style={{width: "100%"}}/>
+        ) : (
+          <TextField
+            multiline
+            fullWidth
+            name="Input"
+            id="Input"
+            label="Input"
+            value={useInputInput.value}
+            onChange={useInputInput.handleChange}
+            error={useInputInput.error !== ""}
+            helperText={
+              useInputInput.error !== ""
+                ? useInputInput.error
+                : `Detected language: ${detectedLanguage}`
+            }
+          />
+        )}
         <div style={{ padding: "20px" }}>
           <ForumOutlined style={{ height: "50px", width: "50px" }} />
         </div>
