@@ -16,22 +16,32 @@ interface UsecaseProps {
   onSelected: (useCase: UseCase) => void;
 }
 
-const Usecase: React.FC<UsecaseProps> = ({image, imageAlt, title, details, useCase, onSelected}) => {
+const Usecase: React.FC<UsecaseProps> = ({
+  image,
+  imageAlt,
+  title,
+  details,
+  useCase,
+  onSelected,
+}) => {
   return (
-    <Card style={{textAlign: 'left'}}>
+    <Card style={{ textAlign: "left" }}>
       <CardActionArea onClick={() => onSelected(useCase)}>
-        <CardMedia
-          component="img"
-          height="140"
-          image={image}
-          alt={imageAlt}
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+        <CardMedia height="160" component="img" image={image} alt={imageAlt} />
+        <CardContent className={`usecase usecase-${useCase}`}>
+          <Typography gutterBottom variant="h5" color="white" component="div">
             {title}
           </Typography>
-          <Typography variant="body2" color="text.secondary" >
-              {details}
+          <Typography
+            variant="body1"
+            color={
+              useCase === UseCase.NewsReader ||
+              useCase === UseCase.RealtimeTranscription
+                ? "white"
+                : "lightgrey"
+            }
+          >
+            {details}
           </Typography>
         </CardContent>
       </CardActionArea>

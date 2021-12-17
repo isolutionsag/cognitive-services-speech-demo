@@ -26,7 +26,6 @@
 }
 
 .MuiPaper-root {
-  
 }
 
 a {
@@ -36,4 +35,21 @@ a {
 
 a:hover {
   color: var(--passion-color1);
+}
+
+.usecase {
+  min-height: 90px;
+}
+
+.usecase-fourLangToSwissTranslation {
+  background-color: var(--simplicity-color1);
+}
+.usecase-botChat {
+  background-color: var(--passion-color1);
+}
+.usecase-realtimeTranscription {
+  background-color: var(--passion-color2);
+}
+.usecase-newsReader {
+  background-color: var(--passion-color3);
 }
