@@ -80,6 +80,8 @@ function App() {
     setSelectedUseCase(useCase);
   };
 
+  const [useCaseError, setUseCaseError] = useState("")
+
   const theme = createTheme({
     palette: {
       primary: {
@@ -168,7 +170,7 @@ function App() {
               setConfigKeys={handleChangeKeys}
             />
           )}
-          {currentPage === Page.UseCase  && displayUseCase(selectedUseCase)}
+          {currentPage === Page.UseCase  && displayUseCase(selectedUseCase, useCaseError, setUseCaseError)}
         </Paper>
 
         <div className="App-footer">
@@ -182,18 +184,19 @@ function App() {
   );
 }
 
-function displayUseCase(useCase: UseCase) {
+function displayUseCase(useCase: UseCase, useCaseError: string, setUseCaseError: React.Dispatch<React.SetStateAction<string>>) {
   console.log("Usecase selected: ", useCase);
 
   const speechConfig = loadSpeechConfig();
+
   return (
-    <UseCaseTemplate model={UseCaseModels[useCase]} speechConfig={speechConfig}>
-      {getUseCaseContent(useCase, speechConfig)}
+    <UseCaseTemplate model={UseCaseModels[useCase]} speechConfig={speechConfig} error={useCaseError}>
+      {getUseCaseContent(useCase, speechConfig, setUseCaseError)}
     </UseCaseTemplate>
   );
 }
 
-function getUseCaseContent(useCase: UseCase, speechConfig: MySpeechConfig) {
+function getUseCaseContent(useCase: UseCase, speechConfig: MySpeechConfig, setError: React.Dispatch<React.SetStateAction<string>>) {
   const qnaConfig = loadQnAConfig();
   const translatorConfig = loadTranslatorConfig();
 
@@ -211,6 +214,7 @@ function getUseCaseContent(useCase: UseCase, speechConfig: MySpeechConfig) {
           mySpeechConfig={speechConfig}
           qnaConfig={qnaConfig}
           translatorConfig={translatorConfig}
+          setError={setError}
         />
       );
     case UseCase.RealtimeTranscription:

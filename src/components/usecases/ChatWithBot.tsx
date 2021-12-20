@@ -54,12 +54,14 @@ interface ChatWithBotProps {
   mySpeechConfig: MySpeechConfig;
   qnaConfig: QnaConfig;
   translatorConfig: TranslatorConfig;
+  setError: React.Dispatch<React.SetStateAction<string>>
 }
 
 const ChatWithBot: React.FC<ChatWithBotProps> = ({
   mySpeechConfig,
   qnaConfig,
   translatorConfig,
+  setError,
 }) => {
   const useInputInput = useInput(
     "Hello, how are you?",
@@ -127,6 +129,10 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
       speechToText.detectedLanguageLocale
     );
   }, [speechToText.resultText]);
+
+  useEffect(() => {
+    setError(_useBotResponse.error)
+  }, [_useBotResponse.error])
 
   useEffect(() => {
     console.log(

@@ -1,6 +1,5 @@
 import { VolumeUp } from "@mui/icons-material";
 import { Button, Grid, Typography, Divider } from "@mui/material";
-import { width } from "@mui/system";
 import React, { useEffect } from "react";
 import useTextToSpeech from "../../hooks/useTextToSpeech";
 import MySpeechConfig from "../../models/MySpeechConfig";
@@ -13,11 +12,13 @@ const descriptionIntro =
 interface UseCaseTemplateProps {
   model: UseCaseModel;
   speechConfig: MySpeechConfig;
+  error: string;
 }
 
 const UseCaseTemplate: React.FC<UseCaseTemplateProps> = ({
   model,
   speechConfig,
+  error,
   children,
 }) => {
   const { synthesizeSpeech, isSynthesizing } = useTextToSpeech(
@@ -53,6 +54,10 @@ const UseCaseTemplate: React.FC<UseCaseTemplateProps> = ({
       </Button>
       <br />
       <Divider variant="middle" sx={{ width: "100%" }} />
+      <br />
+      <Typography variant="body2" color="orange" gutterBottom>
+        {error}
+      </Typography>
       <br />
       {children}
     </Grid>
