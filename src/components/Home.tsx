@@ -24,7 +24,7 @@ const Home: React.FC<HomeProps> = ({ useCaseSelected }) => {
       <Grid item xs={12} md={6}>
           <UseCaseCard
             image="images/isolution_zrh_innenarchitektur-86.jpg"
-            imageAlt="todo"
+            imageAlt="translate symbol with swiss flag"
             title="Übersetzung ins Schweizerdeutsch"
             details="Spreche in EN, FR, IT, ES und erhalte nach einem Satz die Schweizerdeutsche Übersetung gesprochen zurück"
             useCase={UseCase.FourLangToSwissTranslation}

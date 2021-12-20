@@ -9,7 +9,7 @@ export function createPostRequest(
     body: body,
     headers: {
       "Content-Type": contentType,
-      "Authorization": autorization, //TODO:  not accepted by RequestInit (interface) -> casting at end of this function
+      "Authorization": autorization,
     },
   };
   return options as RequestInit;
