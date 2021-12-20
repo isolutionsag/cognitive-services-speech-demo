@@ -54,7 +54,7 @@ interface ChatWithBotProps {
   mySpeechConfig: MySpeechConfig;
   qnaConfig: QnaConfig;
   translatorConfig: TranslatorConfig;
-  setError: React.Dispatch<React.SetStateAction<string>>
+  setError: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const ChatWithBot: React.FC<ChatWithBotProps> = ({
@@ -131,8 +131,8 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
   }, [speechToText.resultText]);
 
   useEffect(() => {
-    setError(_useBotResponse.error)
-  }, [_useBotResponse.error])
+    setError(_useBotResponse.error);
+  }, [_useBotResponse.error]);
 
   useEffect(() => {
     console.log(
@@ -197,13 +197,7 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
 
   return (
     <Grid container justifyContent="center">
-      <Grid
-        container
-        item
-        direction="column"
-        alignItems="center"
-        maxWidth="600px"
-      >
+      <Grid container item direction="column" alignItems="center" justifyContent="center">
         <Typography variant="body2" color="orange" gutterBottom>
           {speechToText.error}
         </Typography>
@@ -218,8 +212,9 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
           <SettingsVoice fontSize="large" />
         </IconButton>
         <Stack direction="row" spacing={1}>
-          {chipSuggestions.map((suggestion) => (
+          {chipSuggestions.map((suggestion, i) => (
             <Chip
+              key={"chip_" + i}
               onClick={() =>
                 handleInputTextChange(
                   suggestion.text,
@@ -233,70 +228,78 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
           ))}
         </Stack>
         <br />
-        {speechToText.isRecordingAndConverting ? (
-          <Skeleton variant="text" style={{width: "100%"}}/>
-        ) : (
-          <TextField
-            multiline
-            fullWidth
-            name="Input"
-            id="Input"
-            label="Input"
-            value={useInputInput.value}
-            onChange={useInputInput.handleChange}
-            error={useInputInput.error !== ""}
-            helperText={
-              useInputInput.error !== ""
-                ? useInputInput.error
-                : `Detected language: ${detectedLanguage}`
-            }
-          />
-        )}
-        <div style={{ padding: "20px" }}>
-          <ForumOutlined style={{ height: "50px", width: "50px" }} />
-        </div>
-        <FormControl>
-          <InputLabel id="language-input-label">Output language</InputLabel>
-          <Select
-            style={{ minWidth: "200px" }}
-            autoWidth
-            labelId="language-select-label"
-            id="language-select"
-            value={outputLanguage}
-            label="Output language"
-            onChange={handleOutputLanguageChange}
-          >
-            {languageModels.map((languageModel) => (
-              <MenuItem value={languageModel.key}>
-                {languageModel.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <TextField
-          style={{ marginTop: "10px" }}
-          multiline
-          minRows={3}
-          fullWidth
-          name="Bot response"
-          id="Bot response"
-          label="Bot response"
-          value={useInputOutput.value}
-          onChange={useInputOutput.handleChange}
-          error={useInputOutput.error !== ""}
-          helperText={useInputOutput.error}
-        />
-
-        <IconButton
-          size="large"
-          disabled={!isValidSpeechConfig(mySpeechConfig)}
-          color={textToSpeech.isSynthesizing ? "secondary" : "primary"}
-          onClick={() => textToSpeech.synthesizeSpeech()}
-          aria-label="Speak output"
-          style={{ marginTop: "20px" }}
+        <Grid
+          container
+          item
+          direction="column"
+          alignItems="center"
+          style={{maxWidth: "600px"}}
         >
-          <VolumeUp fontSize="large" />
-        </IconButton>
+          {speechToText.isRecordingAndConverting ? (
+            <Skeleton variant="text" style={{ width: "100%" }} />
+          ) : (
+            <TextField
+              multiline
+              fullWidth
+              name="Input"
+              id="Input"
+              label="Input"
+              value={useInputInput.value}
+              onChange={useInputInput.handleChange}
+              error={useInputInput.error !== ""}
+              helperText={
+                useInputInput.error !== ""
+                  ? useInputInput.error
+                  : `Detected language: ${detectedLanguage}`
+              }
+            />
+          )}
+          <div style={{ padding: "20px" }}>
+            <ForumOutlined style={{ height: "50px", width: "50px" }} />
+          </div>
+          <FormControl>
+            <InputLabel id="language-input-label">Output language</InputLabel>
+            <Select
+              style={{ minWidth: "200px" }}
+              autoWidth
+              labelId="language-select-label"
+              id="language-select"
+              value={outputLanguage}
+              label="Output language"
+              onChange={handleOutputLanguageChange}
+            >
+              {languageModels.map((languageModel) => (
+                <MenuItem value={languageModel.key}>
+                  {languageModel.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <TextField
+            style={{ marginTop: "10px" }}
+            multiline
+            minRows={3}
+            fullWidth
+            name="Bot response"
+            id="Bot response"
+            label="Bot response"
+            value={useInputOutput.value}
+            onChange={useInputOutput.handleChange}
+            error={useInputOutput.error !== ""}
+            helperText={useInputOutput.error}
+          />
+
+          <IconButton
+            size="large"
+            disabled={!isValidSpeechConfig(mySpeechConfig)}
+            color={textToSpeech.isSynthesizing ? "secondary" : "primary"}
+            onClick={() => textToSpeech.synthesizeSpeech()}
+            aria-label="Speak output"
+            style={{ marginTop: "20px" }}
+          >
+            <VolumeUp fontSize="large" />
+          </IconButton>
+        </Grid>
       </Grid>
     </Grid>
   );
