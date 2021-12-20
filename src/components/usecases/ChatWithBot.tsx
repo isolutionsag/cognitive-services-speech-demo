@@ -269,7 +269,7 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
               onChange={handleOutputLanguageChange}
             >
               {languageModels.map((languageModel) => (
-                <MenuItem value={languageModel.key}>
+                <MenuItem value={languageModel.key} key={languageModel.key}>
                   {languageModel.label}
                 </MenuItem>
               ))}
