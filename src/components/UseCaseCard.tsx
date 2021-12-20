@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import UseCase from "../util/UseCase";
 
-interface UsecaseProps {
+interface UseCaseCardProps {
   image: string;
   imageAlt: string;
   title: string;
@@ -16,12 +16,12 @@ interface UsecaseProps {
   onSelected: (useCase: UseCase) => void;
 }
 
-const Usecase: React.FC<UsecaseProps> = ({
+const UseCaseCard: React.FC<UseCaseCardProps> = ({
   image,
   imageAlt,
   title,
   details,
-  useCase,
+  useCase, 
   onSelected,
 }) => {
   return (
@@ -49,4 +49,4 @@ const Usecase: React.FC<UsecaseProps> = ({
   );
 };
 
-export default Usecase;
+export default UseCaseCard;
