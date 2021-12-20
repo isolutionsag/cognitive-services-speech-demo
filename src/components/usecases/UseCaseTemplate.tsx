@@ -15,6 +15,10 @@ interface UseCaseTemplateProps {
   error: string;
 }
 
+export interface UseCaseTemplateChildProps{
+  setError: React.Dispatch<React.SetStateAction<string>>;
+}
+
 const UseCaseTemplate: React.FC<UseCaseTemplateProps> = ({
   model,
   speechConfig,

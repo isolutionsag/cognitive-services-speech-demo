@@ -30,6 +30,7 @@ import Language, {
   InputLanguageLocale,
   languageModels,
 } from "../../util/Language";
+import { UseCaseTemplateChildProps } from "./UseCaseTemplate";
 
 interface ChipSuggestion {
   text: string;
@@ -50,11 +51,10 @@ const recognitionLanguages = [
   Language.IT,
 ];
 
-interface ChatWithBotProps {
+interface ChatWithBotProps extends UseCaseTemplateChildProps {
   mySpeechConfig: MySpeechConfig;
   qnaConfig: QnaConfig;
   translatorConfig: TranslatorConfig;
-  setError: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const ChatWithBot: React.FC<ChatWithBotProps> = ({
