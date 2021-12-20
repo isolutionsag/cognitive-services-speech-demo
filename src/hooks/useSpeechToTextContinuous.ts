@@ -1,6 +1,4 @@
-import MySpeechConfig, {
-  isValidSpeechConfig,
-} from "../models/MySpeechConfig";
+import MySpeechConfig, { isValidSpeechConfig } from "../models/MySpeechConfig";
 import {
   ResultReason,
   SpeechRecognizer,
@@ -12,10 +10,13 @@ import {
   SpeechServiceLocale,
   SpeechTranslationLanguage,
 } from "../util/SupportedLanguages";
-import { useDidUpdate } from "rooks";
+import useTooltip from "./useTooltip";
+import { useDebouncedValue, useDidUpdate } from "rooks";
 import { CreateSpeechRecognizerSingleLanguage } from "../util/SpeechRecognizerCreator";
 
 const speechRecognitionLanguage = SpeechServiceLocale.German_Switzerland;
+
+const autoStopRecognitionTimeout = 30 * 1000; //millis
 
 export default function useSpeechToTextContinuous(
   mySpeechConfig: MySpeechConfig
@@ -26,17 +27,34 @@ export default function useSpeechToTextContinuous(
   const [recognizedText, setRecognizedText] = useState(
     "...speak to your microphone..."
   );
+
   const [recognizingText, setRecognizingText] = useState("... i do listen ...");
+  const [
+    debouncedRecognizingTextDebounced,
+    setDebouncedRecognizingTextDebouncedImmediatelyUpdate,
+  ] = useDebouncedValue(recognizingText, autoStopRecognitionTimeout);
+
   const recognizer = useRef<SpeechRecognizer>();
 
   const [translatedText, setTranslatedText] = useState<string>("...");
   const [translatingText, setTranslatingText] = useState<string>("...");
+  const [
+    debouncedTranslatingTextDebounced,
+    setDebouncedTranslatingTextDebouncedImmediatelyUpdate,
+  ] = useDebouncedValue(recognizingText, autoStopRecognitionTimeout);
+
   const translator = useRef<TranslationRecognizer>();
   const [translationTargetLanguage, setTranslationTargetLanguage] = useState(
     SpeechTranslationLanguage.English
   );
 
   const [isRecognizing, setIsRecognizing] = useState(false);
+
+  const stopRecognitionBecauseTimeoutToolTip = useTooltip(
+    `Stopped recognition because there was no input for ${
+      autoStopRecognitionTimeout / 1000
+    } seconds`
+  );
 
   useEffect(() => {
     if (isValidSpeechConfig(mySpeechConfig)) {
@@ -62,7 +80,6 @@ export default function useSpeechToTextContinuous(
           setError("Error creating speech translator: " + e);
         }
       }
-      console.debug("Created translator: ", translator.current);
     } else {
       setError(
         "To use the speech to speech service, please configure your keys of the azure speech service first"
@@ -83,8 +100,35 @@ export default function useSpeechToTextContinuous(
     }
   }, [translationTargetLanguage]);
 
+  useDidUpdate(() => {
+    if (!isRecognizing) return;
+    //No recognition input for {autoStopRecognitionTimeout / 1000} seconds
+    sttFromMicStop();
+    stopRecognitionBecauseTimeoutToolTip.handleOpen();
+  }, [debouncedRecognizingTextDebounced, debouncedTranslatingTextDebounced]);
+
   function sttFromMic() {
     setIsRecognizing(true);
+
+    resetListeners();
+
+    recognizer.current?.startContinuousRecognitionAsync();
+    translator.current?.startContinuousRecognitionAsync();
+  }
+
+  async function sttFromMicStop() {
+    recognizer.current?.stopContinuousRecognitionAsync();
+    translator.current?.stopContinuousRecognitionAsync();
+
+    setRecognizingText("...");
+    setRecognizedText("...");
+    setTranslatedText("...");
+    setTranslatingText("...");
+
+    setIsRecognizing(false);
+  }
+
+  function resetListeners() {
     if (!recognizer.current || !translator.current) return;
 
     // returns words understood, no punctuation
@@ -116,23 +160,6 @@ export default function useSpeechToTextContinuous(
         setTranslatedText(e.result.translations.get(translationTargetLanguage));
       }
     };
-
-    console.log("Starting recognition");
-    recognizer.current.startContinuousRecognitionAsync();
-    translator.current.startContinuousRecognitionAsync();
-  }
-
-  async function sttFromMicStop() {
-    console.log("Ending recognition");
-    recognizer.current?.stopContinuousRecognitionAsync();
-    translator.current?.stopContinuousRecognitionAsync();
-
-    setRecognizingText("...");
-    setRecognizedText("...");
-    setTranslatedText("...");
-    setTranslatingText("...");
-
-    setIsRecognizing(false);
   }
 
   return {
@@ -145,5 +172,6 @@ export default function useSpeechToTextContinuous(
     isRecognizing,
     sttFromMic,
     sttFromMicStop,
+    stopRecognitionBecauseTimeoutToolTip,
   };
 }

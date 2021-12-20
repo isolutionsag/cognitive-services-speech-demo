@@ -8,6 +8,7 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useEffect } from "react";
@@ -34,7 +35,7 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
     Voice.de_CH_LeniNeural,
     speechConfig
   );
-  
+
   const handleTranslationLanguageChange = (event: SelectChangeEvent) => {
     speechToTextContinuous.setTranslationTargetLanguage(
       event.target.value as SpeechTranslationLanguage
@@ -43,7 +44,6 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
 
   useEffect(() => {
     return () => {
-      console.log("Cleanup transcription component");
       speechToTextContinuous.sttFromMicStop();
     };
   }, []);
@@ -102,8 +102,6 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
                 const voice = getVoiceForLanguage(
                   speechToTextContinuous.translationTargetLanguage
                 );
-                console.log("clicked speak in target language: ", speechToTextContinuous.translationTargetLanguage)
-                console.log("Voice: ", voice)
                 synthesizeSpeech(speechToTextContinuous.translatedText, voice);
               }}
               disabled={speechToTextContinuous.translatedText?.length < 1}
@@ -129,13 +127,22 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
       >
         start recognition
       </Button>
-      <Button
-        onClick={speechToTextContinuous.sttFromMicStop}
-        disabled={!speechToTextContinuous.isRecognizing}
-        variant="contained"
+      <Tooltip
+        title={speechToTextContinuous.stopRecognitionBecauseTimeoutToolTip.text}
+        open={speechToTextContinuous.stopRecognitionBecauseTimeoutToolTip.open}
+        onClose={
+          speechToTextContinuous.stopRecognitionBecauseTimeoutToolTip
+            .handleClose
+        }
       >
-        stop recognition
-      </Button>
+        <Button
+          onClick={() => speechToTextContinuous.sttFromMicStop()}
+          disabled={!speechToTextContinuous.isRecognizing}
+          variant="contained"
+        >
+          stop recognition
+        </Button>
+      </Tooltip>
       <br />
       <br />
       <FormControl>
