@@ -61,7 +61,6 @@ const NewsReader: React.FC<NewsReaderProps> = ({ speechConfig }) => {
       acceptLanguage: "de-DE",
       count: 5,
     });
-    console.log(newsResults);
     setNews(
       newsResults.value.map((result: any) => {
         return {

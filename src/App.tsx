@@ -186,8 +186,6 @@ function App() {
 }
 
 function displayUseCase(useCase: UseCase, useCaseError: string, setUseCaseError: React.Dispatch<React.SetStateAction<string>>) {
-  console.log("Usecase selected: ", useCase);
-
   const speechConfig = loadSpeechConfig();
 
   return (

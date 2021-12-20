@@ -102,20 +102,18 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
         [botLanguage],
         translatorConfig
       );
-      console.log("Input translation result: ", translationResponse);
       if (translationResponse.error)
-        console.log("Failed to get translation for input");
+        console.error("Failed to get translation for input: ", translationResponse.error);
       //TODO: show in UI? send original (unstranslated) question to bot?
       else {
         const translation = translationResponse.translations?.filter(
           (t) => t.to === botLanguage.split("-")[0].toLowerCase()
         );
         if (!translation || translation.length === 0) {
-          console.log("No matching translation for bot language"); //TODO: show in UI? send original (unstranslated) question to bot?
+          console.error("No matching translation for bot language"); //TODO: show in UI? send original (unstranslated) question to bot?
           return;
         }
         const text = translation[0]?.text;
-        console.log("Successfully translated text: ", text);
         setInputTranslation({ text });
       }
     };
@@ -135,11 +133,6 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
   }, [_useBotResponse.error]);
 
   useEffect(() => {
-    console.log(
-      "Bot answer or outputLanguage changed: ",
-      _useBotResponse.answer,
-      outputLanguage
-    );
     const getOutputTranslation = async () => {
       function getToLanguage(): string {
         if (outputLanguage !== Language.AUTO)
@@ -149,7 +142,6 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
       }
 
       const toLanguage = getToLanguage(); //lowercase language key (2 letters)
-      console.log("To language: " + toLanguage);
 
       setOutputVoice(getVoiceForLanguage(toLanguage.toUpperCase() as Language));
 
@@ -160,23 +152,22 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
         translatorConfig
       );
       if (translationResponse.error) {
-        console.log(
+        console.error(
           "Failed to get translation for bot response",
           translationResponse.error
         );
         displayBotAnswer(_useBotResponse.answer, botLanguage);
       } else {
-        console.log("Bot response translations: ", translationResponse);
-        const translation = translationResponse.translations?.filter(
+        const translation = translationResponse.translations?.find(
           (t) => t.to === toLanguage
         );
-        if (!translation || translation.length === 0) {
-          console.log("No matching translation for output language");
+        if (!translation) {
+          console.error("No matching translation for output language");
           displayBotAnswer(_useBotResponse.answer, botLanguage);
           return;
         }
         displayBotAnswer(
-          translation[0]?.text,
+          translation.text,
           toLanguage.toUpperCase() as Language
         );
       }
@@ -187,7 +178,6 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
 
   function displayBotAnswer(text: string, language: Language) {
     useInputOutput.setValue(text);
-    console.log("Displaying bot answer in ", language);
     textToSpeech.synthesizeSpeech(text, getVoiceForLanguage(language));
   }
 

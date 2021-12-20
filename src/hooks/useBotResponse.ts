@@ -24,13 +24,12 @@ export default function useBotResponse(question: {text: string}, config: QnAConf
 
       const handleResponseSuccess = () => {
         const answer = (botResponse as any).answers[0].answer as string;
-        console.log("Bot answer: ", answer);
         setIsSuccess(true);
         setAnswer(answer);
       }
 
       const handleFailure = (e: any) => {
-        console.log("Bot response failed: ", e);
+        console.error("Bot response failed: ", e);
         setError("Bot response failed: " + JSON.stringify(e));
         setIsSuccess(false);
       }

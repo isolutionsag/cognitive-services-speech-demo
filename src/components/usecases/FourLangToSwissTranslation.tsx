@@ -45,20 +45,18 @@ const FourLangToSwissTranslation: React.FC<FourLangToSwissTranslationProps> = ({
         translatorConfig
       );
 
-      console.log("Input translation result: ", translationResponse);
       if (translationResponse.error)
-        console.log("Failed to get translation for input");
+        console.error("Failed to get translation for input");
       //TODO: show in UI? send original (unstranslated) question to bot?
       else {
         const translation = translationResponse.translations?.find(
           (t) => t.to === "de"
         );
         if (!translation) {
-          console.log("No matching translation in de"); //TODO: show in UI? send original (unstranslated) question to bot?
+          console.error("No matching translation in de"); //TODO: show in UI? send original (unstranslated) question to bot?
           return;
         }
         const text = translation.text;
-        console.log("Successfully translated text: ", text);
         setTranslation(text);
       }
     };

@@ -29,7 +29,7 @@ export default function useSpeechToText(
       setError("");
     } catch (e) {
       setIsSuccess(false);
-      console.log("Failed to create speech recognizer: ", e);
+      console.error("Failed to create speech recognizer: ", e);
       setError("Error: " + e);
     }
   }, [mySpeechConfig]);

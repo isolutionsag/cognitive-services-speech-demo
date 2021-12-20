@@ -8,7 +8,6 @@ export async function makeBotRequest(
   question: string,
   config: QnAConfig
 ): Promise<BotResponse> {
-  console.log("makeBotRequest", question, config);
   let requestOptions = createPostRequest(
     {
       question: question,

@@ -25,16 +25,14 @@ export default function useTextToSpeech(
         voice
       );
     } catch (err) {
-      console.log("Failed to create speech synthesizer", err);
+      console.error("Failed to create speech synthesizer", err);
       return;
     }
-    console.log("Synthesizing speech in " + voice + "...");
     setIsSynthesizing(true);
     synthesizer.speakTextAsync(
       text,
       (result) => {
         setTimeout(() => setIsSynthesizing(false), text.length * 70); //estimated millis per character to pronounse
-        console.log(result);
         if (result) {
           synthesizer.close();
           return result.audioData;
@@ -42,7 +40,7 @@ export default function useTextToSpeech(
       },
       (error) => {
         setIsSynthesizing(false);
-        console.log(error);
+        console.error(error);
         synthesizer.close();
       }
     );
