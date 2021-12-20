@@ -54,14 +54,15 @@ export const languageModels: LanguageModel[] = Object.keys(Language).map(
 
 export function getVoiceForLanguage(language: Language | string): Voice {
   console.log("getVoiceForLanguage", language);
-  if (language === Language.AUTO) return defaultVoice;
+  if (language === Language.AUTO || language === "") return defaultVoice;
+  
   let locale =
     language.length <= 2 && language.toUpperCase() in Language
       ? OutputLanguageLocale[language.toUpperCase() as Language]
       : language;
 
-  const localeSplit = locale.split("-")
-  if(!localeSplit.every(part => part.length <= 2)) locale = localeSplit[0]; //e.g. if language locale is "zh-hant" only use "zh" to find a matching voice
+  const localeSplit = locale.split("-");
+  if (!localeSplit.every((part) => part.length <= 2)) locale = localeSplit[0]; //e.g. if language locale is "zh-hant" only use "zh" to find a matching voice
 
   const result = Object.values(Voice).filter((v) => v.includes(locale));
   console.log("Get voice for language: ", result, locale);
