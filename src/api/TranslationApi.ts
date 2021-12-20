@@ -1,6 +1,6 @@
 import { createPostRequest } from "./ApiUtil";
 import { v4 as uuidv4 } from "uuid";
-import TranslatorConfig from "../models/TranslatorConfig"
+import TranslatorConfig from "../models/TranslatorConfig";
 
 const endpoint = "https://api.cognitive.microsofttranslator.com";
 
@@ -20,6 +20,16 @@ export async function makeTranslationRequest(
   toLanguages: string[],
   config: TranslatorConfig
 ): Promise<TranslationResponse> {
+  if (textToTranslate === "")
+    return {
+      translations: toLanguages.map((language) => {
+        return {
+          text: "",
+          to: language,
+        };
+      }),
+    };
+
   function getRequestOptions() {
     let requestOptions = createPostRequest(
       [{ Text: textToTranslate }],
