@@ -18,7 +18,7 @@ interface UseCaseTemplateProps {
 const UseCaseTemplate: React.FC<UseCaseTemplateProps> = ({
   model,
   speechConfig,
-  error,
+  error, 
   children,
 }) => {
   const { synthesizeSpeech, isSynthesizing } = useTextToSpeech(

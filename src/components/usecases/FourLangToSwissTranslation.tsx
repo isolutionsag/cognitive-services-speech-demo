@@ -1,5 +1,5 @@
 import { SettingsVoice } from "@mui/icons-material";
-import { Button, Grid, IconButton, Skeleton, Typography } from "@mui/material";
+import { Grid, IconButton, Skeleton, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useDidUpdate } from "rooks";
 import { makeTranslationRequest } from "../../api/TranslationApi";
@@ -30,7 +30,7 @@ const FourLangToSwissTranslation: React.FC<FourLangToSwissTranslationProps> = ({
 }) => {
   const speechToText = useSpeechToText(mySpeechConfig, recognitionLanguages);
   const [translation, setTranslation] = useState("");
-  const { synthesizeSpeech, isSynthesizing } = useTextToSpeech(
+  const { synthesizeSpeech } = useTextToSpeech(
     "",
     Voice.de_CH_LeniNeural,
     mySpeechConfig

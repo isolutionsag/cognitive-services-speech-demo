@@ -34,7 +34,7 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
     Voice.de_CH_LeniNeural,
     speechConfig
   );
-
+  
   const handleTranslationLanguageChange = (event: SelectChangeEvent) => {
     speechToTextContinuous.setTranslationTargetLanguage(
       event.target.value as SpeechTranslationLanguage
