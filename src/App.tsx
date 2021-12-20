@@ -1,8 +1,9 @@
-import { Button, Paper } from "@mui/material";
+import { Alert, Button, Paper } from "@mui/material";
 import React, { useState } from "react";
 import "./App.css";
 import KeysConfigForm from "./components/ConfigForm";
 import Home from "./components/Home";
+import { areAllConfigsValid } from "./util/ConfigValidator";
 import MySpeechConfig from "./models/MySpeechConfig";
 import QnAConfig from "./models/QnAConfig";
 import {
@@ -50,6 +51,15 @@ function App() {
   const translatorConfig = loadTranslatorConfig();
   const bingSearchConfig = loadBingSearchConfig();
 
+  const [validConfig, setValidConfig] = useState(
+    areAllConfigsValid(
+      speechConfig,
+      qnaConfig,
+      translatorConfig,
+      bingSearchConfig
+    )
+  );
+
   const handleChangeKeys = (
     mySpeechConfig: MySpeechConfig,
     qnaConfig: QnAConfig,
@@ -60,17 +70,26 @@ function App() {
     saveQnAConfig(qnaConfig);
     saveTranslatorConfig(translatorConfig);
     saveBingSearchConfig(bingSearchConfig);
+
+    setValidConfig(
+      areAllConfigsValid(
+        mySpeechConfig,
+        qnaConfig,
+        translatorConfig,
+        bingSearchConfig
+      )
+    );
     handleBackClick();
   };
 
-  const [useCaseError, setUseCaseError] = useState("")
+  const [useCaseError, setUseCaseError] = useState("");
 
   const [currentPage, setCurrentPage] = useState(Page.Home);
   const [prevPage, setPrevPage] = useState(Page.Home);
   const updatePage = (page: Page) => {
     setPrevPage(currentPage);
     setCurrentPage(page);
-    setUseCaseError("")
+    setUseCaseError("");
   };
 
   const handleBackClick = () => {
@@ -156,6 +175,23 @@ function App() {
               </Button>
             </GravityItemsArea>
           )}
+          {!validConfig && currentPage !== Page.Settings && (
+            <Alert
+              style={{marginTop: "20px"}}
+              severity="warning"
+              action={
+                <Button
+                  color="inherit"
+                  size="small"
+                  onClick={() => setCurrentPage(Page.Settings)}
+                >
+                  Configure Keys
+                </Button>
+              }
+            >
+              One or more config keys are not entered yet
+            </Alert>
+          )}
           {currentPage === Page.Home && (
             <>
               <Home useCaseSelected={handleSelectedUseCase} />
@@ -171,7 +207,8 @@ function App() {
               setConfigKeys={handleChangeKeys}
             />
           )}
-          {currentPage === Page.UseCase  && displayUseCase(selectedUseCase, useCaseError, setUseCaseError)}
+          {currentPage === Page.UseCase &&
+            displayUseCase(selectedUseCase, useCaseError, setUseCaseError)}
         </Paper>
 
         <div className="App-footer">
@@ -185,17 +222,29 @@ function App() {
   );
 }
 
-function displayUseCase(useCase: UseCase, useCaseError: string, setUseCaseError: React.Dispatch<React.SetStateAction<string>>) {
+function displayUseCase(
+  useCase: UseCase,
+  useCaseError: string,
+  setUseCaseError: React.Dispatch<React.SetStateAction<string>>
+) {
   const speechConfig = loadSpeechConfig();
 
   return (
-    <UseCaseTemplate model={UseCaseModels[useCase]} speechConfig={speechConfig} error={useCaseError}>
+    <UseCaseTemplate
+      model={UseCaseModels[useCase]}
+      speechConfig={speechConfig}
+      error={useCaseError}
+    >
       {getUseCaseContent(useCase, speechConfig, setUseCaseError)}
     </UseCaseTemplate>
   );
 }
 
-function getUseCaseContent(useCase: UseCase, speechConfig: MySpeechConfig, setError: React.Dispatch<React.SetStateAction<string>>) {
+function getUseCaseContent(
+  useCase: UseCase,
+  speechConfig: MySpeechConfig,
+  setError: React.Dispatch<React.SetStateAction<string>>
+) {
   const qnaConfig = loadQnAConfig();
   const translatorConfig = loadTranslatorConfig();
 

@@ -1,5 +1,5 @@
 import { VolumeUp } from "@mui/icons-material";
-import { Button, Grid, Typography, Divider } from "@mui/material";
+import { Button, Grid, Typography, Divider, Alert } from "@mui/material";
 import React, { useEffect } from "react";
 import useTextToSpeech from "../../hooks/useTextToSpeech";
 import MySpeechConfig from "../../models/MySpeechConfig";
@@ -15,14 +15,14 @@ interface UseCaseTemplateProps {
   error: string;
 }
 
-export interface UseCaseTemplateChildProps{
+export interface UseCaseTemplateChildProps {
   setError: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const UseCaseTemplate: React.FC<UseCaseTemplateProps> = ({
   model,
   speechConfig,
-  error, 
+  error,
   children,
 }) => {
   const { synthesizeSpeech, isSynthesizing } = useTextToSpeech(
@@ -59,9 +59,7 @@ const UseCaseTemplate: React.FC<UseCaseTemplateProps> = ({
       <br />
       <Divider variant="middle" sx={{ width: "100%" }} />
       <br />
-      <Typography variant="body2" color="orange" gutterBottom>
-        {error}
-      </Typography>
+      {error !== "" && <Alert severity="error">{error}</Alert>}
       <br />
       {children}
     </Grid>
