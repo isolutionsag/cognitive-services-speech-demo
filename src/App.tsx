@@ -63,11 +63,14 @@ function App() {
     handleBackClick();
   };
 
+  const [useCaseError, setUseCaseError] = useState("")
+
   const [currentPage, setCurrentPage] = useState(Page.Home);
   const [prevPage, setPrevPage] = useState(Page.Home);
   const updatePage = (page: Page) => {
     setPrevPage(currentPage);
     setCurrentPage(page);
+    setUseCaseError("")
   };
 
   const handleBackClick = () => {
@@ -79,8 +82,6 @@ function App() {
     updatePage(Page.UseCase);
     setSelectedUseCase(useCase);
   };
-
-  const [useCaseError, setUseCaseError] = useState("")
 
   const theme = createTheme({
     palette: {
