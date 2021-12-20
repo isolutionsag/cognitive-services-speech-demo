@@ -1,8 +1,6 @@
 import {
   AudioConfig,
-  SpeechTranslationConfig,
   SpeechRecognizer,
-  SpeechConfig,
   AutoDetectSourceLanguageConfig,
 } from "microsoft-cognitiveservices-speech-sdk";
 import MySpeechConfig, {

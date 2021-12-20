@@ -1,5 +1,4 @@
 import MySpeechConfig, {
-  getSpeechConfigFromMySpeechConfig,
   isValidSpeechConfig,
 } from "../models/MySpeechConfig";
 import {
@@ -21,8 +20,8 @@ const speechRecognitionLanguage = SpeechServiceLocale.German_Switzerland;
 export default function useSpeechToTextContinuous(
   mySpeechConfig: MySpeechConfig
 ) {
-  const [isSuccess, setIsSuccess] = useState(true);
-  const [error, setError] = useState("");
+  const [, setIsSuccess] = useState(true);
+  const [, setError] = useState("");
 
   const [recognizedText, setRecognizedText] = useState(
     "...speak to your microphone..."
@@ -63,7 +62,7 @@ export default function useSpeechToTextContinuous(
           setError("Error creating speech translator: " + e);
         }
       }
-      console.log("Created translator: ", translator.current);
+      console.debug("Created translator: ", translator.current);
     } else {
       setError(
         "To use the speech to speech service, please configure your keys of the azure speech service first"

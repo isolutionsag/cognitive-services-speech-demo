@@ -1,9 +1,8 @@
-import { Box, Button, Grid, IconButton, Paper, TextField } from "@mui/material";
+import { Box, Button, Grid, TextField } from "@mui/material";
 import React from "react";
 import MySpeechConfig from "../models/MySpeechConfig";
 import useInput from "../hooks/useInput";
-import { ArrowBack, Save } from "@mui/icons-material";
-import GravityItemsArea from "./common/GravityItemsArea";
+import { Save } from "@mui/icons-material";
 import QnAConfig from "../models/QnAConfig";
 import TranslatorConfig from "../models/TranslatorConfig";
 import BingSearchConfig from "../models/BingSearchConfig";
@@ -23,7 +22,6 @@ interface ConfigFormProps {
 }
 
 const ConfigForm: React.FC<ConfigFormProps> = ({
-  hideConfigureScreen,
   mySpeechConfig,
   qnaConfig,
   translatorConfig,
