@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# Getting Started with Microsoft Speech Services Demo App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a demo project to to demonstrate the Microsoft Speech Services in different usecases. Swiss German is the focus language of this app for both recognition and synthesis.
 
 ## Available Scripts
 
@@ -24,6 +24,24 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+## Technologies Used
+
+This app uses different cognitive services by Microsoft which are documented [here](https://docs.microsoft.com/en-us/azure/cognitive-services).
+
+The following are used by this app:
+### Area of Language
+1. [`QnA Maker`](https://docs.microsoft.com/en-us/azure/cognitive-services/qnamaker/)
+2. [Translator](https://docs.microsoft.com/en-us/azure/cognitive-services/translator/)
+
+### Area of Speech
+1. [`Speech Services`](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/)
+    - [`Speech-to-Text`](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/speech-to-text)
+    - [`Text-to-Speech`](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/text-to-speech)
+
+### Area of Search
+2. [`Bing Search API`](https://docs.microsoft.com/en-us/azure/cognitive-services/bing-web-search/) TODO: correct `@Laurent Christen`?
+
+All information on how to setup the services can also be found in the respective links.
 ## Prerequisites
 
 ### General
@@ -37,17 +55,18 @@ The Azure account comes with $200 in service credit that you can apply toward a 
 
 [`Official documentation for Speech Service prerequisites`](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/overview#try-the-speech-service-for-free)
 
-1. [`Official documentation to create Azure Resource`](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/overview#create-the-azure-resource)
+1. Create Azure Resource ([`Official documentation`](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/overview#create-the-azure-resource))
 
-2. [`Official documentation to get KEYS and LOCATION/REGION`](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/overview#find-keys-and-locationregion)
+2. Get KEYS and LOCATION/REGION ([`Official documentation`](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/overview#find-keys-and-locationregion))
 
 3. Enter the subscription-/resourcekey and  region
     - Option 1: Paste them in the file [MySpeechConfig](./src/models/MySpeechConfig.ts) into the `DefaultSpeechConfig` object
-    - Option 2: Paste them in the Configuration Page, when running the app (Button at top right)
+    - Option 2: Paste them in the Configuration Page, when running the app (Button at top right `"Configure Keys"`)
 
 ### Setup QnA Maker
 
-TODO
+//[`What is QnA Maker?`](https://docs.microsoft.com/en-us/azure/cognitive-services/QnAMaker/overview/overview)¨
+[`Official of QnA Maker`](https://docs.microsoft.com/en-us/azure/cognitive-services/QnAMaker/)
 
 ### Setup Translation Service
 
