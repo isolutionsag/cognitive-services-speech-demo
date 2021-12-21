@@ -19,12 +19,12 @@ export async function makeBotRequest(
   let response: BotResponse;
   try {
     const result = await fetch(
-      getRequestUrl(config.botName, config.knowledgeBaseId),
+      getRequestUrl(config.qnaMakerServiceName, config.knowledgeBaseId),
       requestOptions
     );
     response = await result.json();
   } catch (err) {
-    response = { error: "Failed to get answer from Bot Api" };
+    response = { error: "Failed to get answer from Bot Api: " + err };
   }
   return response;
 }

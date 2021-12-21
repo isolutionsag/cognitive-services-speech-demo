@@ -33,7 +33,7 @@ const ConfigForm: React.FC<ConfigFormProps> = ({
 
   const useInputKbId = useInput(qnaConfig.knowledgeBaseId);
   const useInputAuthEndpointKey = useInput(qnaConfig.authEndpointKey);
-  const useInputBotName = useInput(qnaConfig.botName);
+  const useInputBotName = useInput(qnaConfig.qnaMakerServiceName);
 
   const useInputTranslatorSubscriptionKey = useInput(
     translatorConfig.subscriptionKey
@@ -49,7 +49,7 @@ const ConfigForm: React.FC<ConfigFormProps> = ({
 
     qnaConfig.knowledgeBaseId = useInputKbId.value;
     qnaConfig.authEndpointKey = useInputAuthEndpointKey.value;
-    qnaConfig.botName = useInputBotName.value;
+    qnaConfig.qnaMakerServiceName = useInputBotName.value;
 
     translatorConfig.subscriptionKey = useInputTranslatorSubscriptionKey.value;
 
