@@ -32,7 +32,7 @@ export default function useSpeechToText(
       console.error("Failed to create speech recognizer: ", e);
       setError("Error: " + e);
     }
-  }, [mySpeechConfig]);
+  }, [mySpeechConfig, recognitionLanguages]);
 
   function sttFromMic() {
     setIsRecordingAndConverting(true);
