@@ -165,14 +165,22 @@ export default function useSpeechToTextContinuous(
     recognizer.current.canceled = (s, e) => {
       if (e.reason === CancellationReason.Error) {
         setError(
-          `CANCELED: Reason=${e.reason} ErrorCode=${e.errorCode}, ErrorDetails=${e.errorDetails}. Have you configured everything correctly?`
+          `CANCELED (recognition):  Reason=${e.reason} ErrorCode=${e.errorCode}, ErrorDetails=${e.errorDetails}. Have you configured everything correctly?`
         );
       } else {
-        setError(`CANCELED: Reason=${e.reason}`);
+        setError(`CANCELED(recognition): Reason=${e.reason}`);
       }
       sttFromMicStop();
     };
-    recognizer.current.sessionStopped = (s, e) => {
+
+    translator.current.canceled = (s, e) => {
+      if (e.reason === CancellationReason.Error) {
+        setError(
+          `CANCELED (translation recognition): Reason=${e.reason} ErrorCode=${e.errorCode}, ErrorDetails=${e.errorDetails}. Have you configured everything correctly?`
+        );
+      } else {
+        setError(`CANCELED (translation recognition): Reason=${e.reason}`);
+      }
       sttFromMicStop();
     };
   }
