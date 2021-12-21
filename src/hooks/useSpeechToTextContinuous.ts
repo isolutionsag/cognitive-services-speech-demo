@@ -22,7 +22,7 @@ export default function useSpeechToTextContinuous(
   mySpeechConfig: MySpeechConfig
 ) {
   const [, setIsSuccess] = useState(true);
-  const [, setError] = useState("");
+  const [error, setError] = useState("");
 
   const [recognizedText, setRecognizedText] = useState(
     "...speak to your microphone..."
@@ -112,8 +112,12 @@ export default function useSpeechToTextContinuous(
 
     resetListeners();
 
-    recognizer.current?.startContinuousRecognitionAsync();
-    translator.current?.startContinuousRecognitionAsync();
+    try{
+      recognizer.current?.startContinuousRecognitionAsync();
+      translator.current?.startContinuousRecognitionAsync();
+    }catch(e){
+      setError((e as any).message)
+    }
   }
 
   async function sttFromMicStop() {
@@ -172,6 +176,7 @@ export default function useSpeechToTextContinuous(
     isRecognizing,
     sttFromMic,
     sttFromMicStop,
+    error,
     stopRecognitionBecauseTimeoutToolTip,
   };
 }

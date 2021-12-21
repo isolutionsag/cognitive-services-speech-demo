@@ -246,6 +246,7 @@ function getUseCaseContent(
         <FourLangToSwissTranslation
           mySpeechConfig={speechConfig}
           translatorConfig={translatorConfig}
+          setError={setError}
         />
       );
     case UseCase.BotChat:
@@ -258,9 +259,14 @@ function getUseCaseContent(
         />
       );
     case UseCase.RealtimeTranscription:
-      return <RealtimeTranscription speechConfig={speechConfig} />;
+      return (
+        <RealtimeTranscription
+          speechConfig={speechConfig}
+          setError={setError}
+        />
+      );
     case UseCase.NewsReader:
-      return <NewsReader speechConfig={speechConfig} />;
+      return <NewsReader speechConfig={speechConfig} setError={setError} />;
   }
 }
 

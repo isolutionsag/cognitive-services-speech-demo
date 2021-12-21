@@ -16,11 +16,12 @@ import useTextToSpeech from "../../hooks/useTextToSpeech";
 import { Voice } from "../../util/TextToSpechVoices";
 import React, { useState, useEffect } from "react";
 import { loadBingSearchConfig } from "../../repositories/BingSearchConfigRepository";
+import { UseCaseTemplateChildProps } from "./UseCaseTemplate";
 
 const { CognitiveServicesCredentials } = require("@azure/ms-rest-azure-js");
 const { NewsSearchClient } = require("@azure/cognitiveservices-newssearch");
 
-interface NewsReaderProps {
+interface NewsReaderProps extends UseCaseTemplateChildProps {
   speechConfig: MySpeechConfig;
 }
 
@@ -32,7 +33,7 @@ interface NewsItem {
   datePublished: Date;
 }
 
-const NewsReader: React.FC<NewsReaderProps> = ({ speechConfig }) => {
+const NewsReader: React.FC<NewsReaderProps> = ({ speechConfig, setError }) => {
   const bingConfig = loadBingSearchConfig();
   const credentials = new CognitiveServicesCredentials(
     bingConfig.subscriptionKey
@@ -56,22 +57,27 @@ const NewsReader: React.FC<NewsReaderProps> = ({ speechConfig }) => {
   }
 
   const searchNews = async () => {
-    let newsResults = await newsSearchClient.news.search(searchTopic, {
-      market: "de-ch",
-      acceptLanguage: "de-DE",
-      count: 5,
-    });
-    setNews(
-      newsResults.value.map((result: any) => {
-        return {
-          title: result.name,
-          description: result.description,
-          url: result.url,
-          thumbnail: result.image?.thumbnail?.contentUrl,
-          datePublished: new Date(result.datePublished),
-        };
-      })
-    );
+    
+    try{
+      let newsResults = await newsSearchClient.news.search(searchTopic, {
+        market: "de-ch",
+        acceptLanguage: "de-DE",
+        count: 5,
+      });
+      setNews(
+        newsResults.value.map((result: any) => {
+          return {
+            title: result.name,
+            description: result.description,
+            url: result.url,
+            thumbnail: result.image?.thumbnail?.contentUrl,
+            datePublished: new Date(result.datePublished),
+          };
+        })
+      );
+    }catch(e) {
+      setError("Failed to get news results: " + (e as any).message + ". Have you entered the correct configuration?")
+    }
   };
 
   return (

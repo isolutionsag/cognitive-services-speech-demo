@@ -11,6 +11,7 @@ import MySpeechConfig, {
 import TranslatorConfig from "../../models/TranslatorConfig";
 import Language from "../../util/Language";
 import { Voice } from "../../util/TextToSpechVoices";
+import { UseCaseTemplateChildProps } from "./UseCaseTemplate";
 
 const recognitionLanguages = [
   Language.EN,
@@ -19,7 +20,7 @@ const recognitionLanguages = [
   Language.ES,
 ];
 
-interface FourLangToSwissTranslationProps {
+interface FourLangToSwissTranslationProps extends UseCaseTemplateChildProps {
   mySpeechConfig: MySpeechConfig;
   translatorConfig: TranslatorConfig;
 }
@@ -27,6 +28,7 @@ interface FourLangToSwissTranslationProps {
 const FourLangToSwissTranslation: React.FC<FourLangToSwissTranslationProps> = ({
   mySpeechConfig,
   translatorConfig,
+  setError,
 }) => {
   const speechToText = useSpeechToText(mySpeechConfig, recognitionLanguages);
   const [translation, setTranslation] = useState("");
@@ -45,15 +47,19 @@ const FourLangToSwissTranslation: React.FC<FourLangToSwissTranslationProps> = ({
         translatorConfig
       );
 
-      if (translationResponse.error)
-        console.error("Failed to get translation for input");
-      //TODO: show in UI? send original (unstranslated) question to bot?
-      else {
+      if (translationResponse.error) {
+        setError(
+          "Failed to get translation for input: " + translationResponse.error
+        );
+      } else {
         const translation = translationResponse.translations?.find(
           (t) => t.to === "de"
         );
         if (!translation) {
-          console.error("No matching translation in de"); //TODO: show in UI? send original (unstranslated) question to bot?
+          setError(
+            `No matching translation in german ("de"). Translations response: ` +
+              JSON.stringify(translationResponse.translations)
+          );
           return;
         }
         const text = translation.text;
@@ -79,7 +85,7 @@ const FourLangToSwissTranslation: React.FC<FourLangToSwissTranslationProps> = ({
         <SettingsVoice fontSize="large" />
       </IconButton>
       {speechToText.isRecordingAndConverting ? (
-        <Skeleton variant="text" style={{ width: "100%", maxWidth: "500px"  }} />
+        <Skeleton variant="text" style={{ width: "100%", maxWidth: "500px" }} />
       ) : (
         <>
           <Typography variant="h5">{speechToText.resultText}</Typography>

@@ -23,8 +23,14 @@ export default function useBotResponse(question: {text: string}, config: QnAConf
       setIsFetching(false);
 
       const handleResponseSuccess = () => {
-        const answer = (botResponse as any).answers[0].answer as string;
+        if(!botResponse || !botResponse.answers || botResponse.answers.length === 0){
+          setAnswer("")
+          setIsSuccess(false)
+          return
+        }
+
         setIsSuccess(true);
+        const answer = botResponse.answers[0].answer  as string;
         setAnswer(answer);
       }
 

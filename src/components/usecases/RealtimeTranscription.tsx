@@ -21,13 +21,15 @@ import {
   SpeechTranslationLanguagesNames,
 } from "../../util/SupportedLanguages";
 import { Voice } from "../../util/TextToSpechVoices";
+import { UseCaseTemplateChildProps } from "./UseCaseTemplate";
 
-interface RealtimeTranscriptionProps {
+interface RealtimeTranscriptionProps extends UseCaseTemplateChildProps{
   speechConfig: MySpeechConfig;
 }
 
 const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
   speechConfig,
+  setError
 }) => {
   const speechToTextContinuous = useSpeechToTextContinuous(speechConfig);
   const { synthesizeSpeech, isSynthesizing } = useTextToSpeech(
@@ -47,6 +49,12 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
       speechToTextContinuous.sttFromMicStop();
     };
   }, []);
+
+  useEffect(() => {
+    if(speechToTextContinuous.error.length > 0)
+      setError("Error in speech recognition: " + speechToTextContinuous.error)
+    else setError("")
+  }, [speechToTextContinuous.error]);
 
   return (
     <div style={{ minHeight: "65vh" }}>

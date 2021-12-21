@@ -8,7 +8,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  SelectChangeEvent, 
+  SelectChangeEvent,
   Chip,
   Stack,
   Skeleton,
@@ -22,7 +22,7 @@ import QnaConfig from "../../models/QnAConfig";
 import useSpeechToText from "../../hooks/useSpeechToText";
 import useTextToSpeech from "../../hooks/useTextToSpeech";
 import useBotResponse from "../../hooks/useBotResponse";
-import { makeTranslationRequest } from "../../api/TranslationApi";
+import { makeTranslationRequest, TranslationResponse } from "../../api/TranslationApi";
 import { botLanguage } from "../../api/BotApi";
 import TranslatorConfig from "../../models/TranslatorConfig";
 import Language, {
@@ -91,6 +91,19 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
     mySpeechConfig
   );
 
+  const handleTranslationResponseError = (err: any) => {
+    setError(
+      "Failed to get translation for input: " + err + ". Is your translation config correct?"
+    );
+  }
+
+  const handleTranslationResultError = (result: TranslationResponse) => {
+    setError(
+      `No matching translation in botlanguage ("${botLanguage}"). Translations response: ` +
+      JSON.stringify(result.translations)
+    );
+  }
+
   const handleInputTextChange = (text: string, languageLocale: string) => {
     useInputInput.setValue(text);
     setDetectedLanguage(languageLocale);
@@ -102,15 +115,13 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
         [botLanguage],
         translatorConfig
       );
-      if (translationResponse.error)
-        console.error("Failed to get translation for input: ", translationResponse.error);
-      //TODO: show in UI? send original (unstranslated) question to bot?
+      if (translationResponse.error) handleTranslationResponseError(translationResponse.error)
       else {
         const translation = translationResponse.translations?.filter(
           (t) => t.to === botLanguage.split("-")[0].toLowerCase()
         );
-        if (!translation || translation.length === 0) {
-          console.error("No matching translation for bot language"); //TODO: show in UI? send original (unstranslated) question to bot?
+        if (!translation) {
+          handleTranslationResultError(translationResponse)
           return;
         }
         const text = translation[0]?.text;
@@ -151,18 +162,16 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
         [toLanguage],
         translatorConfig
       );
-      if (translationResponse.error) {
-        console.error(
-          "Failed to get translation for bot response",
-          translationResponse.error
-        );
+      if (translationResponse.error){
+        handleTranslationResponseError(translationResponse.error)
+        
         displayBotAnswer(_useBotResponse.answer, botLanguage);
       } else {
         const translation = translationResponse.translations?.find(
           (t) => t.to === toLanguage
         );
         if (!translation) {
-          console.error("No matching translation for output language");
+          handleTranslationResultError(translationResponse);
           displayBotAnswer(_useBotResponse.answer, botLanguage);
           return;
         }
@@ -187,7 +196,13 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
 
   return (
     <Grid container justifyContent="center">
-      <Grid container item direction="column" alignItems="center" justifyContent="center">
+      <Grid
+        container
+        item
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+      >
         <Typography variant="body2" color="orange" gutterBottom>
           {speechToText.error}
         </Typography>
@@ -223,7 +238,7 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
           item
           direction="column"
           alignItems="center"
-          style={{maxWidth: "600px"}}
+          style={{ maxWidth: "600px" }}
         >
           {speechToText.isRecordingAndConverting ? (
             <Skeleton variant="text" style={{ width: "100%" }} />

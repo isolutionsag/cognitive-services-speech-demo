@@ -8,7 +8,7 @@ const endpoint = "https://api.cognitive.microsofttranslator.com";
 // This is required if using a Cognitive Services resource.
 const region = "global";
 
-interface TranslationResponse {
+export interface TranslationResponse {
   error?: string;
   translations?: { text: string; to: string }[];
   detectedLanguage?: string;
@@ -20,7 +20,7 @@ export async function makeTranslationRequest(
   toLanguages: string[],
   config: TranslatorConfig
 ): Promise<TranslationResponse> {
-  if (textToTranslate === "")
+  if (!textToTranslate || textToTranslate === "")
     return {
       translations: toLanguages.map((language) => {
         return {
@@ -52,6 +52,12 @@ export async function makeTranslationRequest(
       getRequestOptions()
     );
     const data = await result.json();
+    if (!data || data.length === 0)
+      return {
+        error:
+          "No data response from translation API. Response was:  " +
+          data.response,
+      };
     return {
       translations: data[0].translations,
       detectedLanguage: data[0].detectedLanguage,

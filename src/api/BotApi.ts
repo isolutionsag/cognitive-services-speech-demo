@@ -8,6 +8,8 @@ export async function makeBotRequest(
   question: string,
   config: QnAConfig
 ): Promise<BotResponse> {
+  if(!question || question.length === 0) return {answers: [{answer: ""}]}
+
   let requestOptions = createPostRequest(
     {
       question: question,
@@ -35,5 +37,5 @@ function getRequestUrl(botName: string, kbId: string) {
 
 interface BotResponse {
   error?: string;
-  answers?: string[];
+  answers?: {answer: string}[];
 }

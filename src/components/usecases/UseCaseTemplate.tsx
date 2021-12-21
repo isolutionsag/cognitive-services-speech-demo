@@ -33,8 +33,9 @@ const UseCaseTemplate: React.FC<UseCaseTemplateProps> = ({
 
   useEffect(() => {
     const intro = descriptionIntro + " " + model.description;
-    synthesizeSpeech(intro);
-  }, []);
+    //synthesizeSpeech(intro);
+    console.log("speaking...");
+  }, [model.description]);
 
   return (
     <Grid
