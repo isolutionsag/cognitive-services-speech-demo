@@ -51,7 +51,7 @@ function App() {
   const translatorConfig = loadTranslatorConfig();
   const bingSearchConfig = loadBingSearchConfig();
 
-  const [validConfig, setValidConfig] = useState(
+  const [validConfig] = useState(
     areAllConfigsValid(
       speechConfig,
       qnaConfig,
@@ -71,14 +71,6 @@ function App() {
     saveTranslatorConfig(translatorConfig);
     saveBingSearchConfig(bingSearchConfig);
 
-    setValidConfig(
-      areAllConfigsValid(
-        mySpeechConfig,
-        qnaConfig,
-        translatorConfig,
-        bingSearchConfig
-      )
-    );
     handleBackClick();
   };
 
@@ -177,7 +169,7 @@ function App() {
           )}
           {!validConfig && currentPage !== Page.Settings && (
             <Alert
-              style={{marginTop: "20px"}}
+              style={{ marginTop: "20px" }}
               severity="warning"
               action={
                 <Button

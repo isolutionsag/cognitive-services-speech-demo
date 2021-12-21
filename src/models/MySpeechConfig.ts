@@ -8,6 +8,8 @@ export const DefaultSpeechConfig = {
 type MySpeechConfig = typeof DefaultSpeechConfig;
 export default MySpeechConfig;
 
+export type SpeechConfigKey = keyof MySpeechConfig
+
 export const isValidSpeechConfig = (config: MySpeechConfig) => {
   return (
     config.resourceKey !== "" &&

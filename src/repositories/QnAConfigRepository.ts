@@ -1,4 +1,4 @@
-import QnAConfig, { DefaultQnAConfig } from "../models/QnAConfig";
+import QnAConfig, { DefaultQnAConfig, QnAConfigKey } from "../models/QnAConfig";
 
 const kbIdKey = "knowledgeBase";
 const authEndpointKeyKey = "authEndpointKey";
@@ -7,13 +7,18 @@ const qnaMakerServiceNameKey = "qnaMakerServicename";
 export function loadQnAConfig(): QnAConfig {
   var kbId = localStorage.getItem(kbIdKey);
   var authEndpointKey = localStorage.getItem(authEndpointKeyKey);
-  var botName = localStorage.getItem(qnaMakerServiceNameKey);
+  var qnaMakerServiceName = localStorage.getItem(qnaMakerServiceNameKey);
 
-  let result = DefaultQnAConfig;
+  let result = Object.assign({},  DefaultQnAConfig);
 
-  if (kbId) result.knowledgeBaseId = kbId;
-  if (authEndpointKey) result.authEndpointKey = authEndpointKey;
-  if (botName) result.qnaMakerServiceName = botName;
+  function checkShouldReplaceDefaultWithStorage(key: QnAConfigKey, storageValue: string | null) {
+    if (storageValue && storageValue.length > 0) result[key] = storageValue;
+  }
+
+  checkShouldReplaceDefaultWithStorage("knowledgeBaseId", kbId)
+  checkShouldReplaceDefaultWithStorage("authEndpointKey", authEndpointKey)
+  checkShouldReplaceDefaultWithStorage("qnaMakerServiceName", qnaMakerServiceName)
+
   return result;
 }
 

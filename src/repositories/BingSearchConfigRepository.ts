@@ -6,8 +6,8 @@ const resourceKeyStorageKey = "subscriptionKey";
 export function loadBingSearchConfig(): BingSearchConfig {
   var subscriptionKey = localStorage.getItem(getStorageKey(resourceKeyStorageKey));
 
-  let result = DefaultBingSearchConfig;
-  if (subscriptionKey) result.subscriptionKey = subscriptionKey;
+  let result = Object.assign({}, DefaultBingSearchConfig);
+  if (subscriptionKey && subscriptionKey.length > 0) result.subscriptionKey = subscriptionKey;
   return result;
 }
 

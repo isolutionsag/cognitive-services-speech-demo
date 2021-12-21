@@ -5,4 +5,7 @@ export const DefaultQnAConfig = {
 }
 
 type QnAConfig = typeof DefaultQnAConfig
+
+export type QnAConfigKey = keyof QnAConfig
+
 export default QnAConfig

@@ -1,20 +1,28 @@
-import TranslatorConfig, { DefaultTranslatorConfig } from "../models/TranslatorConfig";
+import TranslatorConfig, {
+  DefaultTranslatorConfig,
+} from "../models/TranslatorConfig";
 
-const predicate = "translator"
+const predicate = "translator";
 const resourceKeyStorageKey = "subscriptionKey";
 
 export function loadTranslatorConfig(): TranslatorConfig {
-  var subscriptionKey = localStorage.getItem(getStorageKey(resourceKeyStorageKey));
+  var subscriptionKey = localStorage.getItem(
+    getStorageKey(resourceKeyStorageKey)
+  );
 
-  let result = DefaultTranslatorConfig;
-  if (subscriptionKey) result.subscriptionKey = subscriptionKey;
+  let result = Object.assign({}, DefaultTranslatorConfig);
+  if (subscriptionKey && subscriptionKey.length > 0)
+    result.subscriptionKey = subscriptionKey;
   return result;
 }
 
-export function saveTranslatorConfig(config: TranslatorConfig) {  
-  localStorage.setItem(getStorageKey(resourceKeyStorageKey), config.subscriptionKey);
+export function saveTranslatorConfig(config: TranslatorConfig) {
+  localStorage.setItem(
+    getStorageKey(resourceKeyStorageKey),
+    config.subscriptionKey
+  );
 }
 
-function getStorageKey(key: string){
+function getStorageKey(key: string) {
   return predicate + "_" + key;
 }
