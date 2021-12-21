@@ -59,7 +59,7 @@ export default function useSpeechToTextContinuous(
 
   useEffect(() => {
     if (isValidSpeechConfig(mySpeechConfig)) {
-      if (recognizer.current === undefined) {
+      if (!recognizer.current) {
         try {
           recognizer.current = CreateSpeechRecognizerSingleLanguage(
             mySpeechConfig,
@@ -70,7 +70,7 @@ export default function useSpeechToTextContinuous(
         }
       }
 
-      if (translator.current === undefined) {
+      if (!translator.current) {
         try {
           translator.current = CreateTranslator(
             mySpeechConfig,
@@ -87,7 +87,7 @@ export default function useSpeechToTextContinuous(
       );
       setIsSuccess(false);
     }
-  }, [mySpeechConfig]);
+  }, [mySpeechConfig, translationTargetLanguage]);
 
   useDidUpdate(() => {
     if (translator.current !== undefined) {
@@ -163,7 +163,7 @@ export default function useSpeechToTextContinuous(
     };
 
     recognizer.current.canceled = (s, e) => {
-      if (e.reason == CancellationReason.Error) {
+      if (e.reason === CancellationReason.Error) {
         setError(
           `CANCELED: Reason=${e.reason} ErrorCode=${e.errorCode}, ErrorDetails=${e.errorDetails}. Have you configured everything correctly?`
         );
@@ -173,7 +173,6 @@ export default function useSpeechToTextContinuous(
       sttFromMicStop();
     };
     recognizer.current.sessionStopped = (s, e) => {
-      console.log("\n    Session stopped event.");
       sttFromMicStop();
     };
   }
