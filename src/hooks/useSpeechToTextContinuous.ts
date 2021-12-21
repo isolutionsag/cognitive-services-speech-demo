@@ -1,5 +1,6 @@
 import MySpeechConfig, { isValidSpeechConfig } from "../models/MySpeechConfig";
 import {
+  CancellationReason,
   ResultReason,
   SpeechRecognizer,
   TranslationRecognizer,
@@ -112,12 +113,8 @@ export default function useSpeechToTextContinuous(
 
     resetListeners();
 
-    try{
-      recognizer.current?.startContinuousRecognitionAsync();
-      translator.current?.startContinuousRecognitionAsync();
-    }catch(e){
-      setError((e as any).message)
-    }
+    recognizer.current?.startContinuousRecognitionAsync();
+    translator.current?.startContinuousRecognitionAsync();
   }
 
   async function sttFromMicStop() {
@@ -163,6 +160,21 @@ export default function useSpeechToTextContinuous(
       if (e.result.reason === ResultReason.TranslatedSpeech) {
         setTranslatedText(e.result.translations.get(translationTargetLanguage));
       }
+    };
+
+    recognizer.current.canceled = (s, e) => {
+      if (e.reason == CancellationReason.Error) {
+        setError(
+          `CANCELED: Reason=${e.reason} ErrorCode=${e.errorCode}, ErrorDetails=${e.errorDetails}. Have you configured everything correctly?`
+        );
+      } else {
+        setError(`CANCELED: Reason=${e.reason}`);
+      }
+      sttFromMicStop();
+    };
+    recognizer.current.sessionStopped = (s, e) => {
+      console.log("\n    Session stopped event.");
+      sttFromMicStop();
     };
   }
 
