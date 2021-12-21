@@ -50,7 +50,7 @@ export default function useBotResponse(question: {text: string}, config: QnAConf
       }
     };
     getBotAnswer();
-  }, [question]);
+  }, [question, config]);
 
   return {
     isFetching,
