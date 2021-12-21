@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export function noModifier(input: string) {
-    return input
+  return input;
 }
 
 const NoValidator = () => "";
@@ -23,12 +23,7 @@ export default function useInput(
     setValue(modifier(newVal));
   };
 
-  useEffect(() => {
-    if (isInitialMount.current) isInitialMount.current = false;
-    else validate();
-  }, [value]);
-
-  const validate = () => {
+  const validate = useCallback(() => {
     if (required && value === "") {
       setError("Required");
       return;
@@ -36,7 +31,12 @@ export default function useInput(
     const error = errorValidator(value);
     setIsValid(error === "");
     setError(error);
-  };
+  }, [errorValidator, required, value]);
 
-    return { value, handleChange, setValue, isValid, error, validate }
+  useEffect(() => {
+    if (isInitialMount.current) isInitialMount.current = false;
+    else validate();
+  }, [value, validate]);
+
+  return { value, handleChange, setValue, isValid, error, validate };
 }
