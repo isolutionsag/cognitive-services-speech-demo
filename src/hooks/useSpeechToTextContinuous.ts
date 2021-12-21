@@ -29,19 +29,19 @@ export default function useSpeechToTextContinuous(
   );
 
   const [recognizingText, setRecognizingText] = useState("... i do listen ...");
-  const [
-    debouncedRecognizingTextDebounced,
-    setDebouncedRecognizingTextDebouncedImmediatelyUpdate,
-  ] = useDebouncedValue(recognizingText, autoStopRecognitionTimeout);
+  const [debouncedRecognizingTextDebounced] = useDebouncedValue(
+    recognizingText,
+    autoStopRecognitionTimeout
+  );
 
   const recognizer = useRef<SpeechRecognizer>();
 
   const [translatedText, setTranslatedText] = useState<string>("...");
   const [translatingText, setTranslatingText] = useState<string>("...");
-  const [
-    debouncedTranslatingTextDebounced,
-    setDebouncedTranslatingTextDebouncedImmediatelyUpdate,
-  ] = useDebouncedValue(recognizingText, autoStopRecognitionTimeout);
+  const [debouncedTranslatingTextDebounced] = useDebouncedValue(
+    recognizingText,
+    autoStopRecognitionTimeout
+  );
 
   const translator = useRef<TranslationRecognizer>();
   const [translationTargetLanguage, setTranslationTargetLanguage] = useState(
