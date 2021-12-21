@@ -81,9 +81,19 @@ The Azure account comes with $200 in service credit that you can apply toward a 
 
 ### Setup Translation Service
 
-TODO
+1. Create a Translator Resource: [Official documentation](https://docs.microsoft.com/en-us/azure/cognitive-services/translator/translator-how-to-signup)
 
-## Links
+2. Copy the subscription key and
+    - Option 1: Paste them in the file [TranslatorConfig](./src/models/TranslatorConfig.ts) into the `DefaultTranslatorConfig` object
+    - Option 2: Paste them in the Configuration Page, when running the app (Button at top right `"Configure Keys"`)
+
+### Setup Bing Web Search
+
+1. TODO: @Laurent Christen?
+
+## Now you are ready to Rock'n'Roll!
+
+## Further Links
 
 [Cognitive Services](https://azure.microsoft.com/en-us/services/cognitive-services)
 
