@@ -70,12 +70,14 @@ The Azure account comes with $200 in service credit that you can apply toward a 
 
 [Official documentation to setup QnAMaker with Sdk](https://docs.microsoft.com/en-us/azure/cognitive-services/qnamaker/quickstarts/quickstart-sdk?pivots=programming-language-javascript#prerequisites)
 
-1. Create a [QnA Maker Resource](https://portal.azure.com/#create/Microsoft.CognitiveServicesQnAMaker) in the Azure Portal
-2. Copy the key and resource name from the resource you create to connect your application to the QnA Maker API
-2. Go [here](https://www.qnamaker.ai/) to get started with QnA Maker
-3. Create a new `Knowledge base (KB)` and (TODO: is correct?) connect with azure service? or create first?. [Quick start to create KB](https://docs.microsoft.com/en-us/azure/cognitive-services/qnamaker/quickstarts/create-publish-knowledge-base)
-4. Get your KB by clicking the `View Code` button in the [KBs overview](https://www.qnamaker.ai/Home/MyServices) and copying the sample request details. If you want to change your KB name click select the KB name in the  KBs overview and go to the settings page.
-5. Enter the knowledgeBaseId, authEndpointKey and  botName
+1. Create a [QnA Maker Resource](https://portal.azure.com/#create/Microsoft.CognitiveServicesQnAMaker) in the Azure Portal and wait until it is deployed
+2. Create a new `Knowledge Base (KB)` [here](https://www.qnamaker.ai/Create), [Official quick start quide to create KB](https://docs.microsoft.com/en-us/azure/cognitive-services/qnamaker/quickstarts/create-publish-knowledge-base)
+    - Select the same Subscription for the QnA KB as the one from the just created azure QnA resource and select the QnA Resource you just created
+    - Select your KB language which you cannot change later
+4. (Optional) Import our KB [Questions and Answers Sheet](./path/to/sheet.excel) into your KB.
+5. Select `Publish` to create an endpoint for the KB
+            5. Get your KB Details by clicking the `View Code` button in the [KBs overview](https://www.qnamaker.ai/Home/MyServices) and copying the the `KB ID`and `authEndpointKey`. You also need the `QnA Service Name` for the QnA configuration.
+6. Enter the KB ID, authEndpointKey and QnA Service Name:
     - Option 1: Paste them in the file [QnAConfig](./src/models/QnAConfig.ts) into the `DefaultQnAConfig` object
     - Option 2: Paste them in the Configuration Page, when running the app (Button at top right `"Configure Keys"`)
 
