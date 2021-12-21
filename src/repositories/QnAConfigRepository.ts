@@ -2,23 +2,23 @@ import QnAConfig, { DefaultQnAConfig } from "../models/QnAConfig";
 
 const kbIdKey = "knowledgeBase";
 const authEndpointKeyKey = "authEndpointKey";
-const botNameKey = "botName";
+const qnaMakerServiceNameKey = "qnaMakerServicename";
 
 export function loadQnAConfig(): QnAConfig {
   var kbId = localStorage.getItem(kbIdKey);
   var authEndpointKey = localStorage.getItem(authEndpointKeyKey);
-  var botName = localStorage.getItem(botNameKey);
+  var botName = localStorage.getItem(qnaMakerServiceNameKey);
 
   let result = DefaultQnAConfig;
 
   if (kbId) result.knowledgeBaseId = kbId;
   if (authEndpointKey) result.authEndpointKey = authEndpointKey;
-  if (botName) result.botName = botName;
+  if (botName) result.qnaMakerServiceName = botName;
   return result;
 }
 
 export function saveQnAConfig(config: QnAConfig) {
   localStorage.setItem(kbIdKey, config.knowledgeBaseId);
   localStorage.setItem(authEndpointKeyKey, config.authEndpointKey);
-  localStorage.setItem(botNameKey, config.botName);
+  localStorage.setItem(qnaMakerServiceNameKey, config.qnaMakerServiceName);
 }

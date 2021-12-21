@@ -1,7 +1,7 @@
 export const DefaultQnAConfig = {
-    knowledgeBaseId: "748a9cd7-6acb-43aa-abdb-15c0a9118679",
-    authEndpointKey: " 47778641-988a-4ca7-939c-05fbdbfd07a4",
-    botName: "chitchatdemobot"
+    knowledgeBaseId: "f6e96f69-2655-4098-8e2b-69eb02b59539",
+    authEndpointKey: "259538df-618c-470f-9a26-a6aafbedc55e",
+    qnaMakerServiceName: "isol-bridgebotdemo-qna"
 }
 
 type QnAConfig = typeof DefaultQnAConfig
