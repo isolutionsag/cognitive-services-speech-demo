@@ -91,7 +91,12 @@ The Azure account comes with $200 in service credit that you can apply toward a 
 
 ### Setup Bing Web Search
 
-1. TODO: @Laurent Christen?
+1. Create a [Bing Search Resource](https://portal.azure.com/#create/Microsoft.BingSearch), [Offcial documentation](https://docs.microsoft.com/en-us/bing/search-apis/bing-web-search/create-bing-search-service-resource)
+2. Copy the subscription Key and
+    - Option 1: Paste them in the file [BingSearchConfig](./src/models/BingSearchConfig.ts) into the `DefaultBingSearchConfig` object
+    - Option 2: Paste them in the Configuration Page, when running the app (Button at top right `"Configure Keys"`)
+
+[Web Search API v7 reference](https://docs.microsoft.com/en-us/bing/search-apis/bing-web-search/reference/endpoints)
 
 ## Now you are ready to Rock'n'Roll!
 
