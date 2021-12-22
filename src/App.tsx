@@ -48,12 +48,12 @@ enum Page {
 }
 
 function App() {
-  const speechConfig = loadSpeechConfig();
-  const qnaConfig = loadQnAConfig();
-  const translatorConfig = loadTranslatorConfig();
-  const bingSearchConfig = loadBingSearchConfig();
+  let speechConfig = loadSpeechConfig();
+  let qnaConfig = loadQnAConfig();
+  let translatorConfig = loadTranslatorConfig();
+  let bingSearchConfig = loadBingSearchConfig();
 
-  const [validConfig] = useState(
+  const [validConfig, setValidConfig] = useState(
     areAllConfigsValid(
       speechConfig,
       qnaConfig,
@@ -61,6 +61,21 @@ function App() {
       bingSearchConfig
     )
   );
+
+  function loadConfigs() {
+    speechConfig = loadSpeechConfig();
+    qnaConfig = loadQnAConfig();
+    translatorConfig = loadTranslatorConfig();
+    bingSearchConfig = loadBingSearchConfig();
+    setValidConfig(
+      areAllConfigsValid(
+        speechConfig,
+        qnaConfig,
+        translatorConfig,
+        bingSearchConfig
+      )
+    );
+  }
 
   const { synthesizeSpeech, isSynthesizing } = useTextToSpeech(
     "",
@@ -78,6 +93,8 @@ function App() {
     saveQnAConfig(qnaConfig);
     saveTranslatorConfig(translatorConfig);
     saveBingSearchConfig(bingSearchConfig);
+
+    loadConfigs(); //overrite any empty fields from form with Default values
 
     handleBackClick();
   };

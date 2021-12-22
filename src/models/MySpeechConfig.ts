@@ -1,8 +1,8 @@
 import { SpeechConfig } from "microsoft-cognitiveservices-speech-sdk";
 
 export const DefaultSpeechConfig = {
-  resourceKey: "<your-resource/subscription-key>",
-  region: "<your-region>",
+  resourceKey: "" /* <your-resource/subscription-key> */,
+  region: "" /* <your-region> */,
 };
 
 type MySpeechConfig = typeof DefaultSpeechConfig;
