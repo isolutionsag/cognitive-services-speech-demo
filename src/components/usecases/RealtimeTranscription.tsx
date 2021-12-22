@@ -165,14 +165,14 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
       <br />
       <br />
       <FormControl>
-        <InputLabel id="language-input-label">Output language</InputLabel>
+        <InputLabel id="language-input-label">Ausgabesprache</InputLabel>
         <Select
           style={{ minWidth: "200px" }}
           autoWidth
           labelId="language-select-label"
           id="language-select"
           value={speechToTextContinuous.translationTargetLanguage}
-          label="Output language"
+          label="Ausgabesprache"
           onChange={handleTranslationLanguageChange}
         >
           {Object.values(SpeechTranslationLanguage).map((language) => (

@@ -209,7 +209,11 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
               <SettingsVoice fontSize="large" />
             </IconButton>
           }
-          text="Aufnehmen"
+          text={
+            speechToText.isRecordingAndConverting
+              ? "Ich höre zu..."
+              : "Aufnehmen"
+          }
         />
         <br />
         <Stack direction="row" spacing={1}>
@@ -245,7 +249,7 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
               </Typography>
               <Typography variant="body1" color="grey">
                 {detectedLanguage.length > 0
-                  ? `Detected language: ${detectedLanguage}`
+                  ? `Erkannte Sprache: ${detectedLanguage}`
                   : ""}
               </Typography>
             </>
@@ -254,14 +258,14 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
             <ForumOutlined style={{ height: "50px", width: "50px" }} />
           </div>
           <FormControl>
-            <InputLabel id="language-input-label">Output language</InputLabel>
+            <InputLabel id="language-input-label">Ausgabesprache</InputLabel>
             <Select
               style={{ minWidth: "200px" }}
               autoWidth
               labelId="language-select-label"
               id="language-select"
               value={outputLanguage}
-              label="Output language"
+              label="Ausgabesprache"
               onChange={handleOutputLanguageChange}
             >
               {languageModels.map((languageModel) => (

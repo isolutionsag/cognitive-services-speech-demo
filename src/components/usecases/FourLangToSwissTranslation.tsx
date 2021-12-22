@@ -9,6 +9,8 @@ import MySpeechConfig, {
 } from "../../models/MySpeechConfig";
 import TranslatorConfig from "../../models/TranslatorConfig";
 import Language from "../../util/Language";
+import { Voice } from "../../util/TextToSpechVoices";
+import CustomIconButton from "../common/CustomIconButton";
 import { UseCaseTemplateChildProps } from "./UseCaseTemplate";
 
 const recognitionLanguages = [
@@ -47,7 +49,7 @@ const FourLangToSwissTranslation: React.FC<FourLangToSwissTranslationProps> = ({
         );
       } else {
         const translation = translationResponse.translations?.find(
-          (t) => t.to === "de"
+          (t) => t.to.toLowerCase() === "de"
         );
         if (!translation) {
           setError(
@@ -56,6 +58,7 @@ const FourLangToSwissTranslation: React.FC<FourLangToSwissTranslationProps> = ({
           );
           return;
         }
+        setError("");
         const text = translation.text;
         setTranslation(text);
       }
@@ -65,27 +68,41 @@ const FourLangToSwissTranslation: React.FC<FourLangToSwissTranslationProps> = ({
   }, [speechToText.resultText]);
 
   useDidUpdate(() => {
-    synthesizeSpeech(translation);
+    synthesizeSpeech(translation, Voice.de_CH_LeniNeural);
   }, [translation]);
 
   return (
     <Grid container direction="column" alignItems="center">
-      <IconButton
-        size="large"
-        disabled={!isValidSpeechConfig(mySpeechConfig)}
-        color={speechToText.isRecordingAndConverting ? "secondary" : "primary"}
-        onClick={() => speechToText.sttFromMic()}
-      >
-        <SettingsVoice fontSize="large" />
-      </IconButton>
+      <CustomIconButton
+        icon={
+          <IconButton
+            size="large"
+            disabled={!isValidSpeechConfig(mySpeechConfig)}
+            color={
+              speechToText.isRecordingAndConverting ? "secondary" : "primary"
+            }
+            onClick={() => speechToText.sttFromMic()}
+          >
+            <SettingsVoice fontSize="large" />
+          </IconButton>
+        }
+        text={
+          speechToText.isRecordingAndConverting ? "Ich höre zu..." : "Aufnehmen"
+        }
+      />
+      <br />
       {speechToText.isRecordingAndConverting ? (
         <Skeleton variant="text" style={{ width: "100%", maxWidth: "500px" }} />
       ) : (
         <>
-          <Typography variant="h5">{speechToText.resultText}</Typography>
+          <Typography variant="h5">
+            {speechToText.resultText.length > 0
+              ? speechToText.resultText
+              : "Clicke den Aufnehme Knopf und sag etwas..."}
+          </Typography>
           <Typography variant="body2">
             {speechToText.detectedLanguageLocale !== ""
-              ? `Detected language: ${speechToText.detectedLanguageLocale}`
+              ? `Erkannte Sprache: ${speechToText.detectedLanguageLocale}`
               : ""}
           </Typography>
         </>

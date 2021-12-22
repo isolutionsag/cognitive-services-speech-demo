@@ -30,7 +30,7 @@ export const OutputLanguageLocale: { [id in Language]: string } = {
 };
 
 export const LanguageLabels: { [id in Language]: string } = {
-  [Language.AUTO]: "Auto (same as input)",
+  [Language.AUTO]: "Auto (deine Sprache)",
   [Language.DE]: "Deutsch",
   [Language.EN]: "Englisch",
   [Language.FR]: "Französisch",

@@ -1,8 +1,5 @@
-import {
-  Grid,
-  Typography,
-} from "@mui/material";
-import React, {  } from "react";
+import { Grid, Typography } from "@mui/material";
+import React from "react";
 
 import UseCaseCard from "./UseCaseCard";
 import UseCase from "../util/UseCase";
@@ -17,16 +14,16 @@ const Home: React.FC<HomeProps> = ({ useCaseSelected }) => {
       <Typography variant="h2">Grüezi!</Typography>
       <Typography variant="body1" gutterBottom mb={4}>
         {
-          "Hey, ich bin die Leni! Hier kannst Du mit mir schwätzen, Videos in Realtime transkribieren und mehr"
+          "Hey, ich bin Leni. Ich bin ein Demo-Bot, der Schweizerdeutsch versteht und spricht. Mit mir kannst du die Möglichkeiten der Microsoft Azure Cognitive Services ausprobieren.​"
         }
       </Typography>
       <Grid container spacing={4}>
-      <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6}>
           <UseCaseCard
             image="images/isolution_zrh_innenarchitektur-86.jpg"
             imageAlt="translate symbol with swiss flag"
-            title="Übersetzung ins Schweizerdeutsch"
-            details="Spreche in EN, FR, IT, ES und erhalte nach einem Satz die Schweizerdeutsche Übersetung gesprochen zurück"
+            title="Übersetzung ins Schweizerdeutsche"
+            details="Sprich mit mir Englisch, Französisch, Italienisch oder Spanisch und ich übersetze es ins Schweizerdeutsche.​"
             useCase={UseCase.FourLangToSwissTranslation}
             onSelected={useCaseSelected}
           />
@@ -35,8 +32,8 @@ const Home: React.FC<HomeProps> = ({ useCaseSelected }) => {
           <UseCaseCard
             image="images/isolution_zrh_innenarchitektur-102.jpg"
             imageAlt="Bot icon with several language symbols"
-            title="Multilingual Bot Chat"
-            details="Chat with a bot in the language of your choice"
+            title="Mehrsprachiger Chat"
+            details="Stelle mir Fragen und ich beantworte Sie dir auf Schweizerdeutsch."
             useCase={UseCase.BotChat}
             onSelected={useCaseSelected}
           />
@@ -45,8 +42,8 @@ const Home: React.FC<HomeProps> = ({ useCaseSelected }) => {
           <UseCaseCard
             image="images/isolution_zrh_innenarchitektur-31.jpg"
             imageAlt="Recycling icon with several language symbols"
-            title="Realtime Transkription"
-            details="Realtime Transkription Schweizerdeutsch mit Übersetzung in mehrere Sprachen"
+            title="Diktiergerät mit Übersetzung"
+            details="Diktiere auf Schweizerdeutsch und ich übersetze direkt."
             useCase={UseCase.RealtimeTranscription}
             onSelected={useCaseSelected}
           />
@@ -55,8 +52,8 @@ const Home: React.FC<HomeProps> = ({ useCaseSelected }) => {
           <UseCaseCard
             image="images/isolution_zrh_innenarchitektur-100.jpg"
             imageAlt="News Icon with 3 lines symbolyzing summary"
-            title="News Reader with Leni"
-            details="Get the latest Bing news read out loud in your language and quickly view the summary of the events"
+            title="News vorlesen lassen​"
+            details="Suche die aktuellsten News und ich lese sie dir bei Bedarf vor.​"
             useCase={UseCase.NewsReader}
             onSelected={useCaseSelected}
           />

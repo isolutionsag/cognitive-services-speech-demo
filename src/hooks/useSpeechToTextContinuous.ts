@@ -52,9 +52,9 @@ export default function useSpeechToTextContinuous(
   const [isRecognizing, setIsRecognizing] = useState(false);
 
   const stopRecognitionBecauseTimeoutToolTip = useTooltip(
-    `Stopped recognition because there was no input for ${
+    `Aufnahme gestoppt, wegen Inaktivität für ${
       autoStopRecognitionTimeout / 1000
-    } seconds`
+    } Sek`
   );
 
   useEffect(() => {
