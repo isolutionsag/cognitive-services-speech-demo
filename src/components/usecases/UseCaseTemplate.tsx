@@ -2,13 +2,14 @@ import { VolumeUp } from "@mui/icons-material";
 import { Button, Grid, Typography, Divider, Alert } from "@mui/material";
 import React, { useEffect } from "react";
 import MySpeechConfig from "../../models/MySpeechConfig";
+import { Voice } from "../../util/TextToSpechVoices";
 import { UseCaseModel } from "../../util/UseCase";
-import SpeechComponentProps from "../SpeechComponentProps"
+import SpeechComponentProps from "../SpeechComponentProps";
 
 const descriptionIntro =
   "Hallo, ich bin die Leni, ich erkläre dir kurz, was du hier machen kannst.";
 
-interface UseCaseTemplateProps extends SpeechComponentProps{
+interface UseCaseTemplateProps extends SpeechComponentProps {
   model: UseCaseModel;
   error: string;
 }
@@ -22,15 +23,8 @@ const UseCaseTemplate: React.FC<UseCaseTemplateProps> = ({
   error,
   children,
   synthesizeSpeech,
-  isSynthesizing
+  isSynthesizing,
 }) => {
- 
-
-  useEffect(() => {
-    const intro = descriptionIntro + " " + model.description;
-    synthesizeSpeech(intro);
-  }, [model.description]);
-
   return (
     <Grid
       container
@@ -43,8 +37,10 @@ const UseCaseTemplate: React.FC<UseCaseTemplateProps> = ({
       <Typography variant="h6">{model.description}</Typography>
       <Button
         style={{ marginTop: "8x" }}
-        onClick={() => synthesizeSpeech(model.description)}
-        color={isSynthesizing ? "secondary" : "primary"}
+        onClick={() =>
+          synthesizeSpeech(model.description, Voice.de_CH_LeniNeural)
+        }
+        disabled={isSynthesizing}
         variant="outlined"
         size="small"
         startIcon={<VolumeUp />}
