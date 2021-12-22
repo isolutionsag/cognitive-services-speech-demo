@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { loadBingSearchConfig } from "../../repositories/BingSearchConfigRepository";
+import { Voice } from "../../util/TextToSpechVoices";
 import { UseCaseTemplateChildProps } from "./UseCaseTemplate";
 
 const { CognitiveServicesCredentials } = require("@azure/ms-rest-azure-js");
@@ -47,7 +48,7 @@ const NewsReader: React.FC<NewsReaderProps> = ({
   };
 
   function synthesizeNewsItem(newsItem: NewsItem) {
-    synthesizeSpeech(`${newsItem.title}. ${newsItem.description}`);
+    synthesizeSpeech(`${newsItem.title}. ${newsItem.description}`, Voice.de_CH_LeniNeural);
   }
 
   const searchNews = async () => {
