@@ -1,7 +1,6 @@
 import { ForumOutlined, SettingsVoice, VolumeUp } from "@mui/icons-material";
 import {
   IconButton,
-  TextField,
   Grid,
   Typography,
   FormControl,
@@ -32,6 +31,7 @@ import Language, {
   languageModels,
 } from "../../util/Language";
 import { UseCaseTemplateChildProps } from "./UseCaseTemplate";
+import CustomIconButton from "../common/CustomIconButton";
 
 interface ChipSuggestion {
   text: string;
@@ -196,16 +196,22 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
         <Typography variant="body2" color="orange" gutterBottom>
           {speechToText.error}
         </Typography>
-        <IconButton
-          size="large"
-          disabled={!isValidSpeechConfig(mySpeechConfig)}
-          color={
-            speechToText.isRecordingAndConverting ? "secondary" : "primary"
+        <CustomIconButton
+          icon={
+            <IconButton
+              size="large"
+              disabled={!isValidSpeechConfig(mySpeechConfig)}
+              color={
+                speechToText.isRecordingAndConverting ? "secondary" : "primary"
+              }
+              onClick={() => speechToText.sttFromMic()}
+            >
+              <SettingsVoice fontSize="large" />
+            </IconButton>
           }
-          onClick={() => speechToText.sttFromMic()}
-        >
-          <SettingsVoice fontSize="large" />
-        </IconButton>
+          text="Aufnehmen"
+        />
+        <br />
         <Stack direction="row" spacing={1}>
           {chipSuggestions.map((suggestion, i) => (
             <Chip
@@ -275,16 +281,21 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
                 : "Clicke den Aufnehme Knopf and frag mich etwas..."}
             </Typography>
           )}
-          <IconButton
-            size="large"
-            disabled={!isValidSpeechConfig(mySpeechConfig)}
-            color={isSynthesizing ? "secondary" : "primary"}
-            onClick={() => synthesizeSpeech(outputText)}
-            aria-label="Speak output"
-            style={{ marginTop: "20px" }}
-          >
-            <VolumeUp fontSize="large" />
-          </IconButton>
+          <CustomIconButton
+            icon={
+              <IconButton
+                size="large"
+                disabled={!isValidSpeechConfig(mySpeechConfig)}
+                color={isSynthesizing ? "secondary" : "primary"}
+                onClick={() => synthesizeSpeech(outputText)}
+                aria-label="Speak output"
+                style={{ marginTop: "20px" }}
+              >
+                <VolumeUp fontSize="large" />
+              </IconButton>
+            }
+            text="Vorlesen"
+          />
         </Grid>
       </Grid>
     </Grid>
