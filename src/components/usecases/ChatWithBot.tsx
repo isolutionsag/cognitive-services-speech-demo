@@ -283,7 +283,7 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
             <Typography variant="h5" color="primary">
               {outputText.length > 0
                 ? outputText
-                : "Clicke den Aufnehme Knopf and frag mich etwas..."}
+                : "Klicke den Aufnehme Knopf and frag mich etwas..."}
             </Typography>
           )}
           <CustomIconButton

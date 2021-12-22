@@ -125,7 +125,7 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
         <Typography variant="h6">
           {originalIfNotEmptyOr(
             speechToTextContinuous.recognizingText,
-            "Clicke den Aufnehme Knopf und sag etwas..."
+            "Klicke den Aufnehme Knopf und sag etwas..."
           )}
         </Typography>
         <Typography variant="h6" color="primary">

@@ -1,13 +1,9 @@
 import { VolumeUp } from "@mui/icons-material";
 import { Button, Grid, Typography, Divider, Alert } from "@mui/material";
-import React, { useEffect } from "react";
-import MySpeechConfig from "../../models/MySpeechConfig";
+import React from "react";
 import { Voice } from "../../util/TextToSpechVoices";
 import { UseCaseModel } from "../../util/UseCase";
 import SpeechComponentProps from "../SpeechComponentProps";
-
-const descriptionIntro =
-  "Hallo, ich bin die Leni, ich erkläre dir kurz, was du hier machen kannst.";
 
 interface UseCaseTemplateProps extends SpeechComponentProps {
   model: UseCaseModel;

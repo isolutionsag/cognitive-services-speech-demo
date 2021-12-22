@@ -68,13 +68,13 @@ const ConfigForm: React.FC<ConfigFormProps> = ({
   return (
     <Grid container justifyContent="center">
       <Grid item style={{ maxWidth: "500px" }}>
-        <h1>Configure keys</h1>
+        <h1>Schlüssel konfigurieren</h1>
         <Box sx={{ textAlign: "left" }}>
           <h3>Speech service</h3>
           <Box sx={sectionBoxStyles}>
             <TextField
               fullWidth
-              label="Resource key"
+              label="Abonnementschlüssel"
               value={useInputResourceKey.value}
               onChange={useInputResourceKey.handleChange}
             />
@@ -97,7 +97,7 @@ const ConfigForm: React.FC<ConfigFormProps> = ({
             <TextField
               style={textFieldStyles}
               fullWidth
-              label="AuthEndpoint Key"
+              label="AuthEndpoint Schlüssel"
               value={useInputAuthEndpointKey.value}
               onChange={useInputAuthEndpointKey.handleChange}
             />
@@ -113,7 +113,7 @@ const ConfigForm: React.FC<ConfigFormProps> = ({
           <Box sx={sectionBoxStyles}>
             <TextField
               fullWidth
-              label="Subscription (Resource) Key"
+              label="Abonnementschlüssel"
               value={useInputTranslatorSubscriptionKey.value}
               onChange={useInputTranslatorSubscriptionKey.handleChange}
             />
@@ -122,7 +122,7 @@ const ConfigForm: React.FC<ConfigFormProps> = ({
           <Box sx={sectionBoxStyles}>
             <TextField
               fullWidth
-              label="Subscription (Resource) Key"
+              label="Abonnementschlüssel"
               value={useInputBingSearchSubscriptionKey.value}
               onChange={useInputBingSearchSubscriptionKey.handleChange}
             />
@@ -136,7 +136,7 @@ const ConfigForm: React.FC<ConfigFormProps> = ({
             startIcon={<Save />}
             onClick={handleSaveKeys}
           >
-            Save and close
+            Speichern und schliessen
           </Button>
         </div>
       </Grid>

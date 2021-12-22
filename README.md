@@ -64,7 +64,7 @@ The Azure account comes with $200 in service credit that you can apply toward a 
 
 3. Enter the subscription-/resourcekey and  region
     - Option 1: Paste them in the file [MySpeechConfig](./src/models/MySpeechConfig.ts) into the `DefaultSpeechConfig` object
-    - Option 2: Paste them in the Configuration Page, when running the app (Button at top right `"Configure Keys"`)
+    - Option 2: Paste them in the Configuration Page, when running the app (Button at top right `"Schlüssel konfigurieren"`)
 
 ### Setup QnA Maker
 
@@ -79,7 +79,7 @@ The Azure account comes with $200 in service credit that you can apply toward a 
             5. Get your KB Details by clicking the `View Code` button in the [KBs overview](https://www.qnamaker.ai/Home/MyServices) and copying the the `KB ID`and `authEndpointKey`. You also need the `QnA Service Name` for the QnA configuration.
 6. Enter the KB ID, authEndpointKey and QnA Service Name:
     - Option 1: Paste them in the file [QnAConfig](./src/models/QnAConfig.ts) into the `DefaultQnAConfig` object
-    - Option 2: Paste them in the Configuration Page, when running the app (Button at top right `"Configure Keys"`)
+    - Option 2: Paste them in the Configuration Page, when running the app (Button at top right `"Schlüssel konfigurieren"`)
 
 ### Setup Translation Service
 
@@ -87,14 +87,14 @@ The Azure account comes with $200 in service credit that you can apply toward a 
 
 2. Copy the subscription key and
     - Option 1: Paste them in the file [TranslatorConfig](./src/models/TranslatorConfig.ts) into the `DefaultTranslatorConfig` object
-    - Option 2: Paste them in the Configuration Page, when running the app (Button at top right `"Configure Keys"`)
+    - Option 2: Paste them in the Configuration Page, when running the app (Button at top right `"Schlüssel konfigurieren"`)
 
 ### Setup Bing Web Search
 
 1. Create a [Bing Search Resource](https://portal.azure.com/#create/Microsoft.BingSearch), [Offcial documentation](https://docs.microsoft.com/en-us/bing/search-apis/bing-web-search/create-bing-search-service-resource)
 2. Copy the subscription Key and
     - Option 1: Paste them in the file [BingSearchConfig](./src/models/BingSearchConfig.ts) into the `DefaultBingSearchConfig` object
-    - Option 2: Paste them in the Configuration Page, when running the app (Button at top right `"Configure Keys"`)
+    - Option 2: Paste them in the Configuration Page, when running the app (Button at top right `"Schlüssel konfigurieren"`)
 
 [Web Search API v7 reference](https://docs.microsoft.com/en-us/bing/search-apis/bing-web-search/reference/endpoints)
 

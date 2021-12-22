@@ -99,7 +99,7 @@ const FourLangToSwissTranslation: React.FC<FourLangToSwissTranslationProps> = ({
           <Typography variant="h5">
             {originalIfNotEmptyOr(
               speechToText.resultText,
-              "Clicke den Aufnehme Knopf und sag etwas..."
+              "Klicke den Aufnehme Knopf und sag etwas..."
             )}
           </Typography>
           <Typography variant="body2">

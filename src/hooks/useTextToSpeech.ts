@@ -21,7 +21,6 @@ export default function useTextToSpeech(
     text.current = _text;
     voice.current = _voice;
 
-    console.log("attempted synthesizing", text, voice);
     if (isSynthesizing) return; //do not start synthesizing new text while still synthesizing, improvement: create a queue of texts?
     let synthesizer: SpeechSynthesizer;
     try {

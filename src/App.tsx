@@ -134,13 +134,13 @@ function App() {
                   component="div"
                   alignSelf="center"
                 >
-                  Demo App using Azure Speech Services with &nbsp;
+                  Demo App mit Verwendung der Azure Speech Services mit &nbsp;
                   <img
                     src="images/switzerland.svg"
                     height="28px"
                     alt="switzerland"
                   />
-                  &nbsp;Language Model
+                  &nbsp;Sprachenmodel
                 </Typography>
               </Box>
               <Box>
@@ -149,7 +149,7 @@ function App() {
                   startIcon={<VpnKey />}
                   onClick={() => setCurrentPage(Page.Settings)}
                 >
-                  Configure Keys
+                  Schlüssel konfigurieren
                 </Button>
               </Box>
             </Toolbar>
@@ -185,7 +185,7 @@ function App() {
                   size="small"
                   onClick={() => setCurrentPage(Page.Settings)}
                 >
-                  Configure Keys
+                  Schlüssel konfigurieren
                 </Button>
               }
             >
@@ -208,10 +208,16 @@ function App() {
             />
           )}
           {currentPage === Page.UseCase &&
-            displayUseCase(selectedUseCase, useCaseError, setUseCaseError, synthesizeSpeech, isSynthesizing)}
+            displayUseCase(
+              selectedUseCase,
+              useCaseError,
+              setUseCaseError,
+              synthesizeSpeech,
+              isSynthesizing
+            )}
         </Paper>
 
-        <div className="App-footer" style={{paddingBottom: "20px"}}>
+        <div className="App-footer" style={{ paddingBottom: "20px" }}>
           <span>
             created by <a href="https://www.isolutions.ch">isolutions AG</a>
           </span>

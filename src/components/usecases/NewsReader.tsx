@@ -83,7 +83,7 @@ const NewsReader: React.FC<NewsReaderProps> = ({
         <TextField
           id="standard-basic"
           label="News Topic"
-          variant="standard"
+          variant="outlined"
           value={searchTopic}
           onChange={onChangeTopic}
           size="medium"
