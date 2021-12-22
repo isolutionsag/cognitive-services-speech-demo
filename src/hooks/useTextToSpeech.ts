@@ -1,5 +1,5 @@
 import { SpeechSynthesizer } from "microsoft-cognitiveservices-speech-sdk";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import MySpeechConfig from "../models/MySpeechConfig";
 import { Voice } from "../util/TextToSpechVoices";
 import { CreateSpeechSynthesizer } from "../util/SpeechSynthesizerCreator";
@@ -10,19 +10,25 @@ export default function useTextToSpeech(
   initialVoice: Voice,
   mySpeechConfig: MySpeechConfig
 ) {
+  const voice = useRef(initialVoice);
+  const text = useRef(initialText);
   const [isSynthesizing, setIsSynthesizing] = useState(false);
 
   function synthesizeSpeech(
-    text: string = initialText,
-    voice: Voice = initialVoice
+    _text: string = text.current,
+    _voice: Voice = voice.current
   ) {
-    if(isSynthesizing) return; //do not start synthesizing new text while still synthesizing, improvement: create a queue of texts?
+    text.current = _text;
+    voice.current = _voice;
+
+    console.log("attempted synthesizing", text, voice);
+    if (isSynthesizing) return; //do not start synthesizing new text while still synthesizing, improvement: create a queue of texts?
     let synthesizer: SpeechSynthesizer;
     try {
       synthesizer = CreateSpeechSynthesizer(
         mySpeechConfig,
         SpeechServiceLocale.German_Switzerland,
-        voice
+        voice.current
       );
     } catch (err) {
       console.error("Failed to create speech synthesizer", err);
@@ -30,9 +36,9 @@ export default function useTextToSpeech(
     }
     setIsSynthesizing(true);
     synthesizer.speakTextAsync(
-      text,
+      text.current,
       (result) => {
-        setTimeout(() => setIsSynthesizing(false), text.length * 70); //estimated millis per character to pronounse
+        setTimeout(() => setIsSynthesizing(false), text.current.length * 70); //estimated millis per character to pronounse
         if (result) {
           synthesizer.close();
           return result.audioData;
