@@ -13,8 +13,7 @@ import {
   Stack,
   Skeleton,
 } from "@mui/material";
-import React, { useCallback, useEffect, useState } from "react";
-import useInput from "../../hooks/useInput";
+import React, { useEffect, useState } from "react";
 import MySpeechConfig, {
   isValidSpeechConfig,
 } from "../../models/MySpeechConfig";
@@ -67,20 +66,17 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
   isSynthesizing,
   setError,
 }) => {
-  const useInputInput = useInput("", () => "", undefined, false);
-
   const [detectedLanguage, setDetectedLanguage] = useState(
     InputLanguageLocale[Language.DE]
   );
 
+  const [inputText, setInputText] = useState("");
   const [outputLanguage, setOutputLanguage] = useState(Language.AUTO);
-
   const [inputTranslation, setInputTranslation] = useState({ text: "" });
+  const [outputText, setOutputText] = useState("");
 
   const speechToText = useSpeechToText(mySpeechConfig, recognitionLanguages);
   const _useBotResponse = useBotResponse(inputTranslation, qnaConfig);
-
-  const useInputOutput = useInput("", () => "", undefined, false);
 
   const handleTranslationResponseError = (err: any) => {
     setError(
@@ -98,7 +94,7 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
   };
 
   const handleInputTextChange = (text: string, languageLocale: string) => {
-    useInputInput.setValue(text);
+    setInputText(text);
     setDetectedLanguage(languageLocale);
 
     const getTranslationForBot = async () => {
@@ -142,6 +138,7 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
       function getToLanguage(): string {
         if (outputLanguage !== Language.AUTO)
           return outputLanguage.toLocaleLowerCase();
+        if (detectedLanguage.length === 0) return "de";
         const detectedLanguageSplit = detectedLanguage.split("-");
         return detectedLanguageSplit[0];
       }
@@ -167,6 +164,7 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
           displayBotAnswer(_useBotResponse.answer, botLanguage);
           return;
         }
+        setError("");
         displayBotAnswer(
           translation.text,
           toLanguage.toUpperCase() as Language
@@ -178,7 +176,7 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
   }, [_useBotResponse.answer, outputLanguage]);
 
   function displayBotAnswer(text: string, language: Language) {
-    useInputOutput.setValue(text);
+    setOutputText(text);
     synthesizeSpeech(text, getVoiceForLanguage(language));
   }
 
@@ -235,21 +233,16 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
           {speechToText.isRecordingAndConverting ? (
             <Skeleton variant="text" style={{ width: "100%" }} />
           ) : (
-            <TextField
-              multiline
-              fullWidth
-              name="Input"
-              id="Input"
-              label="Input"
-              value={useInputInput.value}
-              onChange={useInputInput.handleChange}
-              error={useInputInput.error !== ""}
-              helperText={
-                useInputInput.error !== ""
-                  ? useInputInput.error
-                  : `Detected language: ${detectedLanguage}`
-              }
-            />
+            <>
+              <Typography variant="h5">
+                {inputText.length > 0 ? inputText : "..."}
+              </Typography>
+              <Typography variant="body1" color="grey">
+                {detectedLanguage.length > 0
+                  ? `Detected language: ${detectedLanguage}`
+                  : ""}
+              </Typography>
+            </>
           )}
           <div style={{ padding: "20px" }}>
             <ForumOutlined style={{ height: "50px", width: "50px" }} />
@@ -272,25 +265,21 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
               ))}
             </Select>
           </FormControl>
-          <TextField
-            style={{ marginTop: "10px" }}
-            multiline
-            minRows={3}
-            fullWidth
-            name="Bot response"
-            id="Bot response"
-            label="Bot response"
-            value={useInputOutput.value}
-            onChange={useInputOutput.handleChange}
-            error={useInputOutput.error !== ""}
-            helperText={useInputOutput.error}
-          />
-
+          <br />
+          {_useBotResponse.isFetching ? (
+            <Skeleton variant="text" style={{ width: "100%" }} />
+          ) : (
+            <Typography variant="h5" color="primary">
+              {outputText.length > 0
+                ? outputText
+                : "Clicke den Aufnehme Knopf and frag mich etwas..."}
+            </Typography>
+          )}
           <IconButton
             size="large"
             disabled={!isValidSpeechConfig(mySpeechConfig)}
             color={isSynthesizing ? "secondary" : "primary"}
-            onClick={() => synthesizeSpeech()}
+            onClick={() => synthesizeSpeech(outputText)}
             aria-label="Speak output"
             style={{ marginTop: "20px" }}
           >
