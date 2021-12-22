@@ -39,7 +39,7 @@ The following are used by this app:
     - [Text-to-Speech](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/text-to-speech)
 
 ### Area of Search
-2. [Bing Search API](https://docs.microsoft.com/en-us/azure/cognitive-services/bing-web-search/) TODO: correct `@Laurent Christen`?
+2. [Bing News Search API](https://docs.microsoft.com/en-us/azure/cognitive-services/bing-news-search/search-the-web)
 
 All information on how to setup the services can also be found in the respective links.
 
