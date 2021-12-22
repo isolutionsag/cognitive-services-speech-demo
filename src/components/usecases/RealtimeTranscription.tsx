@@ -1,9 +1,10 @@
-import { VolumeUp } from "@mui/icons-material";
+import { MicOff, SettingsVoice, VolumeUp } from "@mui/icons-material";
 import {
   Box,
   Button,
   FormControl,
   Grid,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
@@ -20,6 +21,7 @@ import {
   SpeechTranslationLanguagesNames,
 } from "../../util/SupportedLanguages";
 import { Voice } from "../../util/TextToSpechVoices";
+import CustomIconButton from "../common/CustomIconButton";
 import { UseCaseTemplateChildProps } from "./UseCaseTemplate";
 
 interface RealtimeTranscriptionProps extends UseCaseTemplateChildProps {
@@ -125,13 +127,6 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
       </Box>
       <br />
       <br />
-      <Button
-        onClick={speechToTextContinuous.sttFromMic}
-        disabled={speechToTextContinuous.isRecognizing}
-        variant="contained"
-      >
-        start recognition
-      </Button>
       <Tooltip
         title={speechToTextContinuous.stopRecognitionBecauseTimeoutToolTip.text}
         open={speechToTextContinuous.stopRecognitionBecauseTimeoutToolTip.open}
@@ -140,13 +135,32 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
             .handleClose
         }
       >
-        <Button
-          onClick={() => speechToTextContinuous.sttFromMicStop()}
-          disabled={!speechToTextContinuous.isRecognizing}
-          variant="contained"
-        >
-          stop recognition
-        </Button>
+        <CustomIconButton
+          icon={
+            <IconButton
+              color="primary"
+              size="large"
+              onClick={
+                speechToTextContinuous.isRecognizing
+                  ? speechToTextContinuous.sttFromMicStop
+                  : speechToTextContinuous.sttFromMic
+              }
+              aria-label="Speak output"
+              style={{ marginTop: "20px" }}
+            >
+              {speechToTextContinuous.isRecognizing ? (
+                <MicOff fontSize="large" />
+              ) : (
+                <SettingsVoice fontSize="large" />
+              )}
+            </IconButton>
+          }
+          text={
+            speechToTextContinuous.isRecognizing
+              ? "Aufnahme stoppen"
+              : "Aufnahme starten"
+          }
+        />
       </Tooltip>
       <br />
       <br />
