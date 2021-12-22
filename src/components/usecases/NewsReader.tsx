@@ -114,7 +114,8 @@ const NewsReader: React.FC<NewsReaderProps> = ({
           {news.length === 0 && (
             <>
               <Divider component="li" />
-              <Typography variant="body1">No Search results</Typography>
+              <br />
+              <Typography variant="body1">Keine Suchergebisse</Typography>
             </>
           )}
         </List>
