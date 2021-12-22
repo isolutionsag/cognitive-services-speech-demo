@@ -1,4 +1,3 @@
-import MySpeechConfig from "../../models/MySpeechConfig";
 import {
   Avatar,
   Button,
@@ -12,15 +11,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { loadBingSearchConfig } from "../../repositories/BingSearchConfigRepository";
 import { UseCaseTemplateChildProps } from "./UseCaseTemplate";
 
 const { CognitiveServicesCredentials } = require("@azure/ms-rest-azure-js");
 const { NewsSearchClient } = require("@azure/cognitiveservices-newssearch");
 
-interface NewsReaderProps extends UseCaseTemplateChildProps {
-}
+interface NewsReaderProps extends UseCaseTemplateChildProps {}
 
 interface NewsItem {
   title: string;
@@ -30,7 +28,11 @@ interface NewsItem {
   datePublished: Date;
 }
 
-const NewsReader: React.FC<NewsReaderProps> = ({synthesizeSpeech, isSynthesizing, setError }) => {
+const NewsReader: React.FC<NewsReaderProps> = ({
+  synthesizeSpeech,
+  isSynthesizing,
+  setError,
+}) => {
   const bingConfig = loadBingSearchConfig();
   const credentials = new CognitiveServicesCredentials(
     bingConfig.subscriptionKey
