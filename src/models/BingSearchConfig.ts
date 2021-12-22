@@ -1,5 +1,5 @@
 export const DefaultBingSearchConfig = {
-    subscriptionKey: '80ccba9bfd824237a366492e732d6107'
+    subscriptionKey: '<your-resource/subscription-key>',
 }
 type BingSearchConfig = typeof DefaultBingSearchConfig
 export default BingSearchConfig

@@ -1,5 +1,6 @@
 export const DefaultTranslatorConfig = {
-    subscriptionKey: "a4c13ea841b84a6fb5d767016d672520"
+    subscriptionKey: "<your-resource/subscription-key>",
 }
+
 type TranslatorConfig = typeof DefaultTranslatorConfig
 export default TranslatorConfig
