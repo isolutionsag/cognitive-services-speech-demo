@@ -32,6 +32,7 @@ import Language, {
 } from "../../util/Language";
 import { UseCaseTemplateChildProps } from "./UseCaseTemplate";
 import CustomIconButton from "../common/CustomIconButton";
+import { originalIfNotEmptyOr } from "../../util/TextUtil";
 
 interface ChipSuggestion {
   text: string;
@@ -245,7 +246,7 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
           ) : (
             <>
               <Typography variant="h5">
-                {inputText.length > 0 ? inputText : "..."}
+                {originalIfNotEmptyOr(inputText, "...")}
               </Typography>
               <Typography variant="body1" color="grey">
                 {detectedLanguage.length > 0

@@ -21,6 +21,7 @@ import {
   SpeechTranslationLanguagesNames,
 } from "../../util/SupportedLanguages";
 import { Voice } from "../../util/TextToSpechVoices";
+import { originalIfNotEmptyOr } from "../../util/TextUtil";
 import CustomIconButton from "../common/CustomIconButton";
 import { UseCaseTemplateChildProps } from "./UseCaseTemplate";
 
@@ -57,76 +58,6 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
 
   return (
     <div style={{ minHeight: "65vh" }}>
-      <Typography variant="subtitle1">Erkannte Wörter</Typography>
-      <Box
-        border="1px solid black"
-        borderRadius="5px"
-        padding="10px"
-        minWidth="800px"
-      >
-        <Typography variant="h6">
-          {speechToTextContinuous.recognizingText}
-        </Typography>
-        <Typography variant="h6" color="primary">
-          {speechToTextContinuous.translatingText}
-        </Typography>
-      </Box>
-      <br />
-      <Typography variant="subtitle1">Erkannte Sätze (nach Pause)</Typography>
-      <Box
-        border="1px solid black"
-        borderRadius="5px"
-        padding="10px"
-        minWidth="800px"
-      >
-        <Typography variant="h5">
-          {speechToTextContinuous.recognizedText}
-        </Typography>
-        <Typography variant="h5" color="primary">
-          {speechToTextContinuous.translatedText}
-        </Typography>
-        <br />
-        <Grid container spacing={2} justifyContent="space-between">
-          <Grid item>
-            <Button
-              onClick={() =>
-                synthesizeSpeech(
-                  speechToTextContinuous.recognizedText,
-                  Voice.de_CH_LeniNeural
-                )
-              }
-              disabled={speechToTextContinuous.recognizedText.length < 1}
-              color={isSynthesizing ? "secondary" : "primary"}
-              variant="outlined"
-              startIcon={<VolumeUp />}
-            >
-              Auf Schweizerdeutsch wiedergeben
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              onClick={() => {
-                const voice = getVoiceForLanguage(
-                  speechToTextContinuous.translationTargetLanguage
-                );
-                synthesizeSpeech(speechToTextContinuous.translatedText, voice);
-              }}
-              disabled={speechToTextContinuous.translatedText?.length < 1}
-              color={isSynthesizing ? "secondary" : "primary"}
-              variant="outlined"
-              startIcon={<VolumeUp />}
-            >
-              {`Auf ${
-                SpeechTranslationLanguagesNames[
-                  speechToTextContinuous.translationTargetLanguage
-                ]
-              } wiedergeben`}
-            </Button>
-          </Grid>
-        </Grid>
-      </Box>
-      <br />
-      <br />
       <Tooltip
         title={speechToTextContinuous.stopRecognitionBecauseTimeoutToolTip.text}
         open={speechToTextContinuous.stopRecognitionBecauseTimeoutToolTip.open}
@@ -163,7 +94,6 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
         />
       </Tooltip>
       <br />
-      <br />
       <FormControl>
         <InputLabel id="language-input-label">Ausgabesprache</InputLabel>
         <Select
@@ -182,6 +112,83 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
           ))}
         </Select>
       </FormControl>
+      <br />
+      <br />
+      <br />
+      <Typography variant="subtitle1">Erkannte Wörter</Typography>
+      <Box
+        border="1px solid black"
+        borderRadius="5px"
+        padding="10px"
+        minWidth="800px"
+      >
+        <Typography variant="h6">
+          {originalIfNotEmptyOr(
+            speechToTextContinuous.recognizingText,
+            "Clicke den Aufnehme Knopf und sag etwas..."
+          )}
+        </Typography>
+        <Typography variant="h6" color="primary">
+          {originalIfNotEmptyOr(speechToTextContinuous.translatingText, "...")}
+        </Typography>
+      </Box>
+      <br />
+      <Typography variant="subtitle1">Erkannte Sätze (nach Pause)</Typography>
+      <Box
+        border="1px solid black"
+        borderRadius="5px"
+        padding="10px"
+        minWidth="800px"
+      >
+        <Typography variant="h5">
+          {originalIfNotEmptyOr(speechToTextContinuous.recognizedText, "...")}
+        </Typography>
+        <Typography variant="h5" color="primary">
+          {originalIfNotEmptyOr(speechToTextContinuous.translatedText, "...")}
+        </Typography>
+        <br />
+        <Grid container spacing={2} justifyContent="space-between">
+          <Grid item>
+            <Button
+              onClick={() =>
+                synthesizeSpeech(
+                  speechToTextContinuous.recognizedText,
+                  Voice.de_CH_LeniNeural
+                )
+              }
+              disabled={speechToTextContinuous.recognizedText.length < 1}
+              color={isSynthesizing ? "secondary" : "primary"}
+              variant="outlined"
+              startIcon={<VolumeUp />}
+            >
+              Auf Schweizerdeutsch wiedergeben
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              onClick={() => {
+                const voice = getVoiceForLanguage(
+                  speechToTextContinuous.translationTargetLanguage
+                );
+                synthesizeSpeech(speechToTextContinuous.translatedText, voice);
+              }}
+              disabled={
+                !speechToTextContinuous.translatedText ||
+                speechToTextContinuous.translatedText?.length < 1
+              }
+              color={isSynthesizing ? "secondary" : "primary"}
+              variant="outlined"
+              startIcon={<VolumeUp />}
+            >
+              {`Auf ${
+                SpeechTranslationLanguagesNames[
+                  speechToTextContinuous.translationTargetLanguage
+                ]
+              } wiedergeben`}
+            </Button>
+          </Grid>
+        </Grid>
+      </Box>
     </div>
   );
 };

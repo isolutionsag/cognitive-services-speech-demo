@@ -10,6 +10,7 @@ import MySpeechConfig, {
 import TranslatorConfig from "../../models/TranslatorConfig";
 import Language from "../../util/Language";
 import { Voice } from "../../util/TextToSpechVoices";
+import { originalIfNotEmptyOr } from "../../util/TextUtil";
 import CustomIconButton from "../common/CustomIconButton";
 import { UseCaseTemplateChildProps } from "./UseCaseTemplate";
 
@@ -96,9 +97,10 @@ const FourLangToSwissTranslation: React.FC<FourLangToSwissTranslationProps> = ({
       ) : (
         <>
           <Typography variant="h5">
-            {speechToText.resultText.length > 0
-              ? speechToText.resultText
-              : "Clicke den Aufnehme Knopf und sag etwas..."}
+            {originalIfNotEmptyOr(
+              speechToText.resultText,
+              "Clicke den Aufnehme Knopf und sag etwas..."
+            )}
           </Typography>
           <Typography variant="body2">
             {speechToText.detectedLanguageLocale !== ""

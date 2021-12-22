@@ -25,11 +25,9 @@ export default function useSpeechToTextContinuous(
   const [, setIsSuccess] = useState(true);
   const [error, setError] = useState("");
 
-  const [recognizedText, setRecognizedText] = useState(
-    "...speak to your microphone..."
-  );
+  const [recognizedText, setRecognizedText] = useState("");
 
-  const [recognizingText, setRecognizingText] = useState("... i do listen ...");
+  const [recognizingText, setRecognizingText] = useState("");
   const [debouncedRecognizingTextDebounced] = useDebouncedValue(
     recognizingText,
     autoStopRecognitionTimeout
@@ -37,8 +35,8 @@ export default function useSpeechToTextContinuous(
 
   const recognizer = useRef<SpeechRecognizer>();
 
-  const [translatedText, setTranslatedText] = useState<string>("...");
-  const [translatingText, setTranslatingText] = useState<string>("...");
+  const [translatedText, setTranslatedText] = useState<string>("");
+  const [translatingText, setTranslatingText] = useState<string>("");
   const [debouncedTranslatingTextDebounced] = useDebouncedValue(
     recognizingText,
     autoStopRecognitionTimeout
@@ -121,10 +119,10 @@ export default function useSpeechToTextContinuous(
     recognizer.current?.stopContinuousRecognitionAsync();
     translator.current?.stopContinuousRecognitionAsync();
 
-    setRecognizingText("...");
-    setRecognizedText("...");
-    setTranslatedText("...");
-    setTranslatingText("...");
+    setRecognizingText("");
+    setRecognizedText("");
+    setTranslatedText("");
+    setTranslatingText("");
 
     setIsRecognizing(false);
   }
