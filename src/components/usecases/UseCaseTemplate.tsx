@@ -1,40 +1,34 @@
 import { VolumeUp } from "@mui/icons-material";
 import { Button, Grid, Typography, Divider, Alert } from "@mui/material";
 import React, { useEffect } from "react";
-import useTextToSpeech from "../../hooks/useTextToSpeech";
 import MySpeechConfig from "../../models/MySpeechConfig";
-import { Voice } from "../../util/TextToSpechVoices";
 import { UseCaseModel } from "../../util/UseCase";
+import SpeechComponentProps from "../SpeechComponentProps"
 
 const descriptionIntro =
   "Hallo, ich bin die Leni, ich erkläre dir kurz, was du hier machen kannst.";
 
-interface UseCaseTemplateProps {
+interface UseCaseTemplateProps extends SpeechComponentProps{
   model: UseCaseModel;
-  speechConfig: MySpeechConfig;
   error: string;
 }
 
-export interface UseCaseTemplateChildProps {
+export interface UseCaseTemplateChildProps extends SpeechComponentProps {
   setError: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const UseCaseTemplate: React.FC<UseCaseTemplateProps> = ({
   model,
-  speechConfig,
   error,
   children,
+  synthesizeSpeech,
+  isSynthesizing
 }) => {
-  const { synthesizeSpeech, isSynthesizing } = useTextToSpeech(
-    "",
-    Voice.de_CH_LeniNeural,
-    speechConfig
-  );
+ 
 
   useEffect(() => {
     const intro = descriptionIntro + " " + model.description;
-    //synthesizeSpeech(intro);
-    console.log("speaking...");
+    synthesizeSpeech(intro);
   }, [model.description]);
 
   return (

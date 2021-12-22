@@ -10,6 +10,9 @@ export default function useBotResponse(question: {text: string}, config: QnAConf
 
   useEffect(() => {
     const getBotAnswer = async () => {
+
+      console.log("Fetching bot response")
+
       setAnswer("")
       setIsFetching(true)
       setIsSuccess(false)
@@ -50,7 +53,7 @@ export default function useBotResponse(question: {text: string}, config: QnAConf
       }
     };
     getBotAnswer();
-  }, [question, config]);
+  }, [question]);
 
   return {
     isFetching,

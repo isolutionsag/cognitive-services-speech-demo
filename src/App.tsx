@@ -38,6 +38,8 @@ import Container from "@mui/material/Container";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import useTextToSpeech from "./hooks/useTextToSpeech";
+import { Voice } from "./util/TextToSpechVoices";
 
 enum Page {
   Home,
@@ -58,6 +60,12 @@ function App() {
       translatorConfig,
       bingSearchConfig
     )
+  );
+
+  const { synthesizeSpeech, isSynthesizing } = useTextToSpeech(
+    "",
+    Voice.de_CH_LeniNeural,
+    speechConfig
   );
 
   const handleChangeKeys = (
@@ -200,7 +208,7 @@ function App() {
             />
           )}
           {currentPage === Page.UseCase &&
-            displayUseCase(selectedUseCase, useCaseError, setUseCaseError)}
+            displayUseCase(selectedUseCase, useCaseError, setUseCaseError, synthesizeSpeech, isSynthesizing)}
         </Paper>
 
         <div className="App-footer">
@@ -217,17 +225,26 @@ function App() {
 function displayUseCase(
   useCase: UseCase,
   useCaseError: string,
-  setUseCaseError: React.Dispatch<React.SetStateAction<string>>
+  setUseCaseError: React.Dispatch<React.SetStateAction<string>>,
+  synthesizeSpeech: (text?: string, voice?: Voice) => void,
+  isSynthesizing: boolean
 ) {
   const speechConfig = loadSpeechConfig();
 
   return (
     <UseCaseTemplate
       model={UseCaseModels[useCase]}
-      speechConfig={speechConfig}
       error={useCaseError}
+      synthesizeSpeech={synthesizeSpeech}
+      isSynthesizing={isSynthesizing}
     >
-      {getUseCaseContent(useCase, speechConfig, setUseCaseError)}
+      {getUseCaseContent(
+        useCase,
+        speechConfig,
+        setUseCaseError,
+        synthesizeSpeech,
+        isSynthesizing
+      )}
     </UseCaseTemplate>
   );
 }
@@ -235,7 +252,9 @@ function displayUseCase(
 function getUseCaseContent(
   useCase: UseCase,
   speechConfig: MySpeechConfig,
-  setError: React.Dispatch<React.SetStateAction<string>>
+  setError: React.Dispatch<React.SetStateAction<string>>,
+  synthesizeSpeech: (text?: string, voice?: Voice) => void,
+  isSynthesizing: boolean
 ) {
   const qnaConfig = loadQnAConfig();
   const translatorConfig = loadTranslatorConfig();
@@ -247,6 +266,8 @@ function getUseCaseContent(
           mySpeechConfig={speechConfig}
           translatorConfig={translatorConfig}
           setError={setError}
+          synthesizeSpeech={synthesizeSpeech}
+          isSynthesizing={isSynthesizing}
         />
       );
     case UseCase.BotChat:
@@ -255,6 +276,8 @@ function getUseCaseContent(
           mySpeechConfig={speechConfig}
           qnaConfig={qnaConfig}
           translatorConfig={translatorConfig}
+          synthesizeSpeech={synthesizeSpeech}
+          isSynthesizing={isSynthesizing}
           setError={setError}
         />
       );
@@ -262,11 +285,19 @@ function getUseCaseContent(
       return (
         <RealtimeTranscription
           speechConfig={speechConfig}
+          synthesizeSpeech={synthesizeSpeech}
+          isSynthesizing={isSynthesizing}
           setError={setError}
         />
       );
     case UseCase.NewsReader:
-      return <NewsReader speechConfig={speechConfig} setError={setError} />;
+      return (
+        <NewsReader
+          synthesizeSpeech={synthesizeSpeech}
+          isSynthesizing={isSynthesizing}
+          setError={setError}
+        />
+      );
   }
 }
 

@@ -4,13 +4,11 @@ import React, { useState } from "react";
 import { useDidUpdate } from "rooks";
 import { makeTranslationRequest } from "../../api/TranslationApi";
 import useSpeechToText from "../../hooks/useSpeechToText";
-import useTextToSpeech from "../../hooks/useTextToSpeech";
 import MySpeechConfig, {
   isValidSpeechConfig,
 } from "../../models/MySpeechConfig";
 import TranslatorConfig from "../../models/TranslatorConfig";
 import Language from "../../util/Language";
-import { Voice } from "../../util/TextToSpechVoices";
 import { UseCaseTemplateChildProps } from "./UseCaseTemplate";
 
 const recognitionLanguages = [
@@ -28,15 +26,11 @@ interface FourLangToSwissTranslationProps extends UseCaseTemplateChildProps {
 const FourLangToSwissTranslation: React.FC<FourLangToSwissTranslationProps> = ({
   mySpeechConfig,
   translatorConfig,
+  synthesizeSpeech,
   setError,
 }) => {
   const speechToText = useSpeechToText(mySpeechConfig, recognitionLanguages);
   const [translation, setTranslation] = useState("");
-  const { synthesizeSpeech } = useTextToSpeech(
-    "",
-    Voice.de_CH_LeniNeural,
-    mySpeechConfig
-  );
 
   useDidUpdate(() => {
     const getTranslation = async () => {

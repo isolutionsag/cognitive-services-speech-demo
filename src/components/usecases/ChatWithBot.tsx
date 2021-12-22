@@ -13,16 +13,18 @@ import {
   Stack,
   Skeleton,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import useInput from "../../hooks/useInput";
 import MySpeechConfig, {
   isValidSpeechConfig,
 } from "../../models/MySpeechConfig";
 import QnaConfig from "../../models/QnAConfig";
 import useSpeechToText from "../../hooks/useSpeechToText";
-import useTextToSpeech from "../../hooks/useTextToSpeech";
 import useBotResponse from "../../hooks/useBotResponse";
-import { makeTranslationRequest, TranslationResponse } from "../../api/TranslationApi";
+import {
+  makeTranslationRequest,
+  TranslationResponse,
+} from "../../api/TranslationApi";
 import { botLanguage } from "../../api/BotApi";
 import TranslatorConfig from "../../models/TranslatorConfig";
 import Language, {
@@ -61,23 +63,17 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
   mySpeechConfig,
   qnaConfig,
   translatorConfig,
+  synthesizeSpeech,
+  isSynthesizing,
   setError,
 }) => {
-  const useInputInput = useInput(
-    "Hello, how are you?",
-    () => "",
-    undefined,
-    false
-  );
+  const useInputInput = useInput("", () => "", undefined, false);
 
   const [detectedLanguage, setDetectedLanguage] = useState(
     InputLanguageLocale[Language.DE]
   );
 
   const [outputLanguage, setOutputLanguage] = useState(Language.AUTO);
-  const [outputVoice, setOutputVoice] = useState(
-    getVoiceForLanguage(outputLanguage)
-  );
 
   const [inputTranslation, setInputTranslation] = useState({ text: "" });
 
@@ -85,24 +81,21 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
   const _useBotResponse = useBotResponse(inputTranslation, qnaConfig);
 
   const useInputOutput = useInput("", () => "", undefined, false);
-  const textToSpeech = useTextToSpeech(
-    useInputOutput.value,
-    outputVoice,
-    mySpeechConfig
-  );
 
   const handleTranslationResponseError = (err: any) => {
     setError(
-      "Failed to get translation for input: " + err + ". Is your translation config correct?"
+      "Failed to get translation for input: " +
+        err +
+        ". Is your translation config correct?"
     );
-  }
+  };
 
   const handleTranslationResultError = (result: TranslationResponse) => {
     setError(
       `No matching translation in botlanguage ("${botLanguage}"). Translations response: ` +
-      JSON.stringify(result.translations)
+        JSON.stringify(result.translations)
     );
-  }
+  };
 
   const handleInputTextChange = (text: string, languageLocale: string) => {
     useInputInput.setValue(text);
@@ -115,13 +108,14 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
         [botLanguage],
         translatorConfig
       );
-      if (translationResponse.error) handleTranslationResponseError(translationResponse.error)
+      if (translationResponse.error)
+        handleTranslationResponseError(translationResponse.error);
       else {
         const translation = translationResponse.translations?.filter(
           (t) => t.to === botLanguage.split("-")[0].toLowerCase()
         );
         if (!translation) {
-          handleTranslationResultError(translationResponse)
+          handleTranslationResultError(translationResponse);
           return;
         }
         const text = translation[0]?.text;
@@ -154,17 +148,15 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
 
       const toLanguage = getToLanguage(); //lowercase language key (2 letters)
 
-      setOutputVoice(getVoiceForLanguage(toLanguage.toUpperCase() as Language));
-
       const translationResponse = await makeTranslationRequest(
         _useBotResponse.answer,
         botLanguage,
         [toLanguage],
         translatorConfig
       );
-      if (translationResponse.error){
-        handleTranslationResponseError(translationResponse.error)
-        
+
+      if (translationResponse.error) {
+        handleTranslationResponseError(translationResponse.error);
         displayBotAnswer(_useBotResponse.answer, botLanguage);
       } else {
         const translation = translationResponse.translations?.find(
@@ -187,7 +179,7 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
 
   function displayBotAnswer(text: string, language: Language) {
     useInputOutput.setValue(text);
-    textToSpeech.synthesizeSpeech(text, getVoiceForLanguage(language));
+    synthesizeSpeech(text, getVoiceForLanguage(language));
   }
 
   const handleOutputLanguageChange = (event: SelectChangeEvent) => {
@@ -297,8 +289,8 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
           <IconButton
             size="large"
             disabled={!isValidSpeechConfig(mySpeechConfig)}
-            color={textToSpeech.isSynthesizing ? "secondary" : "primary"}
-            onClick={() => textToSpeech.synthesizeSpeech()}
+            color={isSynthesizing ? "secondary" : "primary"}
+            onClick={() => synthesizeSpeech()}
             aria-label="Speak output"
             style={{ marginTop: "20px" }}
           >

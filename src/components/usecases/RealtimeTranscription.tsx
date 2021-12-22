@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import { useEffect } from "react";
 import useSpeechToTextContinuous from "../../hooks/useSpeechToTextContinuous";
-import useTextToSpeech from "../../hooks/useTextToSpeech";
 import MySpeechConfig from "../../models/MySpeechConfig";
 import { getVoiceForLanguage } from "../../util/Language";
 import {
@@ -23,20 +22,17 @@ import {
 import { Voice } from "../../util/TextToSpechVoices";
 import { UseCaseTemplateChildProps } from "./UseCaseTemplate";
 
-interface RealtimeTranscriptionProps extends UseCaseTemplateChildProps{
+interface RealtimeTranscriptionProps extends UseCaseTemplateChildProps {
   speechConfig: MySpeechConfig;
 }
 
 const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
   speechConfig,
-  setError
+  synthesizeSpeech,
+  isSynthesizing,
+  setError,
 }) => {
   const speechToTextContinuous = useSpeechToTextContinuous(speechConfig);
-  const { synthesizeSpeech, isSynthesizing } = useTextToSpeech(
-    "",
-    Voice.de_CH_LeniNeural,
-    speechConfig
-  );
 
   const handleTranslationLanguageChange = (event: SelectChangeEvent) => {
     speechToTextContinuous.setTranslationTargetLanguage(
@@ -44,6 +40,7 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
     );
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     return () => {
       speechToTextContinuous.sttFromMicStop();
@@ -51,10 +48,10 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
   }, []);
 
   useEffect(() => {
-    if(speechToTextContinuous.error.length > 0)
-      setError("Error in speech recognition: " + speechToTextContinuous.error)
-    else setError("")
-  }, [speechToTextContinuous.error]);
+    if (speechToTextContinuous.error.length > 0)
+      setError("Error in speech recognition: " + speechToTextContinuous.error);
+    else setError("");
+  }, [speechToTextContinuous.error, setError]);
 
   return (
     <div style={{ minHeight: "65vh" }}>

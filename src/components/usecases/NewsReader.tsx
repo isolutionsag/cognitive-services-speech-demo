@@ -12,9 +12,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import useTextToSpeech from "../../hooks/useTextToSpeech";
-import { Voice } from "../../util/TextToSpechVoices";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { loadBingSearchConfig } from "../../repositories/BingSearchConfigRepository";
 import { UseCaseTemplateChildProps } from "./UseCaseTemplate";
 
@@ -22,7 +20,6 @@ const { CognitiveServicesCredentials } = require("@azure/ms-rest-azure-js");
 const { NewsSearchClient } = require("@azure/cognitiveservices-newssearch");
 
 interface NewsReaderProps extends UseCaseTemplateChildProps {
-  speechConfig: MySpeechConfig;
 }
 
 interface NewsItem {
@@ -33,17 +30,12 @@ interface NewsItem {
   datePublished: Date;
 }
 
-const NewsReader: React.FC<NewsReaderProps> = ({ speechConfig, setError }) => {
+const NewsReader: React.FC<NewsReaderProps> = ({synthesizeSpeech, isSynthesizing, setError }) => {
   const bingConfig = loadBingSearchConfig();
   const credentials = new CognitiveServicesCredentials(
     bingConfig.subscriptionKey
   );
   const newsSearchClient = new NewsSearchClient(credentials);
-  const { synthesizeSpeech, isSynthesizing } = useTextToSpeech(
-    "",
-    Voice.de_CH_LeniNeural,
-    speechConfig
-  );
 
   const [searchTopic, setSearchTopic] = useState("Skirennen");
   const [news, setNews] = useState<NewsItem[]>([]);
@@ -57,8 +49,7 @@ const NewsReader: React.FC<NewsReaderProps> = ({ speechConfig, setError }) => {
   }
 
   const searchNews = async () => {
-    
-    try{
+    try {
       let newsResults = await newsSearchClient.news.search(searchTopic, {
         market: "de-ch",
         acceptLanguage: "de-DE",
@@ -75,8 +66,12 @@ const NewsReader: React.FC<NewsReaderProps> = ({ speechConfig, setError }) => {
           };
         })
       );
-    }catch(e) {
-      setError("Failed to get news results: " + (e as any).message + ". Have you entered the correct configuration?")
+    } catch (e) {
+      setError(
+        "Failed to get news results: " +
+          (e as any).message +
+          ". Have you entered the correct configuration?"
+      );
     }
   };
 
