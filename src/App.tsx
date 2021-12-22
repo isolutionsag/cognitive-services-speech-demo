@@ -211,10 +211,9 @@ function App() {
             displayUseCase(selectedUseCase, useCaseError, setUseCaseError, synthesizeSpeech, isSynthesizing)}
         </Paper>
 
-        <div className="App-footer">
+        <div className="App-footer" style={{paddingBottom: "20px"}}>
           <span>
-            created by <a href="https://www.isolutions.ch">isolutions AG</a>{" "}
-            under MIT License.
+            created by <a href="https://www.isolutions.ch">isolutions AG</a>
           </span>
         </div>
       </div>
