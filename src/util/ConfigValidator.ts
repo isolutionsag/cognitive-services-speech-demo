@@ -11,19 +11,10 @@ export const areAllConfigsValid = (
   translatorConfig: TranslatorConfig,
   bingSearchConfig: BingSearchConfig
 ) => {
-  console.log(
-    "areAllConfigsValid?",
-    mySpeechConfig,
-    qnaConfig,
-    translatorConfig,
-    bingSearchConfig
-  );
-  const res = (
+  return (
     Object.values(mySpeechConfig).every(configValueCheck) &&
     Object.values(qnaConfig).every(configValueCheck) &&
     Object.values(translatorConfig).every(configValueCheck) &&
     Object.values(bingSearchConfig).every(configValueCheck)
   );
-  console.log("res: ", res);
-  return res;
 };
