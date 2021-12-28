@@ -12,11 +12,25 @@ const Home: React.FC<HomeProps> = ({ useCaseSelected }) => {
   return (
     <div>
       <Typography variant="h2">Grüezi!</Typography>
-      <Typography variant="body1" gutterBottom mb={4}>
-        {
-          "Hey, ich bin Leni. Ich bin ein Demo-Bot, der Schweizerdeutsch versteht und spricht. Mit mir kannst du die Möglichkeiten der Microsoft Azure Cognitive Services ausprobieren.​"
-        }
+      <Typography variant="body1">
+        Hey, ich bin Leni. Ich bin ein Demo-Bot, der Schweizerdeutsch versteht
+        und spricht.
       </Typography>
+      <Grid container direction="row" alignItems="center" justifyContent="center" mb={4}>
+        <Grid item xs={12} md="auto">
+          <Typography variant="body1" textAlign="center">
+            Mit mir kannst du die Möglichkeiten der Microsoft Azure Cognitive
+            Services ausprobieren.
+          </Typography>
+        </Grid>
+        <Grid item xs={12} md="auto">
+          <img
+            className="Microsoft-Logo"
+            src="images/RWCZER.webp"
+            alt="Microsoft"
+          />
+        </Grid>
+      </Grid>
       <Grid container spacing={4}>
         <Grid item xs={12} md={6}>
           <UseCaseCard
