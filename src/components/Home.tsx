@@ -26,7 +26,7 @@ const Home: React.FC<HomeProps> = ({ useCaseSelected }) => {
         <Grid item xs={12} md="auto">
           <img
             className="Microsoft-Logo"
-            src="images/RWCZER.webp"
+            src="images/RWCZER.jpg"
             alt="Microsoft"
           />
         </Grid>
