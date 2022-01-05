@@ -63,9 +63,7 @@ export function getVoiceForLanguage(language: Language | string): Voice {
   const localeSplit = locale.split("-");
   if (!localeSplit.every((part) => part.length <= 2)) locale = localeSplit[0]; //e.g. if language locale is "zh-hant" only use "zh" to find a matching voice
 
-  const result = Object.values(Voice).filter((v) => v.includes(locale));
-
-  //result = Object.values(Voice).filter(v => getLanguageLocalFromVoice(v) === LanguageLocale[language])
-  if (result.length > 0) return result[0];
+  const result = Object.values(Voice).find((v) => v.includes(locale));
+  if (result) return result;
   return defaultVoice;
 }
