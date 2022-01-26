@@ -1,38 +1,28 @@
 import { ForumOutlined, SettingsVoice, VolumeUp } from "@mui/icons-material";
 import {
-  IconButton,
-  Grid,
-  Typography,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  SelectChangeEvent,
-  Chip,
-  Stack,
-  Skeleton,
+  Checkbox, Chip, FormControl, FormControlLabel, Grid, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent, Skeleton, Stack, Typography
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import MySpeechConfig, {
-  isValidSpeechConfig,
-} from "../../models/MySpeechConfig";
-import QnaConfig from "../../models/QnAConfig";
-import useSpeechToText from "../../hooks/useSpeechToText";
-import useBotResponse from "../../hooks/useBotResponse";
+import { botLanguage } from "../../api/BotApi";
 import {
   makeTranslationRequest,
-  TranslationResponse,
+  TranslationResponse
 } from "../../api/TranslationApi";
-import { botLanguage } from "../../api/BotApi";
+import useBotResponse from "../../hooks/useBotResponse";
+import useSpeechToText from "../../hooks/useSpeechToText";
+import MySpeechConfig, {
+  isValidSpeechConfig
+} from "../../models/MySpeechConfig";
+import QnaConfig from "../../models/QnAConfig";
 import TranslatorConfig from "../../models/TranslatorConfig";
 import Language, {
   getVoiceForLanguage,
   InputLanguageLocale,
-  languageModels,
+  languageModels
 } from "../../util/Language";
-import { UseCaseTemplateChildProps } from "./UseCaseTemplate";
-import CustomIconButton from "../common/CustomIconButton";
 import { originalIfNotEmptyOr } from "../../util/TextUtil";
+import CustomIconButton from "../common/CustomIconButton";
+import { UseCaseTemplateChildProps } from "./UseCaseTemplate";
 
 interface ChipSuggestion {
   text: string;
@@ -46,7 +36,7 @@ const chipSuggestions: ChipSuggestion[] = [
   { text: "What is the best company?", languageLocale: "en-EN" },
 ];
 
-const recognitionLanguages = [
+const defaultRecognitionLanguages = [
   Language.EN,
   Language.DE,
   Language.FR,
@@ -70,6 +60,18 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
   const [detectedLanguage, setDetectedLanguage] = useState(
     InputLanguageLocale[Language.DE]
   );
+
+  const [recognizeOnlySwissGerman, setRecognizeOnlySwissGerman] =
+    useState(false);
+
+  const [recognitionLanguages, setRecognitionLanguages] = useState(
+    defaultRecognitionLanguages
+  );
+
+  useEffect(() => {
+    if (recognizeOnlySwissGerman) setRecognitionLanguages([Language.CH]);
+    else setRecognitionLanguages(defaultRecognitionLanguages);
+  }, [recognizeOnlySwissGerman]);
 
   const [inputText, setInputText] = useState("");
   const [outputLanguage, setOutputLanguage] = useState(Language.AUTO);
@@ -96,6 +98,7 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
 
   const handleInputTextChange = (text: string, languageLocale: string) => {
     setInputText(text);
+    if (!languageLocale) languageLocale = "";
     setDetectedLanguage(languageLocale);
 
     const getTranslationForBot = async () => {
@@ -123,6 +126,12 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
     getTranslationForBot();
   };
 
+  const handleSuggestionChipClick = (text: string, languageLocale: string) => {
+    setRecognizeOnlySwissGerman(false);
+    setRecognitionLanguages(defaultRecognitionLanguages);
+    handleInputTextChange(text, languageLocale);
+  };
+
   useEffect(() => {
     handleInputTextChange(
       speechToText.resultText,
@@ -145,6 +154,13 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
       }
 
       const toLanguage = getToLanguage(); //lowercase language key (2 letters)
+
+      if ([botLanguage, "ch"].includes(toLanguage)) {
+        //no need to translate
+        setError("");
+        displayBotAnswer(_useBotResponse.answer, botLanguage);
+        return;
+      }
 
       const translationResponse = await makeTranslationRequest(
         _useBotResponse.answer,
@@ -197,6 +213,15 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
         <Typography variant="body2" color="orange" gutterBottom>
           {speechToText.error}
         </Typography>
+        <FormControlLabel
+          label="Ich möchte nur Schweizerdeutsch sprechen"
+          control={
+            <Checkbox
+              checked={recognizeOnlySwissGerman}
+              onChange={(e) => setRecognizeOnlySwissGerman(e.target.checked)}
+            />
+          }
+        />
         <CustomIconButton
           icon={
             <IconButton
@@ -222,7 +247,7 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
             <Chip
               key={"chip_" + i}
               onClick={() =>
-                handleInputTextChange(
+                handleSuggestionChipClick(
                   suggestion.text,
                   suggestion.languageLocale
                 )
@@ -269,11 +294,13 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
               label="Ausgabesprache"
               onChange={handleOutputLanguageChange}
             >
-              {languageModels.map((languageModel) => (
-                <MenuItem value={languageModel.key} key={languageModel.key}>
-                  {languageModel.label}
-                </MenuItem>
-              ))}
+              {languageModels
+                .filter((model) => model.key !== Language.DE)
+                .map((languageModel) => (
+                  <MenuItem value={languageModel.key} key={languageModel.key}>
+                    {languageModel.label}
+                  </MenuItem>
+                ))}
             </Select>
           </FormControl>
           <br />
