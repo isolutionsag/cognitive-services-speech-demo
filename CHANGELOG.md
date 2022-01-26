@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Added
-- Option to recognize only Swiss German input.
+- Option to recognize only Swiss German input. (#3)
 
 ## v1.0.0 - 2022-01-26
 ### Initial Release
