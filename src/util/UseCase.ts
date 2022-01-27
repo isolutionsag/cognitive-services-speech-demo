@@ -18,7 +18,7 @@ export const UseCaseModels: { [key in UseCase]: UseCaseModel } = {
   },
   [UseCase.BotChat]: {
     title: "Mehrsprachiger Chatbot",
-    description: `Frage mich etwas auf Deutsch, Englisch, Französisch oder Italienisch und lass dir meine Antwort auf Schweizerdeutsch vorlesen.`,
+    description: `Sprich mit mir und du erhälst eine kluge Antwort`,
   },
   [UseCase.RealtimeTranscription]: {
     title: "Diktiergerät mit Übersetzung",
