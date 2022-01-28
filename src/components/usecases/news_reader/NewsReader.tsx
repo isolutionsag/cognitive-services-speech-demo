@@ -12,9 +12,9 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
-import { loadBingSearchConfig } from "../../repositories/BingSearchConfigRepository";
-import { Voice } from "../../util/TextToSpechVoices";
-import { UseCaseTemplateChildProps } from "./UseCaseTemplate";
+import { loadBingSearchConfig } from "../../../repositories/BingSearchConfigRepository";
+import { Voice } from "../../../util/TextToSpechVoices";
+import { UseCaseTemplateChildProps } from "../UseCaseTemplate";
 
 const { CognitiveServicesCredentials } = require("@azure/ms-rest-azure-js");
 const { NewsSearchClient } = require("@azure/cognitiveservices-newssearch");

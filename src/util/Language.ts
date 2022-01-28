@@ -1,8 +1,9 @@
-import { Voice, defaultVoice } from "./TextToSpechVoices";
+import { defaultVoice, Voice } from "./TextToSpechVoices";
 
 enum Language {
   AUTO = "AUTO",
   DE = "DE",
+  CH = "CH",
   EN = "EN",
   FR = "FR",
   IT = "IT",
@@ -14,6 +15,7 @@ export default Language;
 export const InputLanguageLocale: { [id in Language]: string } = {
   [Language.AUTO]: "auto",
   [Language.DE]: "de-DE",
+  [Language.CH]: "de-CH",
   [Language.EN]: "en-US",
   [Language.FR]: "fr-FR",
   [Language.IT]: "it-IT",
@@ -23,6 +25,7 @@ export const InputLanguageLocale: { [id in Language]: string } = {
 export const OutputLanguageLocale: { [id in Language]: string } = {
   [Language.AUTO]: "auto",
   [Language.DE]: "de-CH",
+  [Language.CH]: "de-CH",
   [Language.EN]: "en-US",
   [Language.FR]: "fr-FR",
   [Language.IT]: "it-IT",
@@ -32,6 +35,7 @@ export const OutputLanguageLocale: { [id in Language]: string } = {
 export const LanguageLabels: { [id in Language]: string } = {
   [Language.AUTO]: "Auto (deine Sprache)",
   [Language.DE]: "Deutsch",
+  [Language.CH]: "Schweizerdeutsch",
   [Language.EN]: "Englisch",
   [Language.FR]: "Französisch",
   [Language.IT]: "Italienisch",

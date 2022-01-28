@@ -1,11 +1,15 @@
 import {
   ResultReason,
-  SpeechRecognizer,
+  SpeechRecognizer
 } from "microsoft-cognitiveservices-speech-sdk";
 import { useEffect, useRef, useState } from "react";
 import MySpeechConfig from "../models/MySpeechConfig";
-import Language from "../util/Language";
-import { CreateSpeechRecognizer } from "../util/SpeechRecognizerCreator";
+import Language, { InputLanguageLocale } from "../util/Language";
+import {
+  CreateSpeechRecognizer,
+  CreateSpeechRecognizerSingleLanguage
+} from "../util/SpeechRecognizerCreator";
+import { SpeechServiceLocale } from "../util/SupportedLanguages";
 
 export default function useSpeechToText(
   mySpeechConfig: MySpeechConfig,
@@ -21,10 +25,17 @@ export default function useSpeechToText(
 
   useEffect(() => {
     try {
-      recognizer.current = CreateSpeechRecognizer(
-        mySpeechConfig,
-        recognitionLanguages
-      );
+      if (recognitionLanguages.length === 1) {
+        recognizer.current = CreateSpeechRecognizerSingleLanguage(
+          mySpeechConfig,
+          InputLanguageLocale[recognitionLanguages[0]] as SpeechServiceLocale
+        );
+      } else {
+        recognizer.current = CreateSpeechRecognizer(
+          mySpeechConfig,
+          recognitionLanguages
+        );
+      }
       setIsSuccess(true);
       setError("");
     } catch (e) {
@@ -40,7 +51,11 @@ export default function useSpeechToText(
 
     recognizer.current?.recognizeOnceAsync((result) => {
       if (result.reason === ResultReason.RecognizedSpeech) {
-        setDetectedLanguage(result.language);
+        const recognitionLanguage =
+          recognitionLanguages.length === 1
+            ? InputLanguageLocale[recognitionLanguages[0]] // recognition has to be the only language requested to be recognized
+            : result.language;
+        setDetectedLanguage(recognitionLanguage);
         setResultText(result.text);
         setIsSuccess(true);
       } else {
