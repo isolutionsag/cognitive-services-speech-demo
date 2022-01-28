@@ -22,7 +22,7 @@ export const UseCaseModels: { [key in UseCase]: UseCaseModel } = {
   },
   [UseCase.RealtimeTranscription]: {
     title: "Diktiergerät mit Übersetzung",
-    description: "Diktiere auf deiner gewünschten Sprache und ich übersetze direkt.",
+    description: "Diktiere in deiner gewünschten Sprache und ich transkribiere es in Echtzeit in die Zielsprache.",
   },
   [UseCase.NewsReader]: {
     title: "Latest News by Leni",
