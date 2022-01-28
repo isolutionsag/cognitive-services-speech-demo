@@ -242,7 +242,7 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
   const handleLanguageRecognitionSelection = (
     option: LanguageRecognitionOption
   ) => {
-    const recognizeAuto = !option || option === LanguageRecognitionOption.auto;
+    const recognizeAuto = option === LanguageRecognitionOption.Automatic;
     setRecognizeOnlySwissGerman(!recognizeAuto);
   };
 
@@ -252,8 +252,8 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
         onChange={handleLanguageRecognitionSelection}
         selected={
           recognizeOnlySwissGerman
-            ? LanguageRecognitionOption.onlySwissGerman
-            : LanguageRecognitionOption.auto
+            ? LanguageRecognitionOption.SwissGerman
+            : LanguageRecognitionOption.Automatic
         }
       />
       <Box sx={{ marginTop: ".5rem", display: "flex", alignItems: "center" }}>
@@ -285,7 +285,7 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
         speechToText.isRecordingAndConverting ? "Ich höre zu..." : "Aufnehmen"
       }
     />
-  );
+  ); 
 
   const suggestionChips = () => (
     <Stack direction="row" spacing={1}>

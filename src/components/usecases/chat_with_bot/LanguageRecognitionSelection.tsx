@@ -2,8 +2,8 @@ import { Button, ButtonGroup } from "@mui/material";
 import React from "react";
 
 export enum LanguageRecognitionOption {
-  onlySwissGerman = "Schweizerdeutsch",
-  auto = "Automatisch",
+  SwissGerman,
+  Automatic,
 }
 
 interface LanguageRecognitionSelectionProps {
@@ -14,17 +14,17 @@ interface LanguageRecognitionSelectionProps {
 export const LanguageRecognitionSelection: React.FC<
   LanguageRecognitionSelectionProps
 > = ({ onChange, selected }) => {
+
   return (
     <ButtonGroup disableElevation variant="outlined">
-      {Object.values(LanguageRecognitionOption).map((item, i) => (
-        <Button
-          variant={item === selected ? "contained" : "outlined"}
-          key={i}
-          onClick={() => onChange(item)}
-        >
-          {item}
-        </Button>
-      ))}
+      <Button variant={selected === LanguageRecognitionOption.SwissGerman ? "contained" : "outlined"}
+        onClick={() => onChange(LanguageRecognitionOption.SwissGerman)}>
+          Schweizerdeutsch
+      </Button>
+      <Button variant={selected === LanguageRecognitionOption.Automatic ? "contained" : "outlined"}
+        onClick={() => onChange(LanguageRecognitionOption.Automatic)}>
+          Automatisch
+      </Button>
     </ButtonGroup>
   );
 };
