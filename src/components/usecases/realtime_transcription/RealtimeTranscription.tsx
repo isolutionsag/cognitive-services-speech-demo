@@ -17,10 +17,11 @@ import useSpeechToTextContinuous from "../../../hooks/useSpeechToTextContinuous"
 import MySpeechConfig from "../../../models/MySpeechConfig";
 import { getVoiceForLanguage } from "../../../util/Language";
 import {
+  SpeechServiceLanguagesNames,
+  SpeechServiceLocale,
   SpeechTranslationLanguage,
   SpeechTranslationLanguagesNames,
 } from "../../../util/SupportedLanguages";
-import { Voice } from "../../../util/TextToSpechVoices";
 import { originalIfNotEmptyOr } from "../../../util/TextUtil";
 import CustomIconButton from "../../common/CustomIconButton";
 import { UseCaseTemplateChildProps } from "../UseCaseTemplate";
@@ -35,7 +36,16 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
   isSynthesizing,
   setError,
 }) => {
-  const speechToTextContinuous = useSpeechToTextContinuous(speechConfig);
+  const speechToTextContinuous = useSpeechToTextContinuous(
+    speechConfig,
+    SpeechServiceLocale.German_Switzerland
+  );
+
+  const handleSpeechRecognitionLanguageChange = (event: SelectChangeEvent) => {
+    speechToTextContinuous.setRecognitionLanguage(
+      event.target.value as SpeechServiceLocale
+    );
+  };
 
   const handleTranslationLanguageChange = (event: SelectChangeEvent) => {
     speechToTextContinuous.setTranslationTargetLanguage(
@@ -56,65 +66,95 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
     else setError("");
   }, [speechToTextContinuous.error, setError]);
 
-  return (
-    <div style={{ minHeight: "65vh" }}>
-      <Tooltip
-        title={speechToTextContinuous.stopRecognitionBecauseTimeoutToolTip.text}
-        open={speechToTextContinuous.stopRecognitionBecauseTimeoutToolTip.open}
-        onClose={
-          speechToTextContinuous.stopRecognitionBecauseTimeoutToolTip
-            .handleClose
-        }
+  const speakerButtonText = (languageName: string) =>
+    `Auf ${languageName} wiedergeben`;
+
+  const inputLanguageSelection = () => (
+    <FormControl>
+      <InputLabel id="language-input-label">Eingabesprache</InputLabel>
+      <Select
+        style={{ minWidth: "200px" }}
+        autoWidth
+        labelId="language-input-select-label"
+        id="language-input-select"
+        value={speechToTextContinuous.recognitionLanguage}
+        label="Ausgabesprache"
+        onChange={handleSpeechRecognitionLanguageChange}
       >
-        <CustomIconButton
-          icon={
-            <IconButton
-              color="primary"
-              size="large"
-              onClick={
-                speechToTextContinuous.isRecognizing
-                  ? speechToTextContinuous.sttFromMicStop
-                  : speechToTextContinuous.sttFromMic
-              }
-              aria-label="Speak output"
-              style={{ marginTop: "20px" }}
-            >
-              {speechToTextContinuous.isRecognizing ? (
-                <MicOff fontSize="large" />
-              ) : (
-                <SettingsVoice fontSize="large" />
-              )}
-            </IconButton>
+        {Object.values(SpeechServiceLocale).map((language) => (
+          <MenuItem value={language} key={language}>
+            {SpeechServiceLanguagesNames[language]}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  );
+
+  const startStopRecordingButton = () => (
+    <CustomIconButton
+      icon={
+        <Tooltip
+          title={
+            speechToTextContinuous.stopRecognitionBecauseTimeoutToolTip.text
           }
-          text={
-            speechToTextContinuous.isRecognizing
-              ? "Aufnahme stoppen"
-              : "Aufnahme starten"
+          open={
+            speechToTextContinuous.stopRecognitionBecauseTimeoutToolTip.open
           }
-        />
-      </Tooltip>
-      <br />
-      <FormControl>
-        <InputLabel id="language-input-label">Ausgabesprache</InputLabel>
-        <Select
-          style={{ minWidth: "200px" }}
-          autoWidth
-          labelId="language-select-label"
-          id="language-select"
-          value={speechToTextContinuous.translationTargetLanguage}
-          label="Ausgabesprache"
-          onChange={handleTranslationLanguageChange}
+          onClose={
+            speechToTextContinuous.stopRecognitionBecauseTimeoutToolTip
+              .handleClose
+          }
         >
-          {Object.values(SpeechTranslationLanguage).map((language) => (
-            <MenuItem value={language} key={language}>
-              {SpeechTranslationLanguagesNames[language]}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <br />
-      <br />
-      <br />
+          <IconButton
+            color="primary"
+            size="large"
+            onClick={
+              speechToTextContinuous.isRecognizing
+                ? speechToTextContinuous.sttFromMicStop
+                : speechToTextContinuous.sttFromMic
+            }
+            aria-label="Speak output"
+            style={{ marginTop: "20px" }}
+          >
+            {speechToTextContinuous.isRecognizing ? (
+              <MicOff fontSize="large" />
+            ) : (
+              <SettingsVoice fontSize="large" />
+            )}
+          </IconButton>
+        </Tooltip>
+      }
+      text={
+        speechToTextContinuous.isRecognizing
+          ? "Aufnahme stoppen"
+          : "Aufnahme starten"
+      }
+    />
+  );
+
+  const outputLanguageSelection = () => (
+    <FormControl>
+      <InputLabel id="language-input-label">Ausgabesprache</InputLabel>
+      <Select
+        style={{ minWidth: "200px" }}
+        autoWidth
+        labelId="language-select-label"
+        id="language-select"
+        value={speechToTextContinuous.translationTargetLanguage}
+        label="Ausgabesprache"
+        onChange={handleTranslationLanguageChange}
+      >
+        {Object.values(SpeechTranslationLanguage).map((language) => (
+          <MenuItem value={language} key={language}>
+            {SpeechTranslationLanguagesNames[language]}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  );
+
+  const recognizingTextBox = () => (
+    <>
       <Typography variant="subtitle1">Erkannte Wörter</Typography>
       <Box
         border="1px solid black"
@@ -132,7 +172,59 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
           {originalIfNotEmptyOr(speechToTextContinuous.translatingText, "...")}
         </Typography>
       </Box>
-      <br />
+    </>
+  );
+
+  const speakerButtons = () => (
+    <Grid container spacing={2} justifyContent="space-between">
+      <Grid item>
+        <Button
+          onClick={() => {
+            const voice = getVoiceForLanguage(
+              speechToTextContinuous.recognitionLanguage
+            );
+            synthesizeSpeech(speechToTextContinuous.recognizedText, voice);
+          }}
+          disabled={speechToTextContinuous.recognizedText.length < 1}
+          color={isSynthesizing ? "secondary" : "primary"}
+          variant="outlined"
+          startIcon={<VolumeUp />}
+        >
+          {speakerButtonText(
+            SpeechServiceLanguagesNames[
+              speechToTextContinuous.recognitionLanguage
+            ]
+          )}
+        </Button>
+      </Grid>
+      <Grid item>
+        <Button
+          onClick={() => {
+            const voice = getVoiceForLanguage(
+              speechToTextContinuous.translationTargetLanguage
+            );
+            synthesizeSpeech(speechToTextContinuous.translatedText, voice);
+          }}
+          disabled={
+            !speechToTextContinuous.translatedText ||
+            speechToTextContinuous.translatedText?.length < 1
+          }
+          color={isSynthesizing ? "secondary" : "primary"}
+          variant="outlined"
+          startIcon={<VolumeUp />}
+        >
+          {speakerButtonText(
+            SpeechTranslationLanguagesNames[
+              speechToTextContinuous.translationTargetLanguage
+            ]
+          )}
+        </Button>
+      </Grid>
+    </Grid>
+  );
+
+  const recognizedTextBox = () => (
+    <>
       <Typography variant="subtitle1">Erkannte Sätze (nach Pause)</Typography>
       <Box
         border="1px solid black"
@@ -147,48 +239,24 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
           {originalIfNotEmptyOr(speechToTextContinuous.translatedText, "...")}
         </Typography>
         <br />
-        <Grid container spacing={2} justifyContent="space-between">
-          <Grid item>
-            <Button
-              onClick={() =>
-                synthesizeSpeech(
-                  speechToTextContinuous.recognizedText,
-                  Voice.de_CH_LeniNeural
-                )
-              }
-              disabled={speechToTextContinuous.recognizedText.length < 1}
-              color={isSynthesizing ? "secondary" : "primary"}
-              variant="outlined"
-              startIcon={<VolumeUp />}
-            >
-              Auf Schweizerdeutsch wiedergeben
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              onClick={() => {
-                const voice = getVoiceForLanguage(
-                  speechToTextContinuous.translationTargetLanguage
-                );
-                synthesizeSpeech(speechToTextContinuous.translatedText, voice);
-              }}
-              disabled={
-                !speechToTextContinuous.translatedText ||
-                speechToTextContinuous.translatedText?.length < 1
-              }
-              color={isSynthesizing ? "secondary" : "primary"}
-              variant="outlined"
-              startIcon={<VolumeUp />}
-            >
-              {`Auf ${
-                SpeechTranslationLanguagesNames[
-                  speechToTextContinuous.translationTargetLanguage
-                ]
-              } wiedergeben`}
-            </Button>
-          </Grid>
-        </Grid>
+        {speakerButtons()}
       </Box>
+    </>
+  );
+
+  return (
+    <div style={{ minHeight: "65vh" }}>
+      {inputLanguageSelection()}
+      {startStopRecordingButton()}
+      <br />
+      <br />
+      {outputLanguageSelection()}
+      <br />
+      <br />
+      <br />
+      {recognizingTextBox()}
+      <br />
+      {recognizedTextBox()}
     </div>
   );
 };
