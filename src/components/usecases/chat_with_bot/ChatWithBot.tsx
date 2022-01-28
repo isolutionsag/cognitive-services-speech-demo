@@ -12,30 +12,32 @@ import {
   SelectChangeEvent,
   Skeleton,
   Stack,
-  Typography,
+  Typography
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { botLanguage } from "../../api/BotApi";
+import { botLanguage } from "../../../api/BotApi";
 import {
   makeTranslationRequest,
-  TranslationResponse,
-} from "../../api/TranslationApi";
-import useBotResponse from "../../hooks/useBotResponse";
-import useSpeechToText from "../../hooks/useSpeechToText";
+  TranslationResponse
+} from "../../../api/TranslationApi";
+import useBotResponse from "../../../hooks/useBotResponse";
+import useSpeechToText from "../../../hooks/useSpeechToText";
 import MySpeechConfig, {
-  isValidSpeechConfig,
-} from "../../models/MySpeechConfig";
-import QnaConfig from "../../models/QnAConfig";
-import TranslatorConfig from "../../models/TranslatorConfig";
+  isValidSpeechConfig
+} from "../../../models/MySpeechConfig";
+import QnaConfig from "../../../models/QnAConfig";
+import TranslatorConfig from "../../../models/TranslatorConfig";
 import Language, {
   getVoiceForLanguage,
   InputLanguageLocale,
-  languageModels,
-} from "../../util/Language";
-import { originalIfNotEmptyOr } from "../../util/TextUtil";
-import CustomIconButton from "../common/CustomIconButton";
-import CustomToggleButtonGroup from "../common/CustomToggleButtonGroup";
-import { UseCaseTemplateChildProps } from "./UseCaseTemplate";
+  languageModels
+} from "../../../util/Language";
+import { originalIfNotEmptyOr } from "../../../util/TextUtil";
+import CustomIconButton from "../../common/CustomIconButton";
+import { UseCaseTemplateChildProps } from "../UseCaseTemplate";
+import LanguageRecognitionSelection, {
+  LanguageRecognitionOption
+} from "./LanguageRecognitionSelection";
 
 class ChipSuggestion {
   private originalText: string;
@@ -237,21 +239,22 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
     setOutputLanguage(event.target.value as Language);
   };
 
+  const handleLanguageRecognitionSelection = (
+    option: LanguageRecognitionOption
+  ) => {
+    const recognizeAuto = !option || option === LanguageRecognitionOption.auto;
+    setRecognizeOnlySwissGerman(!recognizeAuto);
+  };
+
   const recognitionModeSelection = () => (
     <>
-      <CustomToggleButtonGroup
-        value={recognizeOnlySwissGerman}
-        onChange={(onlySwissGerman: boolean) =>
-          setRecognizeOnlySwissGerman(
-            onlySwissGerman === null
-              ? recognizeOnlySwissGerman
-              : onlySwissGerman
-          )
+      <LanguageRecognitionSelection
+        onChange={handleLanguageRecognitionSelection}
+        selected={
+          recognizeOnlySwissGerman
+            ? LanguageRecognitionOption.onlySwissGerman
+            : LanguageRecognitionOption.auto
         }
-        items={[
-          { value: true, text: "Schweizerdeutsch" },
-          { value: false, text: "Automatisch" },
-        ]}
       />
       <Box sx={{ marginTop: ".5rem", display: "flex", alignItems: "center" }}>
         <InfoOutlined sx={{ color: "gray" }} fontSize="small" />

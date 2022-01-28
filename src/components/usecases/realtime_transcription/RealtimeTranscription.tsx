@@ -13,17 +13,17 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect } from "react";
-import useSpeechToTextContinuous from "../../hooks/useSpeechToTextContinuous";
-import MySpeechConfig from "../../models/MySpeechConfig";
-import { getVoiceForLanguage } from "../../util/Language";
+import useSpeechToTextContinuous from "../../../hooks/useSpeechToTextContinuous";
+import MySpeechConfig from "../../../models/MySpeechConfig";
+import { getVoiceForLanguage } from "../../../util/Language";
 import {
   SpeechTranslationLanguage,
   SpeechTranslationLanguagesNames,
-} from "../../util/SupportedLanguages";
-import { Voice } from "../../util/TextToSpechVoices";
-import { originalIfNotEmptyOr } from "../../util/TextUtil";
-import CustomIconButton from "../common/CustomIconButton";
-import { UseCaseTemplateChildProps } from "./UseCaseTemplate";
+} from "../../../util/SupportedLanguages";
+import { Voice } from "../../../util/TextToSpechVoices";
+import { originalIfNotEmptyOr } from "../../../util/TextUtil";
+import CustomIconButton from "../../common/CustomIconButton";
+import { UseCaseTemplateChildProps } from "../UseCaseTemplate";
 
 interface RealtimeTranscriptionProps extends UseCaseTemplateChildProps {
   speechConfig: MySpeechConfig;

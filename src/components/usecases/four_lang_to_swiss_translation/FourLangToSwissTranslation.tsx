@@ -2,17 +2,17 @@ import { SettingsVoice } from "@mui/icons-material";
 import { Grid, IconButton, Skeleton, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useDidUpdate } from "rooks";
-import { makeTranslationRequest } from "../../api/TranslationApi";
-import useSpeechToText from "../../hooks/useSpeechToText";
+import { makeTranslationRequest } from "../../../api/TranslationApi";
+import useSpeechToText from "../../../hooks/useSpeechToText";
 import MySpeechConfig, {
   isValidSpeechConfig,
-} from "../../models/MySpeechConfig";
-import TranslatorConfig from "../../models/TranslatorConfig";
-import Language from "../../util/Language";
-import { Voice } from "../../util/TextToSpechVoices";
-import { originalIfNotEmptyOr } from "../../util/TextUtil";
-import CustomIconButton from "../common/CustomIconButton";
-import { UseCaseTemplateChildProps } from "./UseCaseTemplate";
+} from "../../../models/MySpeechConfig";
+import TranslatorConfig from "../../../models/TranslatorConfig";
+import Language from "../../../util/Language";
+import { Voice } from "../../../util/TextToSpechVoices";
+import { originalIfNotEmptyOr } from "../../../util/TextUtil";
+import CustomIconButton from "../../common/CustomIconButton";
+import { UseCaseTemplateChildProps } from "../UseCaseTemplate";
 
 const recognitionLanguages = [
   Language.EN,
