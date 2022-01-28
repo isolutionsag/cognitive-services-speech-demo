@@ -1,6 +1,8 @@
-import { ForumOutlined, SettingsVoice, VolumeUp } from "@mui/icons-material";
+import { InfoOutlined, SettingsVoice, VolumeUp } from "@mui/icons-material";
 import {
+  Box,
   Chip,
+  Divider,
   FormControl,
   Grid,
   IconButton,
@@ -10,8 +12,6 @@ import {
   SelectChangeEvent,
   Skeleton,
   Stack,
-  ToggleButton,
-  ToggleButtonGroup,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -34,19 +34,44 @@ import Language, {
 } from "../../util/Language";
 import { originalIfNotEmptyOr } from "../../util/TextUtil";
 import CustomIconButton from "../common/CustomIconButton";
-import { UseCaseTemplateChildProps } from "./UseCaseTemplate";
 import CustomToggleButtonGroup from "../common/CustomToggleButtonGroup";
+import { UseCaseTemplateChildProps } from "./UseCaseTemplate";
 
-interface ChipSuggestion {
-  text: string;
-  languageLocale: string;
+class ChipSuggestion {
+  private originalText: string;
+  private germanText: string;
+  private languageLocale: string;
+
+  constructor(
+    originalText: string,
+    languageLocale: string,
+    germanText?: string
+  ) {
+    this.originalText = originalText;
+    this.languageLocale = languageLocale;
+    this.germanText = germanText ?? originalText;
+  }
+
+  text(inSwissGerman: boolean) {
+    if (inSwissGerman) return this.germanText;
+    return this.originalText;
+  }
+
+  getLanguageLocale(inSwissGerman: boolean) {
+    if (inSwissGerman) return InputLanguageLocale[Language.CH];
+    return this.languageLocale;
+  }
 }
 
 const chipSuggestions: ChipSuggestion[] = [
-  { text: "Hallo, wie geht es dir?", languageLocale: "de-DE" },
-  { text: "Kannst du Schweizerdeutsch sprechen?", languageLocale: "de-DE" },
-  { text: "Quel âge as-tu?", languageLocale: "fr-FR" },
-  { text: "What is the best company?", languageLocale: "en-EN" },
+  new ChipSuggestion("Hallo, wie geht es dir?", "de-DE"),
+  new ChipSuggestion("Kannst du Schweizerdeutsch sprechen?", "de-DE"),
+  new ChipSuggestion("Quel âge as-tu?", "fr-FR", "Wie alt bist du?"),
+  new ChipSuggestion(
+    "What is the best company?",
+    "en-EN",
+    "Welche is die beste Firma?"
+  ),
 ];
 
 const defaultRecognitionLanguages = [
@@ -140,8 +165,6 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
   };
 
   const handleSuggestionChipClick = (text: string, languageLocale: string) => {
-    setRecognizeOnlySwissGerman(false);
-    setRecognitionLanguages(defaultRecognitionLanguages);
     handleInputTextChange(text, languageLocale);
   };
 
@@ -226,15 +249,18 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
           )
         }
         items={[
-          { value: true, text: "Nur CH" },
-          { value: false, text: "Autoerkennung (DE, EN, FR, IT)" },
+          { value: true, text: "Schweizerdeutsch" },
+          { value: false, text: "Automatisch" },
         ]}
       />
-      <Typography variant="body2" color="GrayText" gutterBottom>
-        {recognizeOnlySwissGerman
-          ? "Ich erkenne Schweizerdeutsch"
-          : "Ich erkenne Deutsch, Englisch, Französisch oder Italienisch"}
-      </Typography>
+      <Box sx={{ marginTop: ".5rem", display: "flex", alignItems: "center" }}>
+        <InfoOutlined sx={{ color: "gray" }} fontSize="small" />
+        <Typography variant="body2" color="GrayText" marginLeft=".4rem">
+          {recognizeOnlySwissGerman
+            ? "Ich erkenne nur Schweizerdeutsch"
+            : "Ich erkenne Deutsch, Englisch, Französisch oder Italienisch"}
+        </Typography>
+      </Box>
     </>
   );
 
@@ -265,11 +291,11 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
           key={"chip_" + i}
           onClick={() =>
             handleSuggestionChipClick(
-              suggestion.text,
-              suggestion.languageLocale
+              suggestion.text(recognizeOnlySwissGerman),
+              suggestion.getLanguageLocale(recognizeOnlySwissGerman)
             )
           }
-          label={suggestion.text}
+          label={suggestion.text(recognizeOnlySwissGerman)}
           color="primary"
           variant="outlined"
         />
@@ -291,6 +317,22 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
             : ""}
         </Typography>
       </>
+    );
+  };
+
+  const outputDisplay = () => {
+    if (_useBotResponse.isFetching)
+      return <Skeleton variant="text" style={{ width: "100%" }} />;
+    if (outputText.length > 0)
+      return (
+        <Typography variant="h5" color="primary">
+          {outputText}
+        </Typography>
+      );
+    return (
+      <Typography variant="h5" color="primary">
+        Klicke den <em>Aufnehmen Knopf</em> and frag mich etwas...
+      </Typography>
     );
   };
 
@@ -317,18 +359,6 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
     </FormControl>
   );
 
-  const outputDisplay = () => {
-    return _useBotResponse.isFetching ? (
-      <Skeleton variant="text" style={{ width: "100%" }} />
-    ) : (
-      <Typography variant="h5" color="primary">
-        {outputText.length > 0
-          ? outputText
-          : "Klicke den Aufnehme Knopf and frag mich etwas..."}
-      </Typography>
-    );
-  };
-
   const synthesizeResponseButton = () => (
     <CustomIconButton
       icon={
@@ -338,7 +368,6 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
           color={isSynthesizing ? "secondary" : "primary"}
           onClick={() => synthesizeSpeech(outputText)}
           aria-label="Speak output"
-          style={{ marginTop: "20px" }}
         >
           <VolumeUp fontSize="large" />
         </IconButton>
@@ -360,6 +389,7 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
           {speechToText.error}
         </Typography>
         {recognitionModeSelection()}
+        <br />
         {recordButton()}
         <br />
         {suggestionChips()}
@@ -372,13 +402,21 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
           style={{ maxWidth: "600px" }}
         >
           {inputTextDisplay()}
-          <div style={{ padding: "20px" }}>
-            <ForumOutlined style={{ height: "50px", width: "50px" }} />
-          </div>
-          {outputLanguageSelection()}
-          <br />
+          <Box sx={{ height: 30 }} />
+          <Divider variant="middle" sx={{ width: "50%" }} />
+          <Box sx={{ height: 30 }} />
           {outputDisplay()}
-          {synthesizeResponseButton()}
+          <br />
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            {outputLanguageSelection()}
+            <Box sx={{ width: 30 }} />
+            {synthesizeResponseButton()}
+          </Box>
         </Grid>
       </Grid>
     </Grid>
