@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Added
-- Recognizing language select for Realtime transcription. (#4)
+- Select Recognizing language for Realtime Transcription. (#4)
 - Option to recognize only Swiss German input. (#3)
 
 ## v1.0.0 - 2022-01-26
