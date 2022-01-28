@@ -10,4 +10,4 @@ All notable changes to this project will be documented in this file.
 ### Initial Release
 Try out the new Swiss Natural Language Processing Voice "Leni".
 
-Follow the instructions [here](https://github.com/isolutionsag/cognitive-services-speech-demo/tree/v1.0.0) branch to get started.
+Follow the instructions [here](https://github.com/isolutionsag/cognitive-services-speech-demo/tree/v1.0.0) to get started.
