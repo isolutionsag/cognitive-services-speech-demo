@@ -56,3 +56,7 @@ a:hover {
 .usecase-newsReader {
   background-color: var(--passion-color3);
 }
+
+.translated-text-cell{
+  background-color: var(--simplicity-color3);
+}
