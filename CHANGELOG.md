@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Added
+- History of recorded paragraphs (#5)
 - Select Recognizing language for Realtime Transcription. (#4)
 - Option to recognize only Swiss German input. (#3)
 

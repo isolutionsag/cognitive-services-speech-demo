@@ -29,10 +29,9 @@ const UseCaseTemplate: React.FC<UseCaseTemplateProps> = ({
       direction="column"
     >
       <Typography variant="h3">{model.title}</Typography>
-      <br />
       <Typography variant="h6">{model.description}</Typography>
       <Button
-        style={{ marginTop: "8x" }}
+        style={{ margin: "1rem 0" }}
         onClick={() =>
           synthesizeSpeech(model.description, Voice.de_CH_LeniNeural)
         }
@@ -43,11 +42,8 @@ const UseCaseTemplate: React.FC<UseCaseTemplateProps> = ({
       >
         Anleitung vorlesen
       </Button>
-      <br />
       <Divider variant="middle" sx={{ width: "100%" }} />
-      <br />
       {error !== "" && <Alert severity="error">{error}</Alert>}
-      <br />
       {children}
     </Grid>
   );
