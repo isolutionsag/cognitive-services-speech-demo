@@ -226,7 +226,7 @@ const TranscriptionResultsTable: React.FC<{
           {results.map((result, index) => {
             const isLastItem = index === results.length - 1;
             return (
-              <TableRow>
+              <TableRow key={index}>
                 <TableCell>
                   <Typography variant={isLastItem ? "h6" : "subtitle1"}>
                     {result.recognizedText}
