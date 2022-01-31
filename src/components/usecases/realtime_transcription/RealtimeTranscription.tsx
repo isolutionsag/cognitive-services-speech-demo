@@ -1,7 +1,7 @@
 import { MicOff, SettingsVoice, ArrowForward } from "@mui/icons-material";
 import {
   FormControl,
-  Grid,
+  Box,
   IconButton,
   InputLabel,
   MenuItem,
@@ -114,7 +114,7 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
         <Typography variant="h6">
           {
             SpeechServiceLanguagesNames[
-              speechToTextContinuous.recognitionLanguage
+            speechToTextContinuous.recognitionLanguage
             ]
           }
         </Typography>
@@ -148,7 +148,7 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
         <Typography variant="h6" color="primary">
           {
             SpeechTranslationLanguagesNames[
-              speechToTextContinuous.translationTargetLanguage
+            speechToTextContinuous.translationTargetLanguage
             ]
           }
         </Typography>
@@ -178,29 +178,23 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
 
   return (
     <div style={{ minHeight: "65vh" }}>
-      {startStopRecordingButton()}
-      <br />
-      <br />
-      <Grid container alignItems="center" justifyContent="center" spacing={2}>
-        <Grid item xs={5} container justifyContent="end">
+      <Box sx={{ margin: '.5rem 0' }}>
+        {startStopRecordingButton()}
+      </Box>
+      <Box sx={{ margin: '1rem 0'}}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           {inputLanguageSelection()}
-        </Grid>
-        <Grid item>
           <ArrowForward sx={{ width: 32, height: 32 }} />
-        </Grid>
-        <Grid item xs={5} container justifyContent="start">
           {outputLanguageSelection()}
-        </Grid>
-      </Grid>
-      {(hasResults || speechToTextContinuous.isRecognizing) && (
-        <Typography variant="body2" color="GrayText">
-          Um die Sprachen zu wechseln, beende die Aufnahme und räume alle
-          Aufnahmen auf.
-        </Typography>
-      )}
-      <br />
-      <br />
-      <br />
+        </Box>
+        {(hasResults || speechToTextContinuous.isRecognizing) && (
+          <Typography variant="body2" color="GrayText">
+            Um die Sprachen zu wechseln, beende die Aufnahme und räume alle
+            Aufnahmen auf.
+          </Typography>
+        )}
+      </Box>
+
       <TranscriptionResults
         synthesizeSpeech={synthesizeSpeech}
         isSynthesizing={isSynthesizing}
