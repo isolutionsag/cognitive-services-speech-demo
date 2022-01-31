@@ -17,6 +17,9 @@ import { CreateSpeechRecognizerSingleLanguage } from "../util/SpeechRecognizerCr
 
 const autoStopRecognitionTimeout = 30 * 1000; //millis
 
+type useSpeechToTextContinuousType = typeof useSpeechToTextContinuous;
+export type SpeechToTextContinuous = ReturnType<useSpeechToTextContinuousType>;
+
 export default function useSpeechToTextContinuous(
   mySpeechConfig: MySpeechConfig,
   initialSpeechRecognitionLanguage: SpeechServiceLocale
