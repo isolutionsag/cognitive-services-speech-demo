@@ -1,12 +1,14 @@
-import { MicOff, SettingsVoice } from "@mui/icons-material";
+import { MicOff, SettingsVoice, ArrowForward } from "@mui/icons-material";
 import {
   FormControl,
+  Grid,
   IconButton,
   InputLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import useSpeechToTextContinuous from "../../../hooks/useSpeechToTextContinuous";
@@ -63,28 +65,6 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
     else setError("");
   }, [speechToTextContinuous.error, setError]);
 
-  const inputLanguageSelection = () => (
-    <FormControl>
-      <InputLabel id="language-input-label">Eingabesprache</InputLabel>
-      <Select
-        disabled={hasResults}
-        style={{ minWidth: "200px" }}
-        autoWidth
-        labelId="language-input-select-label"
-        id="language-input-select"
-        value={speechToTextContinuous.recognitionLanguage}
-        label="Ausgabesprache"
-        onChange={handleSpeechRecognitionLanguageChange}
-      >
-        {Object.values(SpeechServiceLocale).map((language) => (
-          <MenuItem value={language} key={language}>
-            {SpeechServiceLanguagesNames[language]}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  );
-
   const startStopRecordingButton = () => (
     <CustomIconButton
       icon={
@@ -128,35 +108,96 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
     />
   );
 
-  const outputLanguageSelection = () => (
-    <FormControl>
-      <InputLabel id="language-input-label">Ausgabesprache</InputLabel>
-      <Select
-        disabled={hasResults}
-        style={{ minWidth: "200px" }}
-        autoWidth
-        labelId="language-select-label"
-        id="language-select"
-        value={speechToTextContinuous.translationTargetLanguage}
-        label="Ausgabesprache"
-        onChange={handleTranslationLanguageChange}
-      >
-        {Object.values(SpeechTranslationLanguage).map((language) => (
-          <MenuItem value={language} key={language}>
-            {SpeechTranslationLanguagesNames[language]}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  );
+  const inputLanguageSelection = () => {
+    if (hasResults || speechToTextContinuous.isRecognizing)
+      return (
+        <Typography variant="h6">
+          {
+            SpeechServiceLanguagesNames[
+              speechToTextContinuous.recognitionLanguage
+            ]
+          }
+        </Typography>
+      );
+    return (
+      <FormControl>
+        <InputLabel id="language-input-label">Eingabesprache</InputLabel>
+        <Select
+          disabled={hasResults}
+          style={{ minWidth: "200px" }}
+          autoWidth
+          labelId="language-input-select-label"
+          id="language-input-select"
+          value={speechToTextContinuous.recognitionLanguage}
+          label="Ausgabesprache"
+          onChange={handleSpeechRecognitionLanguageChange}
+        >
+          {Object.values(SpeechServiceLocale).map((language) => (
+            <MenuItem value={language} key={language}>
+              {SpeechServiceLanguagesNames[language]}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    );
+  };
+
+  const outputLanguageSelection = () => {
+    if (hasResults || speechToTextContinuous.isRecognizing)
+      return (
+        <Typography variant="h6" color="primary">
+          {
+            SpeechTranslationLanguagesNames[
+              speechToTextContinuous.translationTargetLanguage
+            ]
+          }
+        </Typography>
+      );
+    return (
+      <FormControl>
+        <InputLabel id="language-input-label">Ausgabesprache</InputLabel>
+        <Select
+          disabled={hasResults}
+          style={{ minWidth: "200px" }}
+          autoWidth
+          labelId="language-select-label"
+          id="language-select"
+          value={speechToTextContinuous.translationTargetLanguage}
+          label="Ausgabesprache"
+          onChange={handleTranslationLanguageChange}
+        >
+          {Object.values(SpeechTranslationLanguage).map((language) => (
+            <MenuItem value={language} key={language}>
+              {SpeechTranslationLanguagesNames[language]}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    );
+  };
 
   return (
     <div style={{ minHeight: "65vh" }}>
-      {inputLanguageSelection()}
       {startStopRecordingButton()}
       <br />
       <br />
-      {outputLanguageSelection()}
+      <Grid container alignItems="center" justifyContent="center" spacing={2}>
+        <Grid item xs={5} container justifyContent="end">
+          {inputLanguageSelection()}
+        </Grid>
+        <Grid item>
+          <ArrowForward sx={{ width: 32, height: 32 }} />
+        </Grid>
+        <Grid item xs={5} container justifyContent="start">
+          {outputLanguageSelection()}
+        </Grid>
+      </Grid>
+      {(hasResults || speechToTextContinuous.isRecognizing) && (
+        <Typography variant="body2" color="GrayText">
+          Um die Sprachen zu wechseln, beende die Aufnahme und räume alle
+          Aufnahmen auf.
+        </Typography>
+      )}
       <br />
       <br />
       <br />
