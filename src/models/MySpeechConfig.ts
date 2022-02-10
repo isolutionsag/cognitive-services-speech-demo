@@ -11,7 +11,6 @@ export default MySpeechConfig;
 export type SpeechConfigKey = keyof MySpeechConfig
 
 export const isValidSpeechConfig = (config: MySpeechConfig) => {
-  console.log("region: " + config.region)
   return (
     config.resourceKey !== "" &&
     config.resourceKey !== undefined &&

@@ -60,12 +60,6 @@ export class SpeechToTextContinuous {
     recognitionLanguage: SpeechServiceLocale,
     translationLanguage: SpeechTranslationLanguage
   ) {
-    console.log(
-      "startRecognition with language: " +
-        recognitionLanguage +
-        ", translation language: " +
-        translationLanguage
-    );
     if (!this.recognizer) {
       this.initRecognizer(recognitionLanguage, translationLanguage);
     } else {
@@ -90,8 +84,6 @@ export class SpeechToTextContinuous {
     this.recognizer.startContinuousRecognitionAsync();
 
     this.recognizer.recognizing = (s, e) => {
-      console.log("Recognizing: ", e.result.text);
-      console.log("prev Recognizing: ", e.result);
       if (e.result.reason === ResultReason.TranslatingSpeech) {
         this.recognizing(
           e.result.text,
@@ -126,8 +118,18 @@ export class SpeechToTextContinuous {
   }
 
   stopRecognition() {
-    console.log("Stopping recognition...");
     if (!this.recognizer) return;
-    this.recognizer.stopContinuousRecognitionAsync();
+    this.recognizer.stopContinuousRecognitionAsync(
+      () => {},
+      (e) => {
+        this.error("Failed to stop recognition: " + e, ErrorReason.SdkError);
+      }
+    );
+  }
+
+  closeRecognizer() {
+    this.stopRecognition();
+    this.recognizer?.close();
+    this.recognizer = undefined;
   }
 }

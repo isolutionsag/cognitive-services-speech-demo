@@ -30,6 +30,8 @@ interface TranscriptionResultsProps {
   translationTargetLanguage: SpeechTranslationLanguage;
   recognizedResults: string[];
   translatedResults: string[];
+  recognizingText: string;
+  translatingText: string;
   clearResults: () => void;
   stopRecognition: () => void;
 }
@@ -41,6 +43,8 @@ const TranscriptionResults: React.FC<TranscriptionResultsProps> = ({
   translationTargetLanguage,
   recognizedResults,
   translatedResults,
+  recognizingText,
+  translatingText,
   clearResults,
   stopRecognition,
 }) => {
@@ -56,38 +60,14 @@ const TranscriptionResults: React.FC<TranscriptionResultsProps> = ({
     }
   });
 
-  // const recognizingTextIsLastRecognizedText = () => {
-  //   // After pause the recognized text and recognizingText are almost identical
-  //   // The recognizing text does not have a "." or a "?" at the end but the recognized text does
-  //   // and the first letter may not be in the same case
-  //   // To see if they should be equal remove any non letters or numbers from both texts, lowercase both texts and check if recognized text contains the recognizing text
-  //   // and see if length difference is smaller or equal to 1
-  //   const recognizingText = speechToTextContinuous.recognizingText
-  //     .toLowerCase()
-  //     .replace(/[^a-z0-9]/gi, "");
-  //   const lastRecognizedText = joinedResults[
-  //     joinedResults.length - 1
-  //   ]?.recognizedText
-  //     .toLowerCase()
-  //     .replace(/[^a-z0-9]/gi, "");
-  //   return (
-  //     lastRecognizedText &&
-  //     lastRecognizedText.includes(recognizingText) &&
-  //     lastRecognizedText.length - recognizingText.length <= 1
-  //   );
-  // };
-
-  // if (
-  //   speechToTextContinuous.recognizingText.length > 0 &&
-  //   speechToTextContinuous.translatingText.length > 0 &&
-  //   !recognizingTextIsLastRecognizedText()
-  // ) {
-  //   //show currently spoken text (not yet recognized text) at bottom of
-  //   joinedResults.push({
-  //     recognizedText: speechToTextContinuous.recognizingText,
-  //     translatedText: speechToTextContinuous.translatingText,
-  //   });
-  // }
+  if (
+    recognizingText.length + translatingText.length > 0) {
+    //show currently spoken text (not yet recognized text) at bottom of
+    joinedResults.push({
+      recognizedText: recognizingText,
+      translatedText: translatingText,
+    });
+  }
 
   const clearRecordingsButton = () => (
     <Tooltip title="Alle Aufnahmen löschen">
