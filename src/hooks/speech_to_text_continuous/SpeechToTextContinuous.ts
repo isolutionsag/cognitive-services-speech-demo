@@ -13,11 +13,20 @@ import { CreateTranslator } from "../../util/TranslationRecognizerCreator";
 
 export enum ErrorReason {
   /**
-   * TODO
+   * An internal error in SpeechToTextContinuous occured
    */
   InternalError,
+  /**
+   * The provided speech config is invalid
+   */
   InvalidConfig,
+  /**
+   * The SpeechToText sdk canceled the recognition
+   */
   SdkCancel,
+  /**
+   * There was an error in the SpeechToText sdk
+   */
   SdkError,
 }
 
