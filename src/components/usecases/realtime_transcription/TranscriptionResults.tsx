@@ -13,11 +13,12 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { SpeechToTextContinuous } from "../../../hooks/useSpeechToTextContinuous";
+import React from "react";
 import { getVoiceForLanguage } from "../../../util/Language";
 import {
   SpeechServiceLanguagesNames,
+  SpeechServiceLocale,
+  SpeechTranslationLanguage,
   SpeechTranslationLanguagesNames,
 } from "../../../util/SupportedLanguages";
 import { Voice } from "../../../util/TextToSpechVoices";
@@ -25,37 +26,28 @@ import { Voice } from "../../../util/TextToSpechVoices";
 interface TranscriptionResultsProps {
   synthesizeSpeech: (text: string, voice: Voice) => void;
   isSynthesizing: boolean;
-  speechToTextContinuous: SpeechToTextContinuous;
-  handleHasResults(hasResults: boolean): void;
+  recognitionLanguage: SpeechServiceLocale;
+  translationTargetLanguage: SpeechTranslationLanguage;
+  recognizedResults: string[];
+  translatedResults: string[];
+  recognizingText: string;
+  translatingText: string;
+  clearResults: () => void;
+  stopRecognition: () => void;
 }
 
 const TranscriptionResults: React.FC<TranscriptionResultsProps> = ({
   synthesizeSpeech,
   isSynthesizing,
-  speechToTextContinuous,
-  handleHasResults,
+  recognitionLanguage,
+  translationTargetLanguage,
+  recognizedResults,
+  translatedResults,
+  recognizingText,
+  translatingText,
+  clearResults,
+  stopRecognition,
 }) => {
-  const [recognizedResults, setRecognizedResults] = useState<string[]>([]);
-  const [translatedResults, setTranslatedResults] = useState<string[]>([]);
-
-  useEffect(() => {
-    handleHasResults(recognizedResults.length > 0);
-  }, [recognizedResults]);
-
-  useEffect(() => {
-    const recognizedText = speechToTextContinuous.recognizedText;
-    if (recognizedText && recognizedText.length > 0) {
-      setRecognizedResults([...recognizedResults, recognizedText]);
-    }
-  }, [speechToTextContinuous.recognizedText]);
-
-  useEffect(() => {
-    const translatedText = speechToTextContinuous.translatedText;
-    if (translatedText && translatedText.length > 0) {
-      setTranslatedResults([...translatedResults, translatedText]);
-    }
-  }, [speechToTextContinuous.translatedText]);
-
   const joinedResults: { recognizedText: string; translatedText: string }[] =
     [];
   recognizedResults.forEach((recognized, i) => {
@@ -68,49 +60,18 @@ const TranscriptionResults: React.FC<TranscriptionResultsProps> = ({
     }
   });
 
-  // const recognizingTextIsLastRecognizedText = () => {
-  //   // After pause the recognized text and recognizingText are almost identical
-  //   // The recognizing text does not have a "." or a "?" at the end but the recognized text does
-  //   // and the first letter may not be in the same case
-  //   // To see if they should be equal remove any non letters or numbers from both texts, lowercase both texts and check if recognized text contains the recognizing text
-  //   // and see if length difference is smaller or equal to 1
-  //   const recognizingText = speechToTextContinuous.recognizingText
-  //     .toLowerCase()
-  //     .replace(/[^a-z0-9]/gi, "");
-  //   const lastRecognizedText = joinedResults[
-  //     joinedResults.length - 1
-  //   ]?.recognizedText
-  //     .toLowerCase()
-  //     .replace(/[^a-z0-9]/gi, "");
-  //   return (
-  //     lastRecognizedText &&
-  //     lastRecognizedText.includes(recognizingText) &&
-  //     lastRecognizedText.length - recognizingText.length <= 1
-  //   );
-  // };
-
-  // if (
-  //   speechToTextContinuous.recognizingText.length > 0 &&
-  //   speechToTextContinuous.translatingText.length > 0 &&
-  //   !recognizingTextIsLastRecognizedText()
-  // ) {
-  //   //show currently spoken text (not yet recognized text) at bottom of
-  //   joinedResults.push({
-  //     recognizedText: speechToTextContinuous.recognizingText,
-  //     translatedText: speechToTextContinuous.translatingText,
-  //   });
-  // }
+  if (
+    recognizingText.length + translatingText.length > 0) {
+    //show currently spoken text (not yet recognized text) at bottom of
+    joinedResults.push({
+      recognizedText: recognizingText,
+      translatedText: translatingText,
+    });
+  }
 
   const clearRecordingsButton = () => (
     <Tooltip title="Alle Aufnahmen löschen">
-      <Button
-        onClick={() => {
-          setRecognizedResults([]);
-          setTranslatedResults([]);
-        }}
-        variant="outlined"
-        color="error"
-      >
+      <Button onClick={clearResults} variant="outlined" color="error">
         Aufräumen
       </Button>
     </Tooltip>
@@ -124,10 +85,8 @@ const TranscriptionResults: React.FC<TranscriptionResultsProps> = ({
       <Grid item>
         <Button
           onClick={() => {
-            speechToTextContinuous.sttFromMicStop();
-            const voice = getVoiceForLanguage(
-              speechToTextContinuous.recognitionLanguage
-            );
+            stopRecognition();
+            const voice = getVoiceForLanguage(recognitionLanguage);
             const text = recognizedResults.reduce((a, b) => a + " " + b, "");
             synthesizeSpeech(text, voice);
           }}
@@ -136,20 +95,14 @@ const TranscriptionResults: React.FC<TranscriptionResultsProps> = ({
           variant="outlined"
           startIcon={<VolumeUp />}
         >
-          {speakerButtonText(
-            SpeechServiceLanguagesNames[
-              speechToTextContinuous.recognitionLanguage
-            ]
-          )}
+          {speakerButtonText(SpeechServiceLanguagesNames[recognitionLanguage])}
         </Button>
       </Grid>
       <Grid item>
         <Button
           onClick={() => {
-            speechToTextContinuous.sttFromMicStop();
-            const voice = getVoiceForLanguage(
-              speechToTextContinuous.translationTargetLanguage
-            );
+            stopRecognition();
+            const voice = getVoiceForLanguage(translationTargetLanguage);
             const text = translatedResults.reduce((a, b) => a + " " + b, "");
             synthesizeSpeech(text, voice);
           }}
@@ -159,9 +112,7 @@ const TranscriptionResults: React.FC<TranscriptionResultsProps> = ({
           startIcon={<VolumeUp />}
         >
           {speakerButtonText(
-            SpeechTranslationLanguagesNames[
-              speechToTextContinuous.translationTargetLanguage
-            ]
+            SpeechTranslationLanguagesNames[translationTargetLanguage]
           )}
         </Button>
       </Grid>
