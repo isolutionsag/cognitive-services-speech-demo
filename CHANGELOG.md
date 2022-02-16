@@ -4,9 +4,13 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ### Added
+- Currently recognizing text is displayed at bottom of paragraph history in Realtime Transcription. (#6)
 - History of recorded paragraphs (#5)
 - Select Recognizing language for Realtime Transcription. (#4)
 - Option to recognize only Swiss German input. (#3)
+
+### Changed
+- Removed bug, that started recording when language was changed in Realtime Transcription. (#6)
 
 ## v1.0.0 - 2022-01-26
 ### Initial Release

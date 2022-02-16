@@ -43,7 +43,13 @@ const UseCaseTemplate: React.FC<UseCaseTemplateProps> = ({
         Anleitung vorlesen
       </Button>
       <Divider variant="middle" sx={{ width: "100%" }} />
-      {error !== "" && <Alert severity="error">{error}</Alert>}
+      {error !== "" && (
+        <>
+          <br />
+          <Alert severity="error">{error}</Alert>
+        </>
+      )}
+      <br />
       {children}
     </Grid>
   );
