@@ -22,18 +22,7 @@ import CustomIconButton from "../../common/CustomIconButton";
 import { UseCaseTemplateChildProps } from "../UseCaseTemplate";
 import TranscriptionResults from "./TranscriptionResults";
 import { SpeechToTextContinuous } from "./../../../hooks/speech_to_text_continuous/SpeechToTextContinuous";
-import { useDebounce, useDebouncedValue, useDidUpdate } from "rooks";
 import useTooltip from "../../../hooks/useTooltip";
-
-const autoStopRecognitionTimeout = 3 * 1000; //millis
-
-const debounce = (fn: Function, ms = 300) => {
-  let timeoutId: ReturnType<typeof setTimeout>;
-  return function (this: any, ...args: any[]) {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => fn.apply(this, args), ms);
-  };
-};
 
 interface RealtimeTranscriptionProps extends UseCaseTemplateChildProps {
   speechConfig: MySpeechConfig;
@@ -64,12 +53,6 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
   const [recognizedResults, setRecognizedResults] = useState<string[]>([]);
   const [translatedResults, setTranslatedResults] = useState<string[]>([]);
 
-  const stopRecognitionBecauseTimeoutToolTip = useTooltip(
-    `Aufnahme gestoppt, wegen Inaktivität für ${
-      autoStopRecognitionTimeout / 1000
-    } Sek`
-  );
-
   const handleStartRecognition = () => {
     speechToTextContinuous.current.startRecognition(
       recognitionLanguage,
@@ -77,7 +60,6 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
     );
     setError("");
     setIsRecognizing(true);
-    resetTimeout.current();
   };
 
   const handleStopRecognition = () => {
@@ -85,16 +67,6 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
     setError("");
     setIsRecognizing(false);
   };
-
-  const handleTimeout = () => {
-    if (!isRecognizing) return;
-    handleStopRecognition();
-    stopRecognitionBecauseTimeoutToolTip.handleOpen();
-  };
-
-  const resetTimeout = useRef(
-    debounce(handleTimeout, autoStopRecognitionTimeout)
-  );
 
   const hasResults = recognizedResults.length + translatedResults.length > 0;
 
@@ -127,7 +99,6 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
   speechToTextContinuous.current.recognizing = (recognizing, translating) => {
     setRecognizingText(recognizing);
     setTranslatingText(translating);
-    resetTimeout.current();
   };
 
   speechToTextContinuous.current.recognized = (recognized, translated) => {
@@ -142,28 +113,22 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
   const startStopRecordingButton = () => (
     <CustomIconButton
       icon={
-        <Tooltip
-          title={stopRecognitionBecauseTimeoutToolTip.text}
-          open={stopRecognitionBecauseTimeoutToolTip.open}
-          onClose={stopRecognitionBecauseTimeoutToolTip.handleClose}
+        <IconButton
+          color="primary"
+          size="large"
+          onClick={
+            isRecognizing ? handleStopRecognition : handleStartRecognition
+          }
+          disabled={isSynthesizing}
+          aria-label="Speak output"
+          style={{ marginTop: "20px" }}
         >
-          <IconButton
-            color="primary"
-            size="large"
-            onClick={
-              isRecognizing ? handleStopRecognition : handleStartRecognition
-            }
-            disabled={isSynthesizing}
-            aria-label="Speak output"
-            style={{ marginTop: "20px" }}
-          >
-            {isRecognizing ? (
-              <MicOff fontSize="large" />
-            ) : (
-              <SettingsVoice fontSize="large" />
-            )}
-          </IconButton>
-        </Tooltip>
+          {isRecognizing ? (
+            <MicOff fontSize="large" />
+          ) : (
+            <SettingsVoice fontSize="large" />
+          )}
+        </IconButton>
       }
       text={isRecognizing ? "Aufnahme stoppen" : "Aufnahme starten"}
     />

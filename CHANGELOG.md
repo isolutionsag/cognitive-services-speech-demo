@@ -12,6 +12,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Removed bug, that started recording when language was changed in Realtime Transcription. (#6)
 
+### Removed
+- Automatic timeout for realtime transcription. (#7)
+
 ## v1.0.0 - 2022-01-26
 ### Initial Release
 Try out the new Swiss Natural Language Processing Voice "Leni".
