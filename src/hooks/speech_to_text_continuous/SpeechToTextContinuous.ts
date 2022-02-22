@@ -4,7 +4,6 @@ import {
   TranslationRecognizer,
 } from "microsoft-cognitiveservices-speech-sdk";
 import MySpeechConfig from "../../models/MySpeechConfig";
-import { CreateSpeechRecognizerSingleLanguage } from "../../util/SpeechRecognizerCreator";
 import {
   SpeechServiceLocale,
   SpeechTranslationLanguage,
