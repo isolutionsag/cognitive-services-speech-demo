@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## v1.0.0 - 2022-03-02
+## v1.1.0 - 2022-03-02
 
 ### Added
 - Currently recognizing text is displayed at bottom of paragraph history in Realtime Transcription. (#6)
