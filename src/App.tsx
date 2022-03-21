@@ -210,9 +210,7 @@ function App() {
             </Alert>
           )}
           {currentPage === Page.Home && (
-            <>
-              <Home useCaseSelected={handleSelectedUseCase} />
-            </>
+            <Home useCaseSelected={handleSelectedUseCase} />
           )}
           {currentPage === Page.Settings && (
             <KeysConfigForm
