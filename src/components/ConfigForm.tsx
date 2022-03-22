@@ -6,6 +6,7 @@ import { Save } from "@mui/icons-material";
 import QnAConfig from "../models/QnAConfig";
 import TranslatorConfig from "../models/TranslatorConfig";
 import BingSearchConfig from "../models/BingSearchConfig";
+import {Link as RouterLink} from "react-router-dom";
 
 interface ConfigFormProps {
   hideConfigureScreen: () => void;
@@ -66,8 +67,15 @@ const ConfigForm: React.FC<ConfigFormProps> = ({
   const sectionBoxStyles = { border: 1, p: 3, borderRadius: "4px" };
   const textFieldStyles = { marginTop: "20px" };
   return (
-    <Grid container justifyContent="center">
-      <Grid item style={{ maxWidth: "500px" }}>
+    <Grid
+        container
+        justifyContent="start"
+        alignItems="start"
+        direction="row">
+      <Grid item xs={3} lg={2} display="flex" sx={{padding: '1rem'}} >
+        <Button component={RouterLink} to="/">Zurück</Button>
+      </Grid>
+      <Grid item xs={6} lg={8} >
         <h1>Schlüssel konfigurieren</h1>
         <Box sx={{ textAlign: "left" }}>
           <h3>Speech service</h3>
@@ -140,6 +148,8 @@ const ConfigForm: React.FC<ConfigFormProps> = ({
           </Button>
         </div>
       </Grid>
+
+      <Grid item xs={3} lg={2} />
     </Grid>
   );
 };

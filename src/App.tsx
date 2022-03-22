@@ -41,7 +41,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import useTextToSpeech from "./hooks/useTextToSpeech";
 import {Voice} from "./util/TextToSpechVoices";
-import {Routes, Route, Link} from "react-router-dom";
+import {Routes, Route, Link as RouterLink} from "react-router-dom";
 
 
 enum Page {
@@ -162,7 +162,8 @@ const App = () => {
                                 <Button
                                     variant="contained"
                                     startIcon={<VpnKey/>}
-                                    onClick={() => setCurrentPage(Page.Settings)}
+                                    component={RouterLink}
+                                    to="settings"
                                 >
                                     Schlüssel konfigurieren
                                 </Button>
@@ -207,7 +208,6 @@ const App = () => {
                             One or more config keys are not entered yet
                         </Alert>
                     )}
-
                     <Routes>
                         <Route path="" element={<Home/>}/>
                         <Route path="fourlangtoswiss" element={
