@@ -9,7 +9,6 @@ import BingSearchConfig from "../models/BingSearchConfig";
 import {Link as RouterLink} from "react-router-dom";
 
 interface ConfigFormProps {
-  hideConfigureScreen: () => void;
   mySpeechConfig: MySpeechConfig;
   qnaConfig: QnAConfig;
   translatorConfig: TranslatorConfig;

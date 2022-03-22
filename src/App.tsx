@@ -25,14 +25,13 @@ import {
 import TranslatorConfig from "./models/TranslatorConfig";
 import BingSearchConfig from "./models/BingSearchConfig";
 import {UseCaseModels} from "./util/UseCase";
-import GravityItemsArea from "./components/common/GravityItemsArea";
 import UseCaseTemplate from "./components/usecases/UseCaseTemplate";
 import FourLangToSwissTranslation
     from "./components/usecases/four_lang_to_swiss_translation/FourLangToSwissTranslation";
 import ChatWithBot from "./components/usecases/chat_with_bot/ChatWithBot";
 import RealtimeTranscription from "./components/usecases/realtime_transcription/RealtimeTranscription";
 import NewsReader from "./components/usecases/news_reader/NewsReader";
-import {ArrowBack, VpnKey} from "@mui/icons-material";
+import {VpnKey} from "@mui/icons-material";
 import {ThemeProvider, createTheme} from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Container from "@mui/material/Container";
@@ -42,13 +41,6 @@ import Box from "@mui/material/Box";
 import useTextToSpeech from "./hooks/useTextToSpeech";
 import {Voice} from "./util/TextToSpechVoices";
 import {Routes, Route, Link as RouterLink} from "react-router-dom";
-
-
-enum Page {
-    Home,
-    Settings,
-    UseCase,
-}
 
 const App = () => {
     // TODO: Fix this
@@ -99,19 +91,9 @@ const App = () => {
         saveBingSearchConfig(bingSearchConfig);
 
         loadConfigs();
-
-        handleBackClick();
     };
 
     const [useCaseError, setUseCaseError] = useState("");
-
-    const [currentPage, setCurrentPage] = useState(Page.Home);
-    const [prevPage, setPrevPage] = useState(Page.Home);
-
-    const handleBackClick = () => {
-        setCurrentPage(prevPage);
-    };
-
     const theme = createTheme({
         palette: {
             primary: {
@@ -174,19 +156,7 @@ const App = () => {
                         margin: "20px",
                     }}
                 >
-                    {currentPage !== Page.Home && (
-                        <GravityItemsArea>
-                            <Button
-                                onClick={handleBackClick}
-                                variant="outlined"
-                                color="secondary"
-                                startIcon={<ArrowBack/>}
-                            >
-                                Home
-                            </Button>
-                        </GravityItemsArea>
-                    )}
-                    {!validConfig && currentPage !== Page.Settings && (
+                    {!validConfig && (
                         <Alert
                             style={{marginTop: "20px"}}
                             severity="warning"
@@ -194,7 +164,8 @@ const App = () => {
                                 <Button
                                     color="inherit"
                                     size="small"
-                                    onClick={() => setCurrentPage(Page.Settings)}
+                                    component={RouterLink}
+                                    to="settings"
                                 >
                                     Schlüssel konfigurieren
                                 </Button>
@@ -248,7 +219,6 @@ const App = () => {
                                 />
                             </UseCaseTemplate>}/>
                         <Route path="settings" element={<KeysConfigForm
-                            hideConfigureScreen={handleBackClick}
                             mySpeechConfig={speechConfig}
                             qnaConfig={qnaConfig}
                             translatorConfig={translatorConfig}
