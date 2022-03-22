@@ -24,7 +24,7 @@ import {
 } from "./repositories/BingSearchConfigRepository";
 import TranslatorConfig from "./models/TranslatorConfig";
 import BingSearchConfig from "./models/BingSearchConfig";
-import UseCase, {UseCaseModels} from "./util/UseCase";
+import {UseCaseModels} from "./util/UseCase";
 import GravityItemsArea from "./components/common/GravityItemsArea";
 import UseCaseTemplate from "./components/usecases/UseCaseTemplate";
 import FourLangToSwissTranslation
@@ -98,7 +98,7 @@ const App = () => {
         saveTranslatorConfig(translatorConfig);
         saveBingSearchConfig(bingSearchConfig);
 
-        loadConfigs(); //overrite any empty fields from form with Default values
+        loadConfigs();
 
         handleBackClick();
     };
@@ -107,11 +107,6 @@ const App = () => {
 
     const [currentPage, setCurrentPage] = useState(Page.Home);
     const [prevPage, setPrevPage] = useState(Page.Home);
-    const updatePage = (page: Page) => {
-        setPrevPage(currentPage);
-        setCurrentPage(page);
-        setUseCaseError("");
-    };
 
     const handleBackClick = () => {
         setCurrentPage(prevPage);
@@ -210,7 +205,7 @@ const App = () => {
                     )}
                     <Routes>
                         <Route path="" element={<Home/>}/>
-                        <Route path="fourlangtoswiss" element={
+                        <Route path="translate" element={
                             <UseCaseTemplate model={UseCaseModels.fourLangToSwissTranslation} error={useCaseError}
                                              synthesizeSpeech={synthesizeSpeech} isSynthesizing={isSynthesizing}>
                                 <FourLangToSwissTranslation
@@ -221,7 +216,7 @@ const App = () => {
                                     isSynthesizing={isSynthesizing}
                                 />
                             </UseCaseTemplate>}/>
-                        <Route path="chatwithbot" element={
+                        <Route path="chat" element={
                             <UseCaseTemplate model={UseCaseModels.botChat} error={useCaseError}
                                              synthesizeSpeech={synthesizeSpeech} isSynthesizing={isSynthesizing}>
                                 <ChatWithBot
@@ -233,7 +228,7 @@ const App = () => {
                                     setError={setUseCaseError}
                                 />
                             </UseCaseTemplate>}/>
-                        <Route path="realtimetranscription" element={
+                        <Route path="transcription" element={
                             <UseCaseTemplate model={UseCaseModels.realtimeTranscription} error={useCaseError}
                                              synthesizeSpeech={synthesizeSpeech} isSynthesizing={isSynthesizing}>
                                 <RealtimeTranscription

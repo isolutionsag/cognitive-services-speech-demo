@@ -41,7 +41,7 @@ const Home: React.FC<HomeProps> = () => {
             imageAlt="translate symbol with swiss flag"
             title="Übersetzung ins Schweizerdeutsche"
             details="Sprich mit mir Englisch, Französisch, Italienisch oder Spanisch und ich übersetze es ins Schweizerdeutsche.​"
-            onSelected={() => navigate("/fourlangtoswiss")}
+            onSelected={() => navigate("/translate")}
             useCase={UseCase.FourLangToSwissTranslation}
           />
         </Grid>
@@ -51,7 +51,7 @@ const Home: React.FC<HomeProps> = () => {
             imageAlt="Bot icon with several language symbols"
             title="Mehrsprachiger Chat"
             details="Stelle mir Fragen und ich beantworte Sie dir auf Schweizerdeutsch."
-            onSelected={() => navigate("/chatwithbot")}
+            onSelected={() => navigate("/chat")}
             useCase={UseCase.BotChat}
           />
         </Grid>
@@ -61,7 +61,7 @@ const Home: React.FC<HomeProps> = () => {
             imageAlt="Recycling icon with several language symbols"
             title="Diktiergerät mit Übersetzung"
             details="Diktiere auf Schweizerdeutsch und ich übersetze direkt."
-            onSelected={() => navigate("/realtimetranscription")}
+            onSelected={() => navigate("/transcription")}
             useCase={UseCase.RealtimeTranscription}
           />
         </Grid>
