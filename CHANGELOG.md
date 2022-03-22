@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+- Migrate from custom routing to react-router (#12)
+
 ## v1.2.0 - 2022-03-04
 
 ### Added
