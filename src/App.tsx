@@ -117,12 +117,6 @@ const App = () => {
         setCurrentPage(prevPage);
     };
 
-    const [selectedUseCase, setSelectedUseCase] = useState(UseCase.BotChat);
-    const handleSelectedUseCase = (useCase: UseCase) => {
-        updatePage(Page.UseCase);
-        setSelectedUseCase(useCase);
-    };
-
     const theme = createTheme({
         palette: {
             primary: {
@@ -215,37 +209,49 @@ const App = () => {
                     )}
 
                     <Routes>
-                        <Route path="" element={<Home useCaseSelected={handleSelectedUseCase}/>}/>
+                        <Route path="" element={<Home/>}/>
                         <Route path="fourlangtoswiss" element={
-                            <FourLangToSwissTranslation
-                                mySpeechConfig={speechConfig}
-                                translatorConfig={translatorConfig}
-                                setError={setUseCaseError}
-                                synthesizeSpeech={synthesizeSpeech}
-                                isSynthesizing={isSynthesizing}
-                            />}/>
+                            <UseCaseTemplate model={UseCaseModels.fourLangToSwissTranslation} error={useCaseError}
+                                             synthesizeSpeech={synthesizeSpeech} isSynthesizing={isSynthesizing}>
+                                <FourLangToSwissTranslation
+                                    mySpeechConfig={speechConfig}
+                                    translatorConfig={translatorConfig}
+                                    setError={setUseCaseError}
+                                    synthesizeSpeech={synthesizeSpeech}
+                                    isSynthesizing={isSynthesizing}
+                                />
+                            </UseCaseTemplate>}/>
                         <Route path="chatwithbot" element={
-                            <ChatWithBot
-                                mySpeechConfig={speechConfig}
-                                qnaConfig={qnaConfig}
-                                translatorConfig={translatorConfig}
-                                synthesizeSpeech={synthesizeSpeech}
-                                isSynthesizing={isSynthesizing}
-                                setError={setUseCaseError}
-                            />}/>
+                            <UseCaseTemplate model={UseCaseModels.botChat} error={useCaseError}
+                                             synthesizeSpeech={synthesizeSpeech} isSynthesizing={isSynthesizing}>
+                                <ChatWithBot
+                                    mySpeechConfig={speechConfig}
+                                    qnaConfig={qnaConfig}
+                                    translatorConfig={translatorConfig}
+                                    synthesizeSpeech={synthesizeSpeech}
+                                    isSynthesizing={isSynthesizing}
+                                    setError={setUseCaseError}
+                                />
+                            </UseCaseTemplate>}/>
                         <Route path="realtimetranscription" element={
-                            <RealtimeTranscription
-                                speechConfig={speechConfig}
-                                synthesizeSpeech={synthesizeSpeech}
-                                isSynthesizing={isSynthesizing}
-                                setError={setUseCaseError}
-                            />}/>
+                            <UseCaseTemplate model={UseCaseModels.realtimeTranscription} error={useCaseError}
+                                             synthesizeSpeech={synthesizeSpeech} isSynthesizing={isSynthesizing}>
+                                <RealtimeTranscription
+                                    speechConfig={speechConfig}
+                                    synthesizeSpeech={synthesizeSpeech}
+                                    isSynthesizing={isSynthesizing}
+                                    setError={setUseCaseError}
+                                />
+                            </UseCaseTemplate>}/>
                         <Route path="newsreader" element={
-                            <NewsReader
-                                synthesizeSpeech={synthesizeSpeech}
-                                isSynthesizing={isSynthesizing}
-                                setError={setUseCaseError}
-                            />}/>
+                            <UseCaseTemplate model={UseCaseModels.newsReader} error={useCaseError}
+                                             synthesizeSpeech={synthesizeSpeech} isSynthesizing={isSynthesizing}>
+                                <NewsReader
+                                    synthesizeSpeech={synthesizeSpeech}
+                                    isSynthesizing={isSynthesizing}
+                                    setError={setUseCaseError}
+                                />
+                            </UseCaseTemplate>}/>
                         <Route path="settings" element={<KeysConfigForm
                             hideConfigureScreen={handleBackClick}
                             mySpeechConfig={speechConfig}

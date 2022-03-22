@@ -1,14 +1,17 @@
 import { Grid, Typography } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 
 import UseCaseCard from "./UseCaseCard";
 import UseCase from "../util/UseCase";
 
 interface HomeProps {
-  useCaseSelected: (useCase: UseCase) => void;
 }
 
-const Home: React.FC<HomeProps> = ({ useCaseSelected }) => {
+const Home: React.FC<HomeProps> = () => {
+  let navigate = useNavigate();
+
   return (
     <div>
       <Typography variant="h2">Grüezi!</Typography>
@@ -38,8 +41,8 @@ const Home: React.FC<HomeProps> = ({ useCaseSelected }) => {
             imageAlt="translate symbol with swiss flag"
             title="Übersetzung ins Schweizerdeutsche"
             details="Sprich mit mir Englisch, Französisch, Italienisch oder Spanisch und ich übersetze es ins Schweizerdeutsche.​"
+            onSelected={() => navigate("/fourlangtoswiss")}
             useCase={UseCase.FourLangToSwissTranslation}
-            onSelected={useCaseSelected}
           />
         </Grid>
         <Grid item xs={12} md={6}>
@@ -48,8 +51,8 @@ const Home: React.FC<HomeProps> = ({ useCaseSelected }) => {
             imageAlt="Bot icon with several language symbols"
             title="Mehrsprachiger Chat"
             details="Stelle mir Fragen und ich beantworte Sie dir auf Schweizerdeutsch."
+            onSelected={() => navigate("/chatwithbot")}
             useCase={UseCase.BotChat}
-            onSelected={useCaseSelected}
           />
         </Grid>
         <Grid item xs={12} md={6}>
@@ -58,8 +61,8 @@ const Home: React.FC<HomeProps> = ({ useCaseSelected }) => {
             imageAlt="Recycling icon with several language symbols"
             title="Diktiergerät mit Übersetzung"
             details="Diktiere auf Schweizerdeutsch und ich übersetze direkt."
+            onSelected={() => navigate("/realtimetranscription")}
             useCase={UseCase.RealtimeTranscription}
-            onSelected={useCaseSelected}
           />
         </Grid>
         <Grid item xs={12} md={6}>
@@ -68,8 +71,8 @@ const Home: React.FC<HomeProps> = ({ useCaseSelected }) => {
             imageAlt="News Icon with 3 lines symbolyzing summary"
             title="News vorlesen lassen​"
             details="Suche die aktuellsten News und ich lese sie dir bei Bedarf vor.​"
+            onSelected={() => navigate("/newsreader")}
             useCase={UseCase.NewsReader}
-            onSelected={useCaseSelected}
           />
         </Grid>
       </Grid>
