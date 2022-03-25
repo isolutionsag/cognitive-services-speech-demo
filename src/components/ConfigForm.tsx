@@ -35,6 +35,7 @@ const ConfigForm: React.FC<ConfigFormProps> = ({
   const useInputTranslatorSubscriptionKey = useInput(
     translatorConfig.subscriptionKey
   );
+  const useInputTranslatorRegion = useInput(translatorConfig.region);
 
   const useInputBingSearchSubscriptionKey = useInput(
     bingSearchConfig.subscriptionKey
@@ -43,7 +44,7 @@ const ConfigForm: React.FC<ConfigFormProps> = ({
   const saveKeys = () => {
     const speechServiceConfiguration: SpeechServiceConfiguration = { resourceKey: useInputResourceKey.value, region: useInputRegion.value };
     const qnaServiceConfiguration: QnAConfig = { knowledgeBaseId: useInputKbId.value, authEndpointKey: useInputAuthEndpointKey.value, qnaMakerServiceName: useInputBotName.value };
-    const translatorServiceConfiguration: TranslatorConfig = { subscriptionKey: useInputTranslatorSubscriptionKey.value };
+    const translatorServiceConfiguration: TranslatorConfig = { subscriptionKey: useInputTranslatorSubscriptionKey.value, region: useInputTranslatorRegion.value };
     const bingSearchServiceConfiguration: BingSearchConfig = { subscriptionKey: useInputBingSearchSubscriptionKey.value };
     onConfigurationChanged({ speechServiceConfiguration, qnaServiceConfiguration, translatorServiceConfiguration, bingSearchServiceConfiguration })
     navigate("/");
@@ -109,6 +110,13 @@ const ConfigForm: React.FC<ConfigFormProps> = ({
               label="Abonnementschlüssel"
               value={useInputTranslatorSubscriptionKey.value}
               onChange={useInputTranslatorSubscriptionKey.handleChange}
+            />
+            <TextField
+              style={textFieldStyles}
+              fullWidth
+              label="Region"
+              value={useInputTranslatorRegion.value}
+              onChange={useInputTranslatorRegion.handleChange}
             />
           </Box>
           <h3>Bing Search</h3>
