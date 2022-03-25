@@ -1,10 +1,10 @@
-import {Alert, Button, Paper} from "@mui/material";
-import React, {useState} from "react";
+import { Alert, Button, Paper } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import KeysConfigForm from "./components/ConfigForm";
 import Home from "./components/Home";
-import {areAllConfigsValid} from "./util/ConfigValidator";
-import MySpeechConfig from "./models/MySpeechConfig";
+import { areAllConfigsValid } from "./util/ConfigValidator";
+import SpeechServiceConfiguration from "./models/SpeechServiceConfiguration";
 import QnAConfig from "./models/QnAConfig";
 import {
     loadSpeechConfig,
@@ -24,74 +24,66 @@ import {
 } from "./repositories/BingSearchConfigRepository";
 import TranslatorConfig from "./models/TranslatorConfig";
 import BingSearchConfig from "./models/BingSearchConfig";
-import {UseCaseModels} from "./util/UseCase";
+import { UseCaseModels } from "./util/UseCase";
 import UseCaseTemplate from "./components/usecases/UseCaseTemplate";
 import FourLangToSwissTranslation
     from "./components/usecases/four_lang_to_swiss_translation/FourLangToSwissTranslation";
 import ChatWithBot from "./components/usecases/chat_with_bot/ChatWithBot";
 import RealtimeTranscription from "./components/usecases/realtime_transcription/RealtimeTranscription";
 import NewsReader from "./components/usecases/news_reader/NewsReader";
-import {VpnKey} from "@mui/icons-material";
-import {ThemeProvider, createTheme} from "@mui/material/styles";
+import { VpnKey } from "@mui/icons-material";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Container from "@mui/material/Container";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import useTextToSpeech from "./hooks/useTextToSpeech";
-import {Voice} from "./util/TextToSpechVoices";
-import {Routes, Route, Link as RouterLink} from "react-router-dom";
+import { Voice } from "./util/TextToSpechVoices";
+import { Routes, Route, Link as RouterLink } from "react-router-dom";
+
+export interface ICognitiveServicesConfiguration {
+    speechServiceConfiguration: SpeechServiceConfiguration;
+    qnaServiceConfiguration: QnAConfig;
+    translatorServiceConfiguration: TranslatorConfig;
+    bingSearchServiceConfiguration: BingSearchConfig;
+}
 
 const App = () => {
-    // TODO: Fix this
-    let speechConfig = loadSpeechConfig();
-    let qnaConfig = loadQnAConfig();
-    let translatorConfig = loadTranslatorConfig();
-    let bingSearchConfig = loadBingSearchConfig();
-
-    const [validConfig, setValidConfig] = useState(
+    const [cognitiveServicesConfiguration, setCognitiveServicesConfiguration] = useState<ICognitiveServicesConfiguration>({
+        speechServiceConfiguration: loadSpeechConfig(),
+        qnaServiceConfiguration: loadQnAConfig(),
+        translatorServiceConfiguration: loadTranslatorConfig(),
+        bingSearchServiceConfiguration: loadBingSearchConfig()
+    });
+    const [validConfig, setValidConfig] = useState<boolean>(
         areAllConfigsValid(
-            speechConfig,
-            qnaConfig,
-            translatorConfig,
-            bingSearchConfig
+            cognitiveServicesConfiguration.speechServiceConfiguration,
+            cognitiveServicesConfiguration.qnaServiceConfiguration,
+            cognitiveServicesConfiguration.translatorServiceConfiguration,
+            cognitiveServicesConfiguration.bingSearchServiceConfiguration
         )
     );
-
-    function loadConfigs() {
-        speechConfig = loadSpeechConfig();
-        qnaConfig = loadQnAConfig();
-        translatorConfig = loadTranslatorConfig();
-        bingSearchConfig = loadBingSearchConfig();
+    useEffect(() => {
         setValidConfig(
             areAllConfigsValid(
-                speechConfig,
-                qnaConfig,
-                translatorConfig,
-                bingSearchConfig
+                cognitiveServicesConfiguration.speechServiceConfiguration,
+                cognitiveServicesConfiguration.qnaServiceConfiguration,
+                cognitiveServicesConfiguration.translatorServiceConfiguration,
+                cognitiveServicesConfiguration.bingSearchServiceConfiguration
             )
         );
-    }
+        saveSpeechConfig(cognitiveServicesConfiguration.speechServiceConfiguration);
+        saveQnAConfig(cognitiveServicesConfiguration.qnaServiceConfiguration);
+        saveTranslatorConfig(cognitiveServicesConfiguration.translatorServiceConfiguration);
+        saveBingSearchConfig(cognitiveServicesConfiguration.bingSearchServiceConfiguration);
+    }, [cognitiveServicesConfiguration]);
 
-    const {synthesizeSpeech, isSynthesizing} = useTextToSpeech(
+    const { synthesizeSpeech, isSynthesizing } = useTextToSpeech(
         "",
         Voice.de_CH_LeniNeural,
-        speechConfig
+        cognitiveServicesConfiguration.speechServiceConfiguration
     );
-
-    const handleChangeKeys = (
-        mySpeechConfig: MySpeechConfig,
-        qnaConfig: QnAConfig,
-        translatorConfig: TranslatorConfig,
-        bingSearchConfig: BingSearchConfig
-    ) => {
-        saveSpeechConfig(mySpeechConfig);
-        saveQnAConfig(qnaConfig);
-        saveTranslatorConfig(translatorConfig);
-        saveBingSearchConfig(bingSearchConfig);
-
-        loadConfigs();
-    };
 
     const [useCaseError, setUseCaseError] = useState("");
     const theme = createTheme({
@@ -114,7 +106,7 @@ const App = () => {
                 <AppBar position="static">
                     <Container maxWidth="xl">
                         <Toolbar disableGutters>
-                            <Box sx={{flexGrow: 1, display: {xs: "flex", md: "flex"}}}>
+                            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "flex" } }}>
                                 <img
                                     src="images/isolutions.svg"
                                     className="logo"
@@ -138,7 +130,7 @@ const App = () => {
                             <Box>
                                 <Button
                                     variant="contained"
-                                    startIcon={<VpnKey/>}
+                                    startIcon={<VpnKey />}
                                     component={RouterLink}
                                     to="settings"
                                 >
@@ -158,7 +150,7 @@ const App = () => {
                 >
                     {!validConfig && (
                         <Alert
-                            style={{marginTop: "20px"}}
+                            style={{ marginTop: "20px" }}
                             severity="warning"
                             action={
                                 <Button
@@ -175,62 +167,62 @@ const App = () => {
                         </Alert>
                     )}
                     <Routes>
-                        <Route path="" element={<Home/>}/>
+                        <Route path="" element={<Home />} />
                         <Route path="translate" element={
                             <UseCaseTemplate model={UseCaseModels.fourLangToSwissTranslation} error={useCaseError}
-                                             synthesizeSpeech={synthesizeSpeech} isSynthesizing={isSynthesizing}>
+                                synthesizeSpeech={synthesizeSpeech} isSynthesizing={isSynthesizing}>
                                 <FourLangToSwissTranslation
-                                    mySpeechConfig={speechConfig}
-                                    translatorConfig={translatorConfig}
+                                    mySpeechConfig={cognitiveServicesConfiguration.speechServiceConfiguration}
+                                    translatorConfig={cognitiveServicesConfiguration.translatorServiceConfiguration}
                                     setError={setUseCaseError}
                                     synthesizeSpeech={synthesizeSpeech}
                                     isSynthesizing={isSynthesizing}
                                 />
-                            </UseCaseTemplate>}/>
+                            </UseCaseTemplate>} />
                         <Route path="chat" element={
                             <UseCaseTemplate model={UseCaseModels.botChat} error={useCaseError}
-                                             synthesizeSpeech={synthesizeSpeech} isSynthesizing={isSynthesizing}>
+                                synthesizeSpeech={synthesizeSpeech} isSynthesizing={isSynthesizing}>
                                 <ChatWithBot
-                                    mySpeechConfig={speechConfig}
-                                    qnaConfig={qnaConfig}
-                                    translatorConfig={translatorConfig}
+                                    mySpeechConfig={cognitiveServicesConfiguration.speechServiceConfiguration}
+                                    qnaConfig={cognitiveServicesConfiguration.qnaServiceConfiguration}
+                                    translatorConfig={cognitiveServicesConfiguration.translatorServiceConfiguration}
                                     synthesizeSpeech={synthesizeSpeech}
                                     isSynthesizing={isSynthesizing}
                                     setError={setUseCaseError}
                                 />
-                            </UseCaseTemplate>}/>
+                            </UseCaseTemplate>} />
                         <Route path="transcription" element={
                             <UseCaseTemplate model={UseCaseModels.realtimeTranscription} error={useCaseError}
-                                             synthesizeSpeech={synthesizeSpeech} isSynthesizing={isSynthesizing}>
+                                synthesizeSpeech={synthesizeSpeech} isSynthesizing={isSynthesizing}>
                                 <RealtimeTranscription
-                                    speechConfig={speechConfig}
+                                    speechConfig={cognitiveServicesConfiguration.speechServiceConfiguration}
                                     synthesizeSpeech={synthesizeSpeech}
                                     isSynthesizing={isSynthesizing}
                                     setError={setUseCaseError}
                                 />
-                            </UseCaseTemplate>}/>
+                            </UseCaseTemplate>} />
                         <Route path="newsreader" element={
                             <UseCaseTemplate model={UseCaseModels.newsReader} error={useCaseError}
-                                             synthesizeSpeech={synthesizeSpeech} isSynthesizing={isSynthesizing}>
+                                synthesizeSpeech={synthesizeSpeech} isSynthesizing={isSynthesizing}>
                                 <NewsReader
                                     synthesizeSpeech={synthesizeSpeech}
                                     isSynthesizing={isSynthesizing}
                                     setError={setUseCaseError}
                                 />
-                            </UseCaseTemplate>}/>
+                            </UseCaseTemplate>} />
                         <Route path="settings" element={<KeysConfigForm
-                            mySpeechConfig={speechConfig}
-                            qnaConfig={qnaConfig}
-                            translatorConfig={translatorConfig}
-                            bingSearchConfig={bingSearchConfig}
-                            setConfigKeys={handleChangeKeys}
-                        />}/>
+                            speechServiceConfig={cognitiveServicesConfiguration.speechServiceConfiguration}
+                            qnaConfig={cognitiveServicesConfiguration.qnaServiceConfiguration}
+                            translatorConfig={cognitiveServicesConfiguration.translatorServiceConfiguration}
+                            bingSearchConfig={cognitiveServicesConfiguration.bingSearchServiceConfiguration}
+                            onConfigurationChanged={setCognitiveServicesConfiguration}
+                        />} />
                     </Routes>
                 </Paper>
-                <div className="App-footer" style={{paddingBottom: "20px"}}>
-                  <span>
-                    created by <a href="https://www.isolutions.ch" target="_blank" rel="noreferrer">isolutions AG</a>
-                  </span>
+                <div className="App-footer" style={{ paddingBottom: "20px" }}>
+                    <span>
+                        created by <a href="https://www.isolutions.ch" target="_blank" rel="noreferrer">isolutions AG</a>
+                    </span>
                 </div>
             </div>
         </ThemeProvider>

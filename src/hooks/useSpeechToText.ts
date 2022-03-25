@@ -3,7 +3,7 @@ import {
   SpeechRecognizer
 } from "microsoft-cognitiveservices-speech-sdk";
 import { useEffect, useRef, useState } from "react";
-import MySpeechConfig from "../models/MySpeechConfig";
+import SpeechServiceConfiguration from "../models/SpeechServiceConfiguration";
 import Language, { InputLanguageLocale } from "../util/Language";
 import {
   CreateSpeechRecognizer,
@@ -12,7 +12,7 @@ import {
 import { SpeechServiceLocale } from "../util/SupportedLanguages";
 
 export default function useSpeechToText(
-  mySpeechConfig: MySpeechConfig,
+  mySpeechConfig: SpeechServiceConfiguration,
   recognitionLanguages: Language[]
 ) {
   const [resultText, setResultText] = useState("");
