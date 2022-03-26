@@ -3,11 +3,11 @@ import {
   SpeechTranslationConfig,
   TranslationRecognizer,
 } from "microsoft-cognitiveservices-speech-sdk";
-import MySpeechConfig, { isValidSpeechConfig } from "../models/MySpeechConfig";
+import SpeechServiceConfiguration, { isValidSpeechConfig } from "../models/SpeechServiceConfiguration";
 import { SpeechServiceLocale, SpeechTranslationLanguage } from "./SupportedLanguages";
 
 export function CreateTranslator(
-  speechConfig: MySpeechConfig,
+  speechConfig: SpeechServiceConfiguration,
   sourceLanguage: SpeechServiceLocale,
   targetLanguage: SpeechTranslationLanguage
 ): TranslationRecognizer {

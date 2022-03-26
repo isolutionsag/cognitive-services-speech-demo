@@ -2,15 +2,15 @@ import {
   AudioConfig,
   SpeechSynthesizer,
 } from "microsoft-cognitiveservices-speech-sdk";
-import MySpeechConfig, {
+import SpeechServiceConfiguration, {
   getSpeechConfigFromMySpeechConfig,
   isValidSpeechConfig,
-} from "../models/MySpeechConfig";
+} from "../models/SpeechServiceConfiguration";
 import { SpeechServiceLocale } from "./SupportedLanguages";
 import { Voice } from "./TextToSpechVoices";
 
 export function CreateSpeechSynthesizer(
-  speechConfig: MySpeechConfig,
+  speechConfig: SpeechServiceConfiguration,
   speechSynthesisLanguage: SpeechServiceLocale,
   voice: Voice
 ): SpeechSynthesizer {

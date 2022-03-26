@@ -4,9 +4,9 @@ import React, { useState } from "react";
 import { useDidUpdate } from "rooks";
 import { makeTranslationRequest } from "../../../api/TranslationApi";
 import useSpeechToText from "../../../hooks/useSpeechToText";
-import MySpeechConfig, {
+import SpeechServiceConfiguration, {
   isValidSpeechConfig,
-} from "../../../models/MySpeechConfig";
+} from "../../../models/SpeechServiceConfiguration";
 import TranslatorConfig from "../../../models/TranslatorConfig";
 import Language from "../../../util/Language";
 import { Voice } from "../../../util/TextToSpechVoices";
@@ -22,7 +22,7 @@ const recognitionLanguages = [
 ];
 
 interface FourLangToSwissTranslationProps extends UseCaseTemplateChildProps {
-  mySpeechConfig: MySpeechConfig;
+  mySpeechConfig: SpeechServiceConfiguration;
   translatorConfig: TranslatorConfig;
 }
 

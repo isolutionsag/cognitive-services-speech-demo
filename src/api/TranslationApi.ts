@@ -4,10 +4,6 @@ import TranslatorConfig from "../models/TranslatorConfig";
 
 const endpoint = "https://api.cognitive.microsofttranslator.com";
 
-// Add your location, also known as region. The default is global
-// This is required if using a Cognitive Services resource.
-const region = "global";
-
 export interface TranslationResponse {
   error?: string;
   translations?: { text: string; to: string }[];
@@ -39,7 +35,7 @@ export async function makeTranslationRequest(
     const headers = {
       "Content-Type": "application/json",
       "Ocp-Apim-Subscription-Key": config.subscriptionKey,
-      "Ocp-Apim-Subscription-Region": region,
+      "Ocp-Apim-Subscription-Region": config.region,
       "X-ClientTraceId": uuidv4().toString(),
     };
     requestOptions.headers = headers;

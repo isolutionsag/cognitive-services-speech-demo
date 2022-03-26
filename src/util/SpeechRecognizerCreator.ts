@@ -3,15 +3,15 @@ import {
   SpeechRecognizer,
   AutoDetectSourceLanguageConfig,
 } from "microsoft-cognitiveservices-speech-sdk";
-import MySpeechConfig, {
+import SpeechServiceConfiguration, {
   getSpeechConfigFromMySpeechConfig,
   isValidSpeechConfig,
-} from "../models/MySpeechConfig";
+} from "../models/SpeechServiceConfiguration";
 import Language, { InputLanguageLocale } from "./Language";
 import { SpeechServiceLocale } from "./SupportedLanguages";
 
 export function CreateSpeechRecognizer(
-  mySpeechConfig: MySpeechConfig,
+  mySpeechConfig: SpeechServiceConfiguration,
   recognitionLanguages: Language[]
 ): SpeechRecognizer {
   if (
@@ -39,7 +39,7 @@ export function CreateSpeechRecognizer(
 }
 
 export function CreateSpeechRecognizerSingleLanguage(
-  mySpeechConfig: MySpeechConfig,
+  mySpeechConfig: SpeechServiceConfiguration,
   recognitionLanguage: SpeechServiceLocale
 ): SpeechRecognizer {
   if (

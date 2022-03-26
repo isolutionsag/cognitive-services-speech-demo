@@ -35,12 +35,7 @@ const UseCaseCard: React.FC<UseCaseCardProps> = ({
           </Typography>
           <Typography
             variant="body1"
-            color={
-              useCase === UseCase.NewsReader ||
-              useCase === UseCase.RealtimeTranscription
-                ? "white"
-                : "lightgrey"
-            }
+            color="white"
           >
             {details}
           </Typography>
