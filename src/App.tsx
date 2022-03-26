@@ -1,37 +1,37 @@
 import { Alert, Button, Paper } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import KeysConfigForm from "./components/ConfigForm";
 import Home from "./components/Home";
 import { areAllConfigsValid } from "./util/ConfigValidator";
-import MySpeechConfig from "./models/MySpeechConfig";
+import SpeechServiceConfiguration from "./models/SpeechServiceConfiguration";
 import QnAConfig from "./models/QnAConfig";
 import {
-  loadSpeechConfig,
-  saveSpeechConfig,
+    loadSpeechConfig,
+    saveSpeechConfig,
 } from "./repositories/SpeechConfigRepository";
 import {
-  loadQnAConfig,
-  saveQnAConfig,
+    loadQnAConfig,
+    saveQnAConfig,
 } from "./repositories/QnAConfigRepository";
 import {
-  loadTranslatorConfig,
-  saveTranslatorConfig,
+    loadTranslatorConfig,
+    saveTranslatorConfig,
 } from "./repositories/TranslationConfigRepository";
 import {
-  loadBingSearchConfig,
-  saveBingSearchConfig,
+    loadBingSearchConfig,
+    saveBingSearchConfig,
 } from "./repositories/BingSearchConfigRepository";
 import TranslatorConfig from "./models/TranslatorConfig";
 import BingSearchConfig from "./models/BingSearchConfig";
-import UseCase, { UseCaseModels } from "./util/UseCase";
-import GravityItemsArea from "./components/common/GravityItemsArea";
+import { UseCaseModels } from "./util/UseCase";
 import UseCaseTemplate from "./components/usecases/UseCaseTemplate";
-import FourLangToSwissTranslation from "./components/usecases/four_lang_to_swiss_translation/FourLangToSwissTranslation";
+import FourLangToSwissTranslation
+    from "./components/usecases/four_lang_to_swiss_translation/FourLangToSwissTranslation";
 import ChatWithBot from "./components/usecases/chat_with_bot/ChatWithBot";
 import RealtimeTranscription from "./components/usecases/realtime_transcription/RealtimeTranscription";
 import NewsReader from "./components/usecases/news_reader/NewsReader";
-import { ArrowBack, VpnKey } from "@mui/icons-material";
+import { VpnKey } from "@mui/icons-material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Container from "@mui/material/Container";
@@ -40,287 +40,193 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import useTextToSpeech from "./hooks/useTextToSpeech";
 import { Voice } from "./util/TextToSpechVoices";
+import { Routes, Route, Link as RouterLink } from "react-router-dom";
 
-enum Page {
-  Home,
-  Settings,
-  UseCase,
+export interface ICognitiveServicesConfiguration {
+    speechServiceConfiguration: SpeechServiceConfiguration;
+    qnaServiceConfiguration: QnAConfig;
+    translatorServiceConfiguration: TranslatorConfig;
+    bingSearchServiceConfiguration: BingSearchConfig;
 }
 
-function App() {
-  let speechConfig = loadSpeechConfig();
-  let qnaConfig = loadQnAConfig();
-  let translatorConfig = loadTranslatorConfig();
-  let bingSearchConfig = loadBingSearchConfig();
-
-  const [validConfig, setValidConfig] = useState(
-    areAllConfigsValid(
-      speechConfig,
-      qnaConfig,
-      translatorConfig,
-      bingSearchConfig
-    )
-  );
-
-  function loadConfigs() {
-    speechConfig = loadSpeechConfig();
-    qnaConfig = loadQnAConfig();
-    translatorConfig = loadTranslatorConfig();
-    bingSearchConfig = loadBingSearchConfig();
-    setValidConfig(
-      areAllConfigsValid(
-        speechConfig,
-        qnaConfig,
-        translatorConfig,
-        bingSearchConfig
-      )
+const App = () => {
+    const [cognitiveServicesConfiguration, setCognitiveServicesConfiguration] = useState<ICognitiveServicesConfiguration>({
+        speechServiceConfiguration: loadSpeechConfig(),
+        qnaServiceConfiguration: loadQnAConfig(),
+        translatorServiceConfiguration: loadTranslatorConfig(),
+        bingSearchServiceConfiguration: loadBingSearchConfig()
+    });
+    const [validConfig, setValidConfig] = useState<boolean>(
+        areAllConfigsValid(
+            cognitiveServicesConfiguration.speechServiceConfiguration,
+            cognitiveServicesConfiguration.qnaServiceConfiguration,
+            cognitiveServicesConfiguration.translatorServiceConfiguration,
+            cognitiveServicesConfiguration.bingSearchServiceConfiguration
+        )
     );
-  }
+    useEffect(() => {
+        setValidConfig(
+            areAllConfigsValid(
+                cognitiveServicesConfiguration.speechServiceConfiguration,
+                cognitiveServicesConfiguration.qnaServiceConfiguration,
+                cognitiveServicesConfiguration.translatorServiceConfiguration,
+                cognitiveServicesConfiguration.bingSearchServiceConfiguration
+            )
+        );
+        saveSpeechConfig(cognitiveServicesConfiguration.speechServiceConfiguration);
+        saveQnAConfig(cognitiveServicesConfiguration.qnaServiceConfiguration);
+        saveTranslatorConfig(cognitiveServicesConfiguration.translatorServiceConfiguration);
+        saveBingSearchConfig(cognitiveServicesConfiguration.bingSearchServiceConfiguration);
+    }, [cognitiveServicesConfiguration]);
 
-  const { synthesizeSpeech, isSynthesizing } = useTextToSpeech(
-    "",
-    Voice.de_CH_LeniNeural,
-    speechConfig
-  );
+    const { synthesizeSpeech, isSynthesizing } = useTextToSpeech(
+        "",
+        Voice.de_CH_LeniNeural,
+        cognitiveServicesConfiguration.speechServiceConfiguration
+    );
 
-  const handleChangeKeys = (
-    mySpeechConfig: MySpeechConfig,
-    qnaConfig: QnAConfig,
-    translatorConfig: TranslatorConfig,
-    bingSearchConfig: BingSearchConfig
-  ) => {
-    saveSpeechConfig(mySpeechConfig);
-    saveQnAConfig(qnaConfig);
-    saveTranslatorConfig(translatorConfig);
-    saveBingSearchConfig(bingSearchConfig);
+    const [useCaseError, setUseCaseError] = useState("");
+    const theme = createTheme({
+        palette: {
+            primary: {
+                main: "#003854",
+            },
+            secondary: {
+                main: "#E83181",
+            },
+            background: {
+                default: "#d4dce1",
+            },
+        },
+    });
 
-    loadConfigs(); //overrite any empty fields from form with Default values
+    return (
+        <ThemeProvider theme={theme}>
+            <div className="App">
+                <AppBar position="static">
+                    <Container maxWidth="xl">
+                        <Toolbar disableGutters>
+                            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "flex" } }}>
+                                <img
+                                    src="images/isolutions.svg"
+                                    className="logo"
+                                    alt="iSolutions"
+                                />
+                                <Typography
+                                    variant="h6"
+                                    noWrap
+                                    component="div"
+                                    alignSelf="center"
+                                >
+                                    Demo App mit Verwendung der Azure Speech Services mit &nbsp;
+                                    <img
+                                        src="images/switzerland.svg"
+                                        height="28px"
+                                        alt="switzerland"
+                                    />
+                                    &nbsp;Sprachenmodel
+                                </Typography>
+                            </Box>
+                            <Box>
+                                <Button
+                                    variant="contained"
+                                    startIcon={<VpnKey />}
+                                    component={RouterLink}
+                                    to="settings"
+                                >
+                                    Schlüssel konfigurieren
+                                </Button>
+                            </Box>
+                        </Toolbar>
+                    </Container>
+                </AppBar>
 
-    handleBackClick();
-  };
-
-  const [useCaseError, setUseCaseError] = useState("");
-
-  const [currentPage, setCurrentPage] = useState(Page.Home);
-  const [prevPage, setPrevPage] = useState(Page.Home);
-  const updatePage = (page: Page) => {
-    setPrevPage(currentPage);
-    setCurrentPage(page);
-    setUseCaseError("");
-  };
-
-  const handleBackClick = () => {
-    setCurrentPage(prevPage);
-  };
-
-  const [selectedUseCase, setSelectedUseCase] = useState(UseCase.BotChat);
-  const handleSelectedUseCase = (useCase: UseCase) => {
-    updatePage(Page.UseCase);
-    setSelectedUseCase(useCase);
-  };
-
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: "#003854",
-      },
-      secondary: {
-        main: "#E83181",
-      },
-      background: {
-        default: "#d4dce1",
-      },
-    },
-  });
-
-  return (
-    <ThemeProvider theme={theme}>
-      <div className="App">
-        <AppBar position="static">
-          <Container maxWidth="xl">
-            <Toolbar disableGutters>
-              <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "flex" } }}>
-                <img
-                  src="images/isolutions.svg"
-                  className="logo"
-                  alt="iSolutions"
-                />
-                <Typography
-                  variant="h6"
-                  noWrap
-                  component="div"
-                  alignSelf="center"
+                <Paper
+                    style={{
+                        minHeight: "60vh",
+                        padding: "40px",
+                        margin: "20px",
+                    }}
                 >
-                  Demo App mit Verwendung der Azure Speech Services mit &nbsp;
-                  <img
-                    src="images/switzerland.svg"
-                    height="28px"
-                    alt="switzerland"
-                  />
-                  &nbsp;Sprachenmodel
-                </Typography>
-              </Box>
-              <Box>
-                <Button
-                  variant="contained"
-                  startIcon={<VpnKey />}
-                  onClick={() => setCurrentPage(Page.Settings)}
-                >
-                  Schlüssel konfigurieren
-                </Button>
-              </Box>
-            </Toolbar>
-          </Container>
-        </AppBar>
-
-        <Paper
-          style={{
-            minHeight: "60vh",
-            padding: "40px",
-            margin: "20px",
-          }}
-        >
-          {currentPage !== Page.Home && (
-            <GravityItemsArea>
-              <Button
-                onClick={handleBackClick}
-                variant="outlined"
-                color="secondary"
-                startIcon={<ArrowBack />}
-              >
-                Home
-              </Button>
-            </GravityItemsArea>
-          )}
-          {!validConfig && currentPage !== Page.Settings && (
-            <Alert
-              style={{ marginTop: "20px" }}
-              severity="warning"
-              action={
-                <Button
-                  color="inherit"
-                  size="small"
-                  onClick={() => setCurrentPage(Page.Settings)}
-                >
-                  Schlüssel konfigurieren
-                </Button>
-              }
-            >
-              One or more config keys are not entered yet
-            </Alert>
-          )}
-          {currentPage === Page.Home && (
-            <>
-              <Home useCaseSelected={handleSelectedUseCase} />
-            </>
-          )}
-          {currentPage === Page.Settings && (
-            <KeysConfigForm
-              hideConfigureScreen={handleBackClick}
-              mySpeechConfig={speechConfig}
-              qnaConfig={qnaConfig}
-              translatorConfig={translatorConfig}
-              bingSearchConfig={bingSearchConfig}
-              setConfigKeys={handleChangeKeys}
-            />
-          )}
-          {currentPage === Page.UseCase &&
-            displayUseCase(
-              selectedUseCase,
-              useCaseError,
-              setUseCaseError,
-              synthesizeSpeech,
-              isSynthesizing
-            )}
-        </Paper>
-
-        <div className="App-footer" style={{ paddingBottom: "20px" }}>
-          <span>
-            created by <a href="https://www.isolutions.ch">isolutions AG</a>
-          </span>
-        </div>
-      </div>
-    </ThemeProvider>
-  );
-}
-
-function displayUseCase(
-  useCase: UseCase,
-  useCaseError: string,
-  setUseCaseError: React.Dispatch<React.SetStateAction<string>>,
-  synthesizeSpeech: (text?: string, voice?: Voice) => void,
-  isSynthesizing: boolean
-) {
-  const speechConfig = loadSpeechConfig();
-
-  return (
-    <UseCaseTemplate
-      model={UseCaseModels[useCase]}
-      error={useCaseError}
-      synthesizeSpeech={synthesizeSpeech}
-      isSynthesizing={isSynthesizing}
-    >
-      {getUseCaseContent(
-        useCase,
-        speechConfig,
-        setUseCaseError,
-        synthesizeSpeech,
-        isSynthesizing
-      )}
-    </UseCaseTemplate>
-  );
-}
-
-function getUseCaseContent(
-  useCase: UseCase,
-  speechConfig: MySpeechConfig,
-  setError: React.Dispatch<React.SetStateAction<string>>,
-  synthesizeSpeech: (text?: string, voice?: Voice) => void,
-  isSynthesizing: boolean
-) {
-  const qnaConfig = loadQnAConfig();
-  const translatorConfig = loadTranslatorConfig();
-
-  switch (useCase) {
-    case UseCase.FourLangToSwissTranslation:
-      return (
-        <FourLangToSwissTranslation
-          mySpeechConfig={speechConfig}
-          translatorConfig={translatorConfig}
-          setError={setError}
-          synthesizeSpeech={synthesizeSpeech}
-          isSynthesizing={isSynthesizing}
-        />
-      );
-    case UseCase.BotChat:
-      return (
-        <ChatWithBot
-          mySpeechConfig={speechConfig}
-          qnaConfig={qnaConfig}
-          translatorConfig={translatorConfig}
-          synthesizeSpeech={synthesizeSpeech}
-          isSynthesizing={isSynthesizing}
-          setError={setError}
-        />
-      );
-    case UseCase.RealtimeTranscription:
-      return (
-        <RealtimeTranscription
-          speechConfig={speechConfig}
-          synthesizeSpeech={synthesizeSpeech}
-          isSynthesizing={isSynthesizing}
-          setError={setError}
-        />
-      );
-    case UseCase.NewsReader:
-      return (
-        <NewsReader
-          synthesizeSpeech={synthesizeSpeech}
-          isSynthesizing={isSynthesizing}
-          setError={setError}
-        />
-      );
-  }
+                    {!validConfig && (
+                        <Alert
+                            style={{ marginTop: "20px" }}
+                            severity="warning"
+                            action={
+                                <Button
+                                    color="inherit"
+                                    size="small"
+                                    component={RouterLink}
+                                    to="settings"
+                                >
+                                    Schlüssel konfigurieren
+                                </Button>
+                            }
+                        >
+                            One or more config keys are not entered yet
+                        </Alert>
+                    )}
+                    <Routes>
+                        <Route path="" element={<Home />} />
+                        <Route path="translate" element={
+                            <UseCaseTemplate model={UseCaseModels.fourLangToSwissTranslation} error={useCaseError}
+                                synthesizeSpeech={synthesizeSpeech} isSynthesizing={isSynthesizing}>
+                                <FourLangToSwissTranslation
+                                    mySpeechConfig={cognitiveServicesConfiguration.speechServiceConfiguration}
+                                    translatorConfig={cognitiveServicesConfiguration.translatorServiceConfiguration}
+                                    setError={setUseCaseError}
+                                    synthesizeSpeech={synthesizeSpeech}
+                                    isSynthesizing={isSynthesizing}
+                                />
+                            </UseCaseTemplate>} />
+                        <Route path="chat" element={
+                            <UseCaseTemplate model={UseCaseModels.botChat} error={useCaseError}
+                                synthesizeSpeech={synthesizeSpeech} isSynthesizing={isSynthesizing}>
+                                <ChatWithBot
+                                    mySpeechConfig={cognitiveServicesConfiguration.speechServiceConfiguration}
+                                    qnaConfig={cognitiveServicesConfiguration.qnaServiceConfiguration}
+                                    translatorConfig={cognitiveServicesConfiguration.translatorServiceConfiguration}
+                                    synthesizeSpeech={synthesizeSpeech}
+                                    isSynthesizing={isSynthesizing}
+                                    setError={setUseCaseError}
+                                />
+                            </UseCaseTemplate>} />
+                        <Route path="transcription" element={
+                            <UseCaseTemplate model={UseCaseModels.realtimeTranscription} error={useCaseError}
+                                synthesizeSpeech={synthesizeSpeech} isSynthesizing={isSynthesizing}>
+                                <RealtimeTranscription
+                                    speechConfig={cognitiveServicesConfiguration.speechServiceConfiguration}
+                                    synthesizeSpeech={synthesizeSpeech}
+                                    isSynthesizing={isSynthesizing}
+                                    setError={setUseCaseError}
+                                />
+                            </UseCaseTemplate>} />
+                        <Route path="newsreader" element={
+                            <UseCaseTemplate model={UseCaseModels.newsReader} error={useCaseError}
+                                synthesizeSpeech={synthesizeSpeech} isSynthesizing={isSynthesizing}>
+                                <NewsReader
+                                    synthesizeSpeech={synthesizeSpeech}
+                                    isSynthesizing={isSynthesizing}
+                                    setError={setUseCaseError}
+                                />
+                            </UseCaseTemplate>} />
+                        <Route path="settings" element={<KeysConfigForm
+                            speechServiceConfig={cognitiveServicesConfiguration.speechServiceConfiguration}
+                            qnaConfig={cognitiveServicesConfiguration.qnaServiceConfiguration}
+                            translatorConfig={cognitiveServicesConfiguration.translatorServiceConfiguration}
+                            bingSearchConfig={cognitiveServicesConfiguration.bingSearchServiceConfiguration}
+                            onConfigurationChanged={setCognitiveServicesConfiguration}
+                        />} />
+                    </Routes>
+                </Paper>
+                <div className="App-footer" style={{ paddingBottom: "20px" }}>
+                    <span>
+                        created by <a href="https://www.isolutions.ch" target="_blank" rel="noreferrer">isolutions AG</a>
+                    </span>
+                </div>
+            </div>
+        </ThemeProvider>
+    );
 }
 
 export default App;

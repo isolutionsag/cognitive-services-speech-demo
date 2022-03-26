@@ -3,7 +3,7 @@ import {
   ResultReason,
   TranslationRecognizer,
 } from "microsoft-cognitiveservices-speech-sdk";
-import MySpeechConfig from "../../models/MySpeechConfig";
+import SpeechServiceConfiguration from "../../models/SpeechServiceConfiguration";
 import {
   SpeechServiceLocale,
   SpeechTranslationLanguage,
@@ -32,7 +32,7 @@ export enum ErrorReason {
 export class SpeechToTextContinuous {
   private recognizer?: TranslationRecognizer;
 
-  constructor(private mySpeechConfig: MySpeechConfig) {}
+  constructor(private mySpeechConfig: SpeechServiceConfiguration) {}
 
   // returns words understood, no punctuation
   recognizing: (recognizing: string, translating: string) => void = (

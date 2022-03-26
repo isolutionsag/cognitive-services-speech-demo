@@ -22,9 +22,9 @@ import {
 } from "../../../api/TranslationApi";
 import useBotResponse from "../../../hooks/useBotResponse";
 import useSpeechToText from "../../../hooks/useSpeechToText";
-import MySpeechConfig, {
+import SpeechServiceConfiguration, {
   isValidSpeechConfig
-} from "../../../models/MySpeechConfig";
+} from "../../../models/SpeechServiceConfiguration";
 import QnaConfig from "../../../models/QnAConfig";
 import TranslatorConfig from "../../../models/TranslatorConfig";
 import Language, {
@@ -84,7 +84,7 @@ const defaultRecognitionLanguages = [
 ];
 
 interface ChatWithBotProps extends UseCaseTemplateChildProps {
-  mySpeechConfig: MySpeechConfig;
+  mySpeechConfig: SpeechServiceConfiguration;
   qnaConfig: QnaConfig;
   translatorConfig: TranslatorConfig;
 }

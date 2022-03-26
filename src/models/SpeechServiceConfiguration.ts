@@ -5,12 +5,12 @@ export const DefaultSpeechConfig = {
   region: "" /* <your-region> */,
 };
 
-type MySpeechConfig = typeof DefaultSpeechConfig;
-export default MySpeechConfig;
+type SpeechServiceConfiguration = typeof DefaultSpeechConfig;
+export default SpeechServiceConfiguration;
 
-export type SpeechConfigKey = keyof MySpeechConfig
+export type SpeechConfigKey = keyof SpeechServiceConfiguration
 
-export const isValidSpeechConfig = (config: MySpeechConfig) => {
+export const isValidSpeechConfig = (config: SpeechServiceConfiguration) => {
   return (
     config.resourceKey !== "" &&
     config.resourceKey !== undefined &&
@@ -20,7 +20,7 @@ export const isValidSpeechConfig = (config: MySpeechConfig) => {
 };
 
 export function getSpeechConfigFromMySpeechConfig(
-  config: MySpeechConfig
+  config: SpeechServiceConfiguration
 ): SpeechConfig {
   return SpeechConfig.fromSubscription(config.resourceKey, config.region);
 }

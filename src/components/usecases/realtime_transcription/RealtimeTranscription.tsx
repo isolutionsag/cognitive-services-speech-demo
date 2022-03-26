@@ -11,7 +11,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import MySpeechConfig from "../../../models/MySpeechConfig";
+import SpeechServiceConfiguration from "../../../models/SpeechServiceConfiguration";
 import {
   SpeechServiceLanguagesNames,
   SpeechServiceLocale,
@@ -25,7 +25,7 @@ import { SpeechToTextContinuous } from "./../../../hooks/speech_to_text_continuo
 import useTooltip from "../../../hooks/useTooltip";
 
 interface RealtimeTranscriptionProps extends UseCaseTemplateChildProps {
-  speechConfig: MySpeechConfig;
+  speechConfig: SpeechServiceConfiguration;
 }
 
 const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({

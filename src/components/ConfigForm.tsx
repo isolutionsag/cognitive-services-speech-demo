@@ -1,35 +1,32 @@
 import { Box, Button, Grid, TextField } from "@mui/material";
 import React from "react";
-import MySpeechConfig from "../models/MySpeechConfig";
+import SpeechServiceConfiguration from "../models/SpeechServiceConfiguration";
 import useInput from "../hooks/useInput";
 import { Save } from "@mui/icons-material";
 import QnAConfig from "../models/QnAConfig";
 import TranslatorConfig from "../models/TranslatorConfig";
 import BingSearchConfig from "../models/BingSearchConfig";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { ICognitiveServicesConfiguration } from "../App";
 
 interface ConfigFormProps {
-  hideConfigureScreen: () => void;
-  mySpeechConfig: MySpeechConfig;
+  speechServiceConfig: SpeechServiceConfiguration;
   qnaConfig: QnAConfig;
   translatorConfig: TranslatorConfig;
   bingSearchConfig: BingSearchConfig;
-  setConfigKeys: (
-    mySpeechConfig: MySpeechConfig,
-    qnaConfig: QnAConfig,
-    translatorConfig: TranslatorConfig,
-    bingSearchConfig: BingSearchConfig
-  ) => void;
+  onConfigurationChanged: (newConfiguration: ICognitiveServicesConfiguration) => void;
 }
 
 const ConfigForm: React.FC<ConfigFormProps> = ({
-  mySpeechConfig,
+  speechServiceConfig,
   qnaConfig,
   translatorConfig,
   bingSearchConfig,
-  setConfigKeys,
+  onConfigurationChanged,
 }) => {
-  const useInputResourceKey = useInput(mySpeechConfig.resourceKey);
-  const useInputRegion = useInput(mySpeechConfig.region);
+  const navigate = useNavigate();
+  const useInputResourceKey = useInput(speechServiceConfig.resourceKey);
+  const useInputRegion = useInput(speechServiceConfig.region);
 
   const useInputKbId = useInput(qnaConfig.knowledgeBaseId);
   const useInputAuthEndpointKey = useInput(qnaConfig.authEndpointKey);
@@ -38,36 +35,33 @@ const ConfigForm: React.FC<ConfigFormProps> = ({
   const useInputTranslatorSubscriptionKey = useInput(
     translatorConfig.subscriptionKey
   );
+  const useInputTranslatorRegion = useInput(translatorConfig.region);
 
   const useInputBingSearchSubscriptionKey = useInput(
     bingSearchConfig.subscriptionKey
   );
 
-  const handleSaveKeys = () => {
-    mySpeechConfig.resourceKey = useInputResourceKey.value;
-    mySpeechConfig.region = useInputRegion.value;
-
-    qnaConfig.knowledgeBaseId = useInputKbId.value;
-    qnaConfig.authEndpointKey = useInputAuthEndpointKey.value;
-    qnaConfig.qnaMakerServiceName = useInputBotName.value;
-
-    translatorConfig.subscriptionKey = useInputTranslatorSubscriptionKey.value;
-
-    bingSearchConfig.subscriptionKey = useInputBingSearchSubscriptionKey.value;
-
-    setConfigKeys(
-      mySpeechConfig,
-      qnaConfig,
-      translatorConfig,
-      bingSearchConfig
-    );
+  const saveKeys = () => {
+    const speechServiceConfiguration: SpeechServiceConfiguration = { resourceKey: useInputResourceKey.value, region: useInputRegion.value };
+    const qnaServiceConfiguration: QnAConfig = { knowledgeBaseId: useInputKbId.value, authEndpointKey: useInputAuthEndpointKey.value, qnaMakerServiceName: useInputBotName.value };
+    const translatorServiceConfiguration: TranslatorConfig = { subscriptionKey: useInputTranslatorSubscriptionKey.value, region: useInputTranslatorRegion.value };
+    const bingSearchServiceConfiguration: BingSearchConfig = { subscriptionKey: useInputBingSearchSubscriptionKey.value };
+    onConfigurationChanged({ speechServiceConfiguration, qnaServiceConfiguration, translatorServiceConfiguration, bingSearchServiceConfiguration })
+    navigate("/");
   };
 
   const sectionBoxStyles = { border: 1, p: 3, borderRadius: "4px" };
   const textFieldStyles = { marginTop: "20px" };
   return (
-    <Grid container justifyContent="center">
-      <Grid item style={{ maxWidth: "500px" }}>
+    <Grid
+      container
+      justifyContent="start"
+      alignItems="start"
+      direction="row">
+      <Grid item xs={3} lg={2} display="flex" sx={{ padding: '1rem' }} >
+        <Button component={RouterLink} to="/">Zurück</Button>
+      </Grid>
+      <Grid item xs={6} lg={8} >
         <h1>Schlüssel konfigurieren</h1>
         <Box sx={{ textAlign: "left" }}>
           <h3>Speech service</h3>
@@ -117,6 +111,13 @@ const ConfigForm: React.FC<ConfigFormProps> = ({
               value={useInputTranslatorSubscriptionKey.value}
               onChange={useInputTranslatorSubscriptionKey.handleChange}
             />
+            <TextField
+              style={textFieldStyles}
+              fullWidth
+              label="Region"
+              value={useInputTranslatorRegion.value}
+              onChange={useInputTranslatorRegion.handleChange}
+            />
           </Box>
           <h3>Bing Search</h3>
           <Box sx={sectionBoxStyles}>
@@ -134,12 +135,14 @@ const ConfigForm: React.FC<ConfigFormProps> = ({
             style={{ marginTop: "20px" }}
             variant="contained"
             startIcon={<Save />}
-            onClick={handleSaveKeys}
+            onClick={saveKeys}
           >
             Speichern und schliessen
           </Button>
         </div>
       </Grid>
+
+      <Grid item xs={3} lg={2} />
     </Grid>
   );
 };

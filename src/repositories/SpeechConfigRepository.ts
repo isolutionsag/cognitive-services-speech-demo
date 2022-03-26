@@ -1,10 +1,10 @@
-import MySpeechConfig, { DefaultSpeechConfig, SpeechConfigKey } from "../models/MySpeechConfig";
+import SpeechServiceConfiguration, { DefaultSpeechConfig, SpeechConfigKey } from "../models/SpeechServiceConfiguration";
 
 const resourceKeyStorageKey = "resourceKey";
 const regionStorageKey = "region";
 
 
-export function loadSpeechConfig(): MySpeechConfig {
+export function loadSpeechConfig(): SpeechServiceConfiguration {
   var resourceKey = localStorage.getItem(resourceKeyStorageKey);
   var region = localStorage.getItem(regionStorageKey);
 
@@ -20,7 +20,7 @@ export function loadSpeechConfig(): MySpeechConfig {
   return result;
 }
 
-export function saveSpeechConfig(config: MySpeechConfig) {
+export function saveSpeechConfig(config: SpeechServiceConfiguration) {
   localStorage.setItem(resourceKeyStorageKey, config.resourceKey);
   localStorage.setItem(regionStorageKey, config.region);
 }

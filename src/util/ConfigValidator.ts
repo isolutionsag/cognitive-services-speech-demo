@@ -1,4 +1,4 @@
-import MySpeechConfig from "../models/MySpeechConfig";
+import SpeechServiceConfiguration from "../models/SpeechServiceConfiguration";
 import QnAConfig from "../models/QnAConfig";
 import TranslatorConfig from "../models/TranslatorConfig";
 import BingSearchConfig from "../models/BingSearchConfig";
@@ -6,7 +6,7 @@ import BingSearchConfig from "../models/BingSearchConfig";
 const configValueCheck = (value: string) => value && value !== "";
 
 export const areAllConfigsValid = (
-  mySpeechConfig: MySpeechConfig,
+  mySpeechConfig: SpeechServiceConfiguration,
   qnaConfig: QnAConfig,
   translatorConfig: TranslatorConfig,
   bingSearchConfig: BingSearchConfig

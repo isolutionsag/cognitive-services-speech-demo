@@ -1,6 +1,6 @@
 import { SpeechSynthesizer } from "microsoft-cognitiveservices-speech-sdk";
 import { useRef, useState } from "react";
-import MySpeechConfig from "../models/MySpeechConfig";
+import SpeechServiceConfiguration from "../models/SpeechServiceConfiguration";
 import { Voice } from "../util/TextToSpechVoices";
 import { CreateSpeechSynthesizer } from "../util/SpeechSynthesizerCreator";
 import { SpeechServiceLocale } from "../util/SupportedLanguages";
@@ -8,7 +8,7 @@ import { SpeechServiceLocale } from "../util/SupportedLanguages";
 export default function useTextToSpeech(
   initialText: string,
   initialVoice: Voice,
-  mySpeechConfig: MySpeechConfig
+  mySpeechConfig: SpeechServiceConfiguration
 ) {
   const voice = useRef(initialVoice);
   const text = useRef(initialText);
