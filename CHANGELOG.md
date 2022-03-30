@@ -1,10 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v1.2.1 - 2022-03-30
 
-- Migrate from custom routing to react-router (#12)
+- Migrate from custom routing to react-router (#12).
 - Add the `region` parameter for the translator service (#12).
+- Downgrade Speech SDK version to fix a bug.
 
 ## v1.2.0 - 2022-03-04
 
