@@ -3,12 +3,6 @@
   font-size: 10px;
 }
 
-.Microsoft-Logo {
-  width: 180px;
-  aspect-ratio: 5/1;
-  object-fit: cover;
-}
-
 a {
   color: var(--simplicity-color1);
   text-decoration: none;
