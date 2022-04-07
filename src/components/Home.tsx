@@ -1,11 +1,10 @@
 import {Box, Grid, Typography} from "@mui/material";
 import React from "react";
-import {useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import UseCaseCard from "./UseCaseCard";
 import UseCase from "../util/UseCase";
 
 const Home: React.FC = () => {
-    let navigate = useNavigate();
     return (
         <>
             <Box display="flex" flexDirection="column" alignItems="center" marginBottom="2rem">
@@ -21,44 +20,48 @@ const Home: React.FC = () => {
             </Box>
             <Grid container spacing={4}>
                 <Grid item xs={12} md={6}>
-                    <UseCaseCard
-                        image="images/isolution_zrh_innenarchitektur-86.jpg"
-                        imageAlt="translate symbol with swiss flag"
-                        title="Übersetzung ins Schweizerdeutsche"
-                        details="Sprich mit mir Englisch, Französisch, Italienisch oder Spanisch und ich übersetze es ins Schweizerdeutsche.​"
-                        onSelected={() => navigate("/translate")}
-                        useCase={UseCase.FourLangToSwissTranslation}
-                    />
+                    <Link to="/translate">
+                        <UseCaseCard
+                            image="images/isolution_zrh_innenarchitektur-86.jpg"
+                            imageAlt="translate symbol with swiss flag"
+                            title="Übersetzung ins Schweizerdeutsche"
+                            details="Sprich mit mir Englisch, Französisch, Italienisch oder Spanisch und ich übersetze es ins Schweizerdeutsche.​"
+                            useCase={UseCase.FourLangToSwissTranslation}
+                        />
+                    </Link>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <UseCaseCard
-                        image="images/isolution_zrh_innenarchitektur-102.jpg"
-                        imageAlt="Bot icon with several language symbols"
-                        title="Mehrsprachiger Chat"
-                        details="Stelle mir Fragen und ich beantworte Sie dir auf Schweizerdeutsch."
-                        onSelected={() => navigate("/chat")}
-                        useCase={UseCase.BotChat}
-                    />
+                    <Link to="/chat">
+                        <UseCaseCard
+                            image="images/isolution_zrh_innenarchitektur-102.jpg"
+                            imageAlt="Bot icon with several language symbols"
+                            title="Mehrsprachiger Chat"
+                            details="Stelle mir Fragen und ich beantworte Sie dir auf Schweizerdeutsch."
+                            useCase={UseCase.BotChat}
+                        />
+                    </Link>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <UseCaseCard
-                        image="images/isolution_zrh_innenarchitektur-31.jpg"
-                        imageAlt="Recycling icon with several language symbols"
-                        title="Diktiergerät mit Übersetzung"
-                        details="Diktiere auf Schweizerdeutsch und ich übersetze direkt."
-                        onSelected={() => navigate("/transcription")}
-                        useCase={UseCase.RealtimeTranscription}
-                    />
+                    <Link to="/transcription">
+                        <UseCaseCard
+                            image="images/isolution_zrh_innenarchitektur-31.jpg"
+                            imageAlt="Recycling icon with several language symbols"
+                            title="Diktiergerät mit Übersetzung"
+                            details="Diktiere auf Schweizerdeutsch und ich übersetze direkt."
+                            useCase={UseCase.RealtimeTranscription}
+                        />
+                    </Link>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <UseCaseCard
-                        image="images/isolution_zrh_innenarchitektur-100.jpg"
-                        imageAlt="News Icon with 3 lines symbolyzing summary"
-                        title="News vorlesen lassen​"
-                        details="Suche die aktuellsten News und ich lese sie dir bei Bedarf vor.​"
-                        onSelected={() => navigate("/newsreader")}
-                        useCase={UseCase.NewsReader}
-                    />
+                    <Link to="newsreader">
+                        <UseCaseCard
+                            image="images/isolution_zrh_innenarchitektur-100.jpg"
+                            imageAlt="News Icon with 3 lines symbolyzing summary"
+                            title="News vorlesen lassen​"
+                            details="Suche die aktuellsten News und ich lese sie dir bei Bedarf vor.​"
+                            useCase={UseCase.NewsReader}
+                        />
+                    </Link>
                 </Grid>
             </Grid>
         </>
