@@ -1,4 +1,4 @@
-import { Box, Button, Grid, TextField } from "@mui/material";
+import {Box, Button, Grid, TextField, Typography} from "@mui/material";
 import React from "react";
 import SpeechServiceConfiguration from "../models/SpeechServiceConfiguration";
 import useInput from "../hooks/useInput";
@@ -62,9 +62,9 @@ const ConfigForm: React.FC<ConfigFormProps> = ({
         <Button component={RouterLink} to="/">Zurück</Button>
       </Grid>
       <Grid item xs={6} lg={8} >
-        <h1>Schlüssel konfigurieren</h1>
+        <Typography variant="h3" component="h2">Schlüssel konfigurieren</Typography>
         <Box sx={{ textAlign: "left" }}>
-          <h3>Speech service</h3>
+          <Typography variant="h6">Speech service</Typography>
           <Box sx={sectionBoxStyles}>
             <TextField
               fullWidth
@@ -80,7 +80,7 @@ const ConfigForm: React.FC<ConfigFormProps> = ({
               onChange={useInputRegion.handleChange}
             />
           </Box>
-          <h3>QnAMaker</h3>
+          <Typography variant="h6">QnAMaker</Typography>
           <Box sx={sectionBoxStyles}>
             <TextField
               fullWidth
@@ -103,7 +103,7 @@ const ConfigForm: React.FC<ConfigFormProps> = ({
               onChange={useInputBotName.handleChange}
             />
           </Box>
-          <h3>Translator</h3>
+          <Typography variant="h6">Translator</Typography>
           <Box sx={sectionBoxStyles}>
             <TextField
               fullWidth
@@ -119,7 +119,7 @@ const ConfigForm: React.FC<ConfigFormProps> = ({
               onChange={useInputTranslatorRegion.handleChange}
             />
           </Box>
-          <h3>Bing Search</h3>
+          <Typography variant="h6">Bing Search</Typography>
           <Box sx={sectionBoxStyles}>
             <TextField
               fullWidth

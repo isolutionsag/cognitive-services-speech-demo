@@ -12,7 +12,7 @@ const Home: React.FC = () => {
     return (
         <>
             <Box display="flex" flexDirection="column" alignItems="center" marginBottom="2rem">
-                <Typography variant="h2">Grüezi</Typography>
+                <Typography variant="h3" component="h2">Grüezi</Typography>
                 <Typography variant="h6" component="h1">
                     Ich bin Leni! Eine neurale Stimme, die Schweizerdeutsch versteht
                     und spricht.
