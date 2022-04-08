@@ -35,6 +35,7 @@ import useTextToSpeech from "./hooks/useTextToSpeech";
 import {Voice} from "./util/TextToSpechVoices";
 import {Routes, Route} from "react-router-dom";
 import Layout from "./Layout";
+import {Alert, AlertTitle} from "@mui/material";
 
 export interface ICognitiveServicesConfiguration {
     speechServiceConfiguration: SpeechServiceConfiguration;
@@ -96,6 +97,11 @@ const App = () => {
 
     return (
         <ThemeProvider theme={theme}>
+            {!validConfig &&
+                <Alert severity="error">
+                    <AlertTitle>Die Schlüssel Konfiguration ist nicht komplett.</AlertTitle>
+                </Alert>
+            }
             <Routes>
                 <Route element={<Layout/>}>
                     <Route index element={<Home/>}/>
