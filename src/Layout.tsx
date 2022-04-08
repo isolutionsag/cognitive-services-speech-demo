@@ -13,38 +13,36 @@ const Layout: React.FC = () => {
     return (
         <>
             <AppBar position="static">
-                <Container maxWidth="xl">
-                    <Toolbar disableGutters>
-                        <Box sx={{flexGrow: 1, display: {xs: "flex", md: "flex"}}}>
-                            <img
-                                src={IsolutionsLogo}
-                                style={{margin: "1rem", height: "32px"}}
-                                alt="isolutions"
-                            />
-                        </Box>
-                        <Box>
-                            <Button
-                                variant="contained"
-                                startIcon={<VpnKey/>}
-                                component={RouterLink}
-                                to="settings"
-                            >
-                                Schlüssel konfigurieren
-                            </Button>
-                        </Box>
-                    </Toolbar>
-                </Container>
+                <Toolbar>
+                    <Box sx={{flexGrow: 1, display: {xs: "flex", md: "flex"}}}>
+                        <img
+                            src={IsolutionsLogo}
+                            style={{margin: "1rem", height: "32px"}}
+                            alt="isolutions"
+                        />
+                    </Box>
+                    <Box>
+                        <Button
+                            variant="contained"
+                            startIcon={<VpnKey/>}
+                            component={RouterLink}
+                            to="settings"
+                        >
+                            Schlüssel konfigurieren
+                        </Button>
+                    </Box>
+                </Toolbar>
             </AppBar>
-            <Paper
-                sx={{
-                    minHeight: "60vh",
-                    padding: "2rem",
-                    margin: "1rem",
-                }}
-                component="main"
-            >
-                <Outlet/>
-            </Paper>
+                <Paper
+                    sx={{
+                        minHeight: "60vh",
+                        padding: "2rem",
+                        margin: "1rem",
+                    }}
+                    component="main"
+                >
+                    <Outlet/>
+                </Paper>
             <Box component="footer" paddingRight="1rem" paddingLeft="1rem" display="flex" justifyContent="space-between"
                  alignItems="center">
                 <Typography variant="body2" display="flex" alignItems="center">powered by <a
