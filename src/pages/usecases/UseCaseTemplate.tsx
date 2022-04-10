@@ -34,9 +34,9 @@ const UseCaseTemplate: React.FC<UseCaseTemplateProps> = ({
             <Grid item xs={2} lg={1} display="flex">
                 <Button component={RouterLink} to="/">Zurück</Button>
             </Grid>
-            <Grid item xs={8} lg={10}>
-                <Typography variant="h3">{model.title}</Typography>
-                <Typography variant="h6">{model.description}</Typography>
+            <Grid item xs={8} lg={10} textAlign="center">
+                <Typography variant="h3" component="h2">{model.title}</Typography>
+                <Typography variant="h6" component="h3">{model.description}</Typography>
                 <Button
                     style={{ margin: "1rem 0" }}
                     onClick={() =>

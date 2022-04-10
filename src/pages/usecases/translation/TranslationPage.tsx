@@ -21,12 +21,12 @@ const recognitionLanguages = [
   Language.ES,
 ];
 
-interface FourLangToSwissTranslationProps extends UseCaseTemplateChildProps {
+interface TranslationPageProps extends UseCaseTemplateChildProps {
   mySpeechConfig: SpeechServiceConfiguration;
   translatorConfig: TranslatorConfig;
 }
 
-const FourLangToSwissTranslation: React.FC<FourLangToSwissTranslationProps> = ({
+const TranslationPage: React.FC<TranslationPageProps> = ({
   mySpeechConfig,
   translatorConfig,
   synthesizeSpeech,
@@ -119,4 +119,4 @@ const FourLangToSwissTranslation: React.FC<FourLangToSwissTranslationProps> = ({
   );
 };
 
-export default FourLangToSwissTranslation;
+export default TranslationPage;
