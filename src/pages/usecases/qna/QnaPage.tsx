@@ -83,13 +83,13 @@ const defaultRecognitionLanguages = [
   Language.IT,
 ];
 
-interface ChatWithBotProps extends UseCaseTemplateChildProps {
+interface QnaPageProps extends UseCaseTemplateChildProps {
   mySpeechConfig: SpeechServiceConfiguration;
   qnaConfig: QnaConfig;
   translatorConfig: TranslatorConfig;
 }
 
-const ChatWithBot: React.FC<ChatWithBotProps> = ({
+const QnaPage: React.FC<QnaPageProps> = ({
   mySpeechConfig,
   qnaConfig,
   translatorConfig,
@@ -426,4 +426,4 @@ const ChatWithBot: React.FC<ChatWithBotProps> = ({
   );
 };
 
-export default ChatWithBot;
+export default QnaPage;

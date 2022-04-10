@@ -24,11 +24,11 @@ import TranscriptionResults from "./TranscriptionResults";
 import { SpeechToTextContinuous } from "./../../../hooks/speech_to_text_continuous/SpeechToTextContinuous";
 import useTooltip from "../../../hooks/useTooltip";
 
-interface RealtimeTranscriptionProps extends UseCaseTemplateChildProps {
+interface TranscriptionPageProps extends UseCaseTemplateChildProps {
   speechConfig: SpeechServiceConfiguration;
 }
 
-const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
+const TranscriptionPage: React.FC<TranscriptionPageProps> = ({
   speechConfig,
   synthesizeSpeech,
   isSynthesizing,
@@ -233,4 +233,4 @@ const RealtimeTranscription: React.FC<RealtimeTranscriptionProps> = ({
   );
 };
 
-export default RealtimeTranscription;
+export default TranscriptionPage;
