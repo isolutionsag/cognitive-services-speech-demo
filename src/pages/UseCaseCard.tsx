@@ -14,7 +14,6 @@ interface UseCaseCardProps {
   title: string;
   details: string;
   useCase: UseCase;
-  onSelected: (useCase: UseCase) => void;
 }
 
 const UseCaseCard: React.FC<UseCaseCardProps> = ({
@@ -23,11 +22,10 @@ const UseCaseCard: React.FC<UseCaseCardProps> = ({
   title,
   details,
   useCase, 
-  onSelected,
 }) => {
   return (
-    <Card style={{ textAlign: "left" }}>
-      <CardActionArea onClick={() => onSelected(useCase)}>
+    <Card>
+      <CardActionArea>
         <CardMedia height="160" component="img" image={image} alt={imageAlt} />
         <CardContent className={`usecase usecase-${useCase}`}>
           <Typography gutterBottom variant="h5" color="white" component="div">

@@ -19,7 +19,7 @@ import { UseCaseTemplateChildProps } from "../UseCaseTemplate";
 const { CognitiveServicesCredentials } = require("@azure/ms-rest-azure-js");
 const { NewsSearchClient } = require("@azure/cognitiveservices-newssearch");
 
-interface NewsReaderProps extends UseCaseTemplateChildProps {}
+interface NewsPageProps extends UseCaseTemplateChildProps {}
 
 interface NewsItem {
   title: string;
@@ -29,7 +29,7 @@ interface NewsItem {
   datePublished: Date;
 }
 
-const NewsReader: React.FC<NewsReaderProps> = ({
+const NewsPage: React.FC<NewsPageProps> = ({
   synthesizeSpeech,
   isSynthesizing,
   setError,
@@ -194,4 +194,4 @@ const NewsItemRow: React.FC<{
   );
 };
 
-export default NewsReader;
+export default NewsPage;
