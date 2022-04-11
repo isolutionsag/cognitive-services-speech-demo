@@ -3,17 +3,19 @@ import {
     Stack,
     Typography,
 } from "@mui/material";
-import React, {useState, useRef} from "react";
+import React, {useState, useRef, useEffect} from "react";
 import {loadBingSearchConfig} from "../../../repositories/BingSearchConfigRepository";
-import {Voice} from "../../../util/TextToSpechVoices";
 import {UseCaseTemplateChildProps} from "../UseCaseTemplate";
 import NewsSearch from "./NewsSearch";
 import NewsItemRow from "./NewsItemRow";
+import Synthesizer from "../../../services/Synthesizer";
+import SpeechServiceConfiguration from "../../../models/SpeechServiceConfiguration";
 
 const {CognitiveServicesCredentials} = require("@azure/ms-rest-azure-js");
 const {NewsSearchClient} = require("@azure/cognitiveservices-newssearch");
 
 interface NewsPageProps extends UseCaseTemplateChildProps {
+    speechConfig: SpeechServiceConfiguration;
 }
 
 interface NewsItem {
@@ -25,19 +27,39 @@ interface NewsItem {
 }
 
 const NewsPage: React.FC<NewsPageProps> = ({
-                                               synthesizeSpeech,
-                                               isSynthesizing,
                                                setError,
+                                               speechConfig,
                                            }) => {
     const bingConfig = loadBingSearchConfig();
     const credentials = new CognitiveServicesCredentials(
         bingConfig.subscriptionKey
     );
+    const [synthesizingNewsItem, setSynthesizingNewsItem] = useState<NewsItem>();
     const newsSearchClient = useRef(new NewsSearchClient(credentials));
     const [news, setNews] = useState<NewsItem[]>([]);
     const synthesizeNewsItem = (newsItem: NewsItem) => {
-        synthesizeSpeech(`${newsItem.title}. ${newsItem.description}`, Voice.de_CH_LeniNeural);
+        if (synthesizingNewsItem) {
+            return;
+        }
+
+        setSynthesizingNewsItem(newsItem);
+        speechSynthesizer.current.speak(`${newsItem.title}. ${newsItem.description}`)
+            .finally(() => {
+                setSynthesizingNewsItem(undefined);
+            });
     }
+
+    const speechSynthesizer = useRef<Synthesizer>(new Synthesizer(speechConfig));
+
+    useEffect(() => {
+        if (speechSynthesizer.current?.isDisposed) {
+            speechSynthesizer.current = new Synthesizer(speechConfig);
+        }
+
+        return () => {
+            speechSynthesizer.current.dispose();
+        }
+    }, [speechConfig])
 
     const searchNews = async (newsTopic: string) => {
         try {
@@ -77,7 +99,8 @@ const NewsPage: React.FC<NewsPageProps> = ({
                         item={item}
                         play={() => synthesizeNewsItem(item)}
                         key={i}
-                        isPlaying={false} // TODO: Update this!
+                        isPlaying={(() => synthesizingNewsItem == item)()}
+                        isDisabled={!!synthesizingNewsItem}
                     />
                 ))}
                 {news.length === 0 && (
@@ -87,70 +110,5 @@ const NewsPage: React.FC<NewsPageProps> = ({
         </Stack>
     );
 };
-
-// const NewsItemRow: React.FC<{
-//     item: NewsItem;
-//     index: number;
-//     synthesizeNewsItem: (item: NewsItem) => void;
-//     isSynthesizing: boolean;
-// }> = ({item, index, synthesizeNewsItem, isSynthesizing}) => {
-//     const [isItemBeingSynthesized, setIsItemBeingSynthesized] = useState(false);
-//
-//     useEffect(() => {
-//         if (!isSynthesizing) setIsItemBeingSynthesized(false);
-//     }, [isSynthesizing]);
-//
-//     const handleReadNews = () => {
-//         synthesizeNewsItem(item);
-//         setIsItemBeingSynthesized(true);
-//     }
-//
-//     return (
-//         <>
-//             <Divider component="li"/>
-//             <ListItem alignItems="flex-start">
-//                 <ListItemAvatar>
-//                     <Avatar
-//                         sx={{width: 100, height: 100}}
-//                         alt="News thumbnail"
-//                         src={item.thumbnail}
-//                     />
-//                 </ListItemAvatar>
-//                 <ListItemText
-//                     style={{marginLeft: "20px"}}
-//                     primary={item.title}
-//                     secondary={
-//                         <>
-//                             <Typography
-//                                 sx={{display: "block"}}
-//                                 component="span"
-//                                 variant="body2"
-//                                 color="text.secondary"
-//                             >
-//                                 {item.description}
-//                             </Typography>
-//                             {`— ${item.datePublished.toDateString()}`}
-//                         </>
-//                     }
-//                 />
-//                 <ListItemIcon>
-//                     <div style={{maxWidth: "150px"}}>
-//                         <Button href={item.url} target="_blank" rel="noopener" fullWidth startIcon={<LinkIcon/>}>
-//                             Seite öffnen
-//                         </Button>
-//                         <Button
-//                             disabled={isSynthesizing}
-//                             variant="contained"
-//                             fullWidth
-//                             onClick={handleReadNews}
-//                         >
-//                             {isItemBeingSynthesized ? "Wird Vorgelesen..." : "Vorlesen"}
-//                         </Button>
-//                     </div>
-//                 </ListItemIcon>
-//             </ListItem>
-//         </>
-//     );
-// };
 
 export default NewsPage;
