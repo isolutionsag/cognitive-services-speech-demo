@@ -8,9 +8,10 @@ import {Voice} from "../../util/TextToSpechVoices";
 import {UseCaseModel} from "../../util/UseCase";
 import SpeechComponentProps from "../SpeechComponentProps";
 
-interface UseCaseTemplateProps extends SpeechComponentProps {
+interface UseCaseTemplateProps extends SpeechComponentProps{
     model: UseCaseModel;
     error: string;
+    children?: React.ReactNode;
 }
 
 export interface UseCaseTemplateChildProps extends SpeechComponentProps {
