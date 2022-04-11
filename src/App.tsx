@@ -145,6 +145,7 @@ const App = () => {
                                 isSynthesizing={isSynthesizing}
                                 setError={setUseCaseError}
                                 speechConfig={cognitiveServicesConfiguration.speechServiceConfiguration}
+                                bingSearchConfig={cognitiveServicesConfiguration.bingSearchServiceConfiguration}
                             />
                         </UseCaseTemplate>}/>
                     <Route path="settings" element={<ConfigForm

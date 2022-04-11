@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, IconButton, TextField} from "@mui/material";
+import {IconButton, TextField} from "@mui/material";
 import {Search} from "@mui/icons-material";
 
 interface NewsSearch {

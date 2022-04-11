@@ -4,18 +4,19 @@ import {
     Typography,
 } from "@mui/material";
 import React, {useState, useRef, useEffect} from "react";
-import {loadBingSearchConfig} from "../../../repositories/BingSearchConfigRepository";
 import {UseCaseTemplateChildProps} from "../UseCaseTemplate";
 import NewsSearch from "./NewsSearch";
 import NewsItemRow from "./NewsItemRow";
 import Synthesizer from "../../../services/Synthesizer";
 import SpeechServiceConfiguration from "../../../models/SpeechServiceConfiguration";
+import BingSearchConfig from "../../../models/BingSearchConfig";
 
 const {CognitiveServicesCredentials} = require("@azure/ms-rest-azure-js");
 const {NewsSearchClient} = require("@azure/cognitiveservices-newssearch");
 
 interface NewsPageProps extends UseCaseTemplateChildProps {
     speechConfig: SpeechServiceConfiguration;
+    bingSearchConfig: BingSearchConfig;
 }
 
 interface NewsItem {
@@ -29,10 +30,10 @@ interface NewsItem {
 const NewsPage: React.FC<NewsPageProps> = ({
                                                setError,
                                                speechConfig,
+                                               bingSearchConfig,
                                            }) => {
-    const bingConfig = loadBingSearchConfig();
     const credentials = new CognitiveServicesCredentials(
-        bingConfig.subscriptionKey
+        bingSearchConfig.subscriptionKey
     );
     const [synthesizingNewsItem, setSynthesizingNewsItem] = useState<NewsItem>();
     const newsSearchClient = useRef(new NewsSearchClient(credentials));
