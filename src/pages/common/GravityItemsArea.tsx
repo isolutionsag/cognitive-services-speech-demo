@@ -10,6 +10,7 @@ interface GravityItemsAreaProps {
   gravity?: Gravity;
   right?: boolean;
   left?: boolean;
+  children?: React.ReactNode;
 }
 
 const GravityItemsArea: React.FC<GravityItemsAreaProps> = ({
