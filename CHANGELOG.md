@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 - Cleanup the layout in preparation for future enhancements in the routing mechanism (#15).
+- Update to React 18 (#17)
 
 ## v1.2.1 - 2022-03-30
 
