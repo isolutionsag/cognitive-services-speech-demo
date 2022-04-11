@@ -1,13 +1,12 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
 import React from "react";
-import { Link } from "react-router-dom";
 import UseCaseCard from "./UseCaseCard";
 import UseCase from "../util/UseCase";
 import Image1 from "../assets/isolution_zrh_innenarchitektur-86.jpg";
 import Image2 from "../assets/isolution_zrh_innenarchitektur-102.jpg";
 import Image3 from "../assets/isolution_zrh_innenarchitektur-31.jpg";
 import Image4 from "../assets/isolution_zrh_innenarchitektur-100.jpg";
-import { Link as RouterLink, Outlet } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
 const Home: React.FC = () => {
     return (
