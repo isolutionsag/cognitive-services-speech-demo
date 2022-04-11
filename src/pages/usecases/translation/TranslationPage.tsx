@@ -22,17 +22,17 @@ const recognitionLanguages = [
 ];
 
 interface TranslationPageProps extends UseCaseTemplateChildProps {
-  mySpeechConfig: SpeechServiceConfiguration;
+  speechConfig: SpeechServiceConfiguration;
   translatorConfig: TranslatorConfig;
 }
 
 const TranslationPage: React.FC<TranslationPageProps> = ({
-  mySpeechConfig,
+  speechConfig,
   translatorConfig,
   synthesizeSpeech,
   setError,
 }) => {
-  const speechToText = useSpeechToText(mySpeechConfig, recognitionLanguages);
+  const speechToText = useSpeechToText(speechConfig, recognitionLanguages);
   const [translation, setTranslation] = useState("");
 
   useDidUpdate(() => {
@@ -78,7 +78,7 @@ const TranslationPage: React.FC<TranslationPageProps> = ({
         icon={
           <IconButton
             size="large"
-            disabled={!isValidSpeechConfig(mySpeechConfig)}
+            disabled={!isValidSpeechConfig(speechConfig)}
             color={
               speechToText.isRecordingAndConverting ? "secondary" : "primary"
             }

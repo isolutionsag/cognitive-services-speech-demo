@@ -84,13 +84,13 @@ const defaultRecognitionLanguages = [
 ];
 
 interface QnaPageProps extends UseCaseTemplateChildProps {
-  mySpeechConfig: SpeechServiceConfiguration;
+  speechConfig: SpeechServiceConfiguration;
   qnaConfig: QnaConfig;
   translatorConfig: TranslatorConfig;
 }
 
 const QnaPage: React.FC<QnaPageProps> = ({
-  mySpeechConfig,
+  speechConfig,
   qnaConfig,
   translatorConfig,
   synthesizeSpeech,
@@ -118,7 +118,7 @@ const QnaPage: React.FC<QnaPageProps> = ({
   const [inputTranslation, setInputTranslation] = useState({ text: "" });
   const [outputText, setOutputText] = useState("");
 
-  const speechToText = useSpeechToText(mySpeechConfig, recognitionLanguages);
+  const speechToText = useSpeechToText(speechConfig, recognitionLanguages);
   const _useBotResponse = useBotResponse(inputTranslation, qnaConfig);
 
   const handleTranslationResponseError = (err: any) => {
@@ -272,7 +272,7 @@ const QnaPage: React.FC<QnaPageProps> = ({
       icon={
         <IconButton
           size="large"
-          disabled={!isValidSpeechConfig(mySpeechConfig)}
+          disabled={!isValidSpeechConfig(speechConfig)}
           color={
             speechToText.isRecordingAndConverting ? "secondary" : "primary"
           }
@@ -367,7 +367,7 @@ const QnaPage: React.FC<QnaPageProps> = ({
       icon={
         <IconButton
           size="large"
-          disabled={!isValidSpeechConfig(mySpeechConfig)}
+          disabled={!isValidSpeechConfig(speechConfig)}
           color={isSynthesizing ? "secondary" : "primary"}
           onClick={() => synthesizeSpeech(outputText)}
           aria-label="Speak output"
