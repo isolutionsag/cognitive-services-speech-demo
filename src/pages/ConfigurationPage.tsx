@@ -75,7 +75,10 @@ const ConfigForm: React.FC<ConfigFormProps> = ({
                 <Button component={RouterLink} to="/">Zurück</Button>
             </Grid>
             <Grid item xs={6} lg={8}>
-                <form onSubmit={saveKeys}>
+                <form onSubmit={(e) => {
+                    saveKeys();
+                    e.preventDefault();
+                }}>
                     <Box textAlign="center">
                         <Typography variant="h3" component="h2">Schlüssel konfigurieren</Typography>
                     </Box>
