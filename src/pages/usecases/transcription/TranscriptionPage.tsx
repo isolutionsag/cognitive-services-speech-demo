@@ -8,7 +8,6 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import SpeechServiceConfiguration from "../../../models/SpeechServiceConfiguration";
@@ -21,8 +20,7 @@ import {
 import CustomIconButton from "../../common/CustomIconButton";
 import { UseCaseTemplateChildProps } from "../UseCaseTemplate";
 import TranscriptionResults from "./TranscriptionResults";
-import { SpeechToTextContinuous } from "./../../../hooks/speech_to_text_continuous/SpeechToTextContinuous";
-import useTooltip from "../../../hooks/useTooltip";
+import {SpeechToTextContinuous} from "../../../services/SpeechToTextContinuous";
 
 interface TranscriptionPageProps extends UseCaseTemplateChildProps {
   speechConfig: SpeechServiceConfiguration;

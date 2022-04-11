@@ -25,9 +25,9 @@ export const UseCaseModels: { [key in UseCase]: UseCaseModel } = {
     description: "Diktiere in deiner gewünschten Sprache und ich transkribiere es in Echtzeit in die Zielsprache.",
   },
   [UseCase.NewsReader]: {
-    title: "Latest News by Leni",
+    title: "Nachrichten vorlesen",
     description:
-      "Hier kannst du nach einem Thema suchen und dir die Suchergebnisse vorlesen lassen.",
+      "Hier kannst du nach einem Thema suchen und dir die Nachrichten vorlesen lassen.",
   },
 };
 
