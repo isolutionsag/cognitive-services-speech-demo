@@ -11,13 +11,3 @@
   --secondary-OC08: #343A40;
   --secondary-OC04: #CED4DA;
 }
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: var(--simplicity-color3);
-  color: var(--secondary-OC08);
-}
