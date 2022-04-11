@@ -1,12 +1,13 @@
-import {Box, Grid, Typography} from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import React from "react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import UseCaseCard from "./UseCaseCard";
 import UseCase from "../util/UseCase";
 import Image1 from "../assets/isolution_zrh_innenarchitektur-86.jpg";
 import Image2 from "../assets/isolution_zrh_innenarchitektur-102.jpg";
 import Image3 from "../assets/isolution_zrh_innenarchitektur-31.jpg";
 import Image4 from "../assets/isolution_zrh_innenarchitektur-100.jpg";
+import { Link as RouterLink, Outlet } from "react-router-dom";
 
 const Home: React.FC = () => {
     return (
@@ -24,7 +25,12 @@ const Home: React.FC = () => {
             </Box>
             <Grid container spacing={4}>
                 <Grid item xs={12} md={6}>
-                    <Link to="/translate">
+
+                    <Button
+                        component={RouterLink}
+                        fullWidth
+                        to="translate"
+                    >
                         <UseCaseCard
                             image={Image1}
                             imageAlt="translate symbol with swiss flag"
@@ -32,10 +38,13 @@ const Home: React.FC = () => {
                             details="Sprich mit mir Englisch, Französisch, Italienisch oder Spanisch und ich übersetze es ins Schweizerdeutsche.​"
                             useCase={UseCase.FourLangToSwissTranslation}
                         />
-                    </Link>
+                    </Button>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <Link to="/chat">
+                    <Button
+                        component={RouterLink}
+                        fullWidth
+                        to="/chat">
                         <UseCaseCard
                             image={Image2}
                             imageAlt="Bot icon with several language symbols"
@@ -43,10 +52,13 @@ const Home: React.FC = () => {
                             details="Stelle mir Fragen und ich beantworte Sie dir auf Schweizerdeutsch."
                             useCase={UseCase.BotChat}
                         />
-                    </Link>
+                    </Button>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <Link to="/transcription">
+                    <Button
+                        component={RouterLink}
+                        fullWidth
+                        to="/transcription">
                         <UseCaseCard
                             image={Image3}
                             imageAlt="Recycling icon with several language symbols"
@@ -54,10 +66,13 @@ const Home: React.FC = () => {
                             details="Diktiere auf Schweizerdeutsch und ich übersetze direkt."
                             useCase={UseCase.RealtimeTranscription}
                         />
-                    </Link>
+                    </Button>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <Link to="newsreader">
+                    <Button
+                        component={RouterLink}
+                        fullWidth
+                        to="newsreader">
                         <UseCaseCard
                             image={Image4}
                             imageAlt="News Icon with 3 lines symbolyzing summary"
@@ -65,7 +80,7 @@ const Home: React.FC = () => {
                             details="Suche die aktuellsten News und ich lese sie dir bei Bedarf vor.​"
                             useCase={UseCase.NewsReader}
                         />
-                    </Link>
+                    </Button>
                 </Grid>
             </Grid>
         </>

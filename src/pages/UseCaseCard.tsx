@@ -21,10 +21,10 @@ const UseCaseCard: React.FC<UseCaseCardProps> = ({
   imageAlt,
   title,
   details,
-  useCase, 
+  useCase,
 }) => {
   return (
-    <Card>
+    <Card style={{ width: "100%" }}>
       <CardActionArea>
         <CardMedia height="160" component="img" image={image} alt={imageAlt} />
         <CardContent className={`usecase usecase-${useCase}`}>
