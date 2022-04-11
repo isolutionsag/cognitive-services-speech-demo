@@ -87,12 +87,12 @@ const App = () => {
 
     return (
         <ThemeProvider theme={theme}>
+            <CssBaseline />
             {!validConfig &&
                 <Alert severity="error">
                     <AlertTitle>Die Schlüssel Konfiguration ist nicht komplett.</AlertTitle>
                 </Alert>
             }
-            <CssBaseline />
             <Routes>
                 <Route element={<Layout />}>
                     <Route index element={<Home />} />
