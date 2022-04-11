@@ -3,12 +3,9 @@ import {
   ResultReason,
   TranslationRecognizer,
 } from "microsoft-cognitiveservices-speech-sdk";
-import SpeechServiceConfiguration from "../../models/SpeechServiceConfiguration";
-import {
-  SpeechServiceLocale,
-  SpeechTranslationLanguage,
-} from "../../util/SupportedLanguages";
-import { CreateTranslator } from "../../util/TranslationRecognizerCreator";
+import {SpeechServiceLocale, SpeechTranslationLanguage} from "../util/SupportedLanguages";
+import SpeechServiceConfiguration from "../models/SpeechServiceConfiguration";
+import {CreateTranslator} from "../util/TranslationRecognizerCreator";
 
 export enum ErrorReason {
   /**

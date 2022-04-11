@@ -108,7 +108,7 @@ const App = () => {
                         <UseCaseTemplate model={UseCaseModels.fourLangToSwissTranslation} error={useCaseError}
                                          synthesizeSpeech={synthesizeSpeech} isSynthesizing={isSynthesizing}>
                             <TranslationPage
-                                mySpeechConfig={cognitiveServicesConfiguration.speechServiceConfiguration}
+                                speechConfig={cognitiveServicesConfiguration.speechServiceConfiguration}
                                 translatorConfig={cognitiveServicesConfiguration.translatorServiceConfiguration}
                                 setError={setUseCaseError}
                                 synthesizeSpeech={synthesizeSpeech}
@@ -119,7 +119,7 @@ const App = () => {
                         <UseCaseTemplate model={UseCaseModels.botChat} error={useCaseError}
                                          synthesizeSpeech={synthesizeSpeech} isSynthesizing={isSynthesizing}>
                             <QnaPage
-                                mySpeechConfig={cognitiveServicesConfiguration.speechServiceConfiguration}
+                                speechConfig={cognitiveServicesConfiguration.speechServiceConfiguration}
                                 qnaConfig={cognitiveServicesConfiguration.qnaServiceConfiguration}
                                 translatorConfig={cognitiveServicesConfiguration.translatorServiceConfiguration}
                                 synthesizeSpeech={synthesizeSpeech}
@@ -144,6 +144,8 @@ const App = () => {
                                 synthesizeSpeech={synthesizeSpeech}
                                 isSynthesizing={isSynthesizing}
                                 setError={setUseCaseError}
+                                speechConfig={cognitiveServicesConfiguration.speechServiceConfiguration}
+                                bingSearchConfig={cognitiveServicesConfiguration.bingSearchServiceConfiguration}
                             />
                         </UseCaseTemplate>}/>
                     <Route path="settings" element={<ConfigForm
