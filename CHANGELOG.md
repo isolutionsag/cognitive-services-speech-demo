@@ -1,17 +1,22 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v1.3.0 - 2022-04-12
 
-- Cleanup the layout in preparation for future enhancements in the routing mechanism (#15).
-- Update to React 18 (#17)
-- The application now automatically selects the light / dark mode based on the user preference (OS Setting). (#18)
-
-## v1.2.1 - 2022-03-30
+### Added
 
 - Migrate from custom routing to react-router (#12).
 - Add the `region` parameter for the translator service (#12).
-- Downgrade Speech SDK version to fix a bug.
+- Dark Mode: The application now automatically selects the light / dark mode based on the user preference (OS Setting) or manual override. (#18)
+
+### Changed
+
+- Cleanup the layout in preparation for future enhancements in the routing mechanism (#15).
+- Update to React 18 (#17)
+
+### Fixed 
+
+- Downgrade Speech SDK version to fix the broken translation feature.
 
 ## v1.2.0 - 2022-03-04
 
