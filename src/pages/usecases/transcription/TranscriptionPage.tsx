@@ -165,7 +165,7 @@ const TranscriptionPage: React.FC<TranscriptionPageProps> = ({
   const outputLanguageSelection = () => {
     if (hasResults || isRecognizing)
       return (
-        <Typography variant="h6" color="primary">
+        <Typography variant="h6">
           {SpeechTranslationLanguagesNames[translationTargetLanguage]}
         </Typography>
       );
