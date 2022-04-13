@@ -27,7 +27,7 @@ const UseCaseCard: React.FC<UseCaseCardProps> = ({
     <Card style={{ width: "100%" }}>
       <CardActionArea>
         <CardMedia height="160" component="img" image={image} alt={imageAlt} />
-        <CardContent className={`usecase usecase-${useCase}`}>
+        <CardContent sx={{ minHeight: "120px" }} className={`usecase usecase-${useCase}`}>
           <Typography gutterBottom variant="h5" color="white" component="div">
             {title}
           </Typography>
