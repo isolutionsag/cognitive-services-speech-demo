@@ -145,7 +145,7 @@ const TranscriptionResults: React.FC<TranscriptionResultsProps> = ({
           </>
         ) : (
           <Typography variant="h6">
-            Klicke den <em>Aufnahme Starten Knopf</em> und rede los...
+            Klicke den <em>Aufnahme Starten</em> Knopf und rede los...
           </Typography>
         )}
       </Grid>
