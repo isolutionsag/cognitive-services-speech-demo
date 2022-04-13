@@ -328,13 +328,13 @@ const QnaPage: React.FC<QnaPageProps> = ({
       return <Skeleton variant="text" style={{ width: "100%" }} />;
     if (outputText.length > 0)
       return (
-        <Typography variant="h5" color="primary">
+        <Typography variant="h5">
           {outputText}
         </Typography>
       );
     return (
-      <Typography variant="h5" color="primary">
-        Klicke den <em>Aufnehmen Knopf</em> and frag mich etwas...
+      <Typography variant="h5">
+        Klicke den <em>Aufnehmen</em> Knopf und frag mich etwas...
       </Typography>
     );
   };

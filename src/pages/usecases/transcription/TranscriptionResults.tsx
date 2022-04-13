@@ -144,8 +144,8 @@ const TranscriptionResults: React.FC<TranscriptionResultsProps> = ({
             {speakerButtons()}
           </>
         ) : (
-          <Typography variant="h6" color="primary">
-            Klicke den <em>Aufnahme Starten Knopf</em> and rede los...
+          <Typography variant="h6">
+            Klicke den <em>Aufnahme Starten Knopf</em> und rede los...
           </Typography>
         )}
       </Grid>
