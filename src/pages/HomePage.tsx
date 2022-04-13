@@ -24,7 +24,6 @@ const Home: React.FC = () => {
             </Box>
             <Grid container spacing={4}>
                 <Grid item xs={12} md={6}>
-
                     <Button
                         component={RouterLink}
                         fullWidth
